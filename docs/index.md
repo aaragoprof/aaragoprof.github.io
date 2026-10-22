@@ -19,7 +19,7 @@ Benvingut/da! Tria el teu cicle formatiu, després el mòdul i el resultat d'apr
 
     [:octicons-arrow-right-24: Entra](asix/index.md)
 
--   :material-cellphone-code: **DAM**
+-   :material-application-brackets: **DAM**
 
     ---
 

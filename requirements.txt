@@ -1,0 +1,4 @@
+mkdocs<2
+mkdocs-material
+mkdocs-awesome-pages-plugin
+mkdocs-gen-files

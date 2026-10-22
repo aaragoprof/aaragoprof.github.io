@@ -1,0 +1,48 @@
+site_name: Aula d'Informàtica
+site_description: Material de les assignatures d'informàtica
+site_url: https://aaragoprof.github.io/
+repo_url: https://github.com/aaragoprof/aaragoprof.github.io
+
+docs_dir: docs
+
+theme:
+  name: material
+  language: ca
+  features:
+    - navigation.top
+    - navigation.indexes
+    - navigation.sections
+    - search.suggest
+    - content.code.copy
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      toggle:
+        icon: material/weather-night
+        name: Mode fosc
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Mode clar
+
+plugins:
+  - search
+  # Genera el menú automàticament a partir de les carpetes
+  - awesome-pages
+  # Crea una pàgina per cada carpeta amb PDF (sense que l'hagis d'escriure)
+  - gen-files:
+      scripts:
+        - gen_pages.py
+
+markdown_extensions:
+  - attr_list
+  - md_in_html
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg

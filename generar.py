@@ -323,6 +323,11 @@ def copia_fitxers(fitxers, origen_base, desti_dir):
         parts = [slug(norm(p)) for p in rel.parts[:-1]]
         stem, ext = f.stem, f.suffix.lower()
         es_pdf = CONVERTIR_PDF and ext == ".pdf"
+        if es_pdf and any(
+            x.suffix.lower() == ".md" and norm(x.stem) == norm(f.stem)
+            for x in f.parent.iterdir()
+        ):
+            continue  # ja hi ha la versió en Markdown: tindrà prioritat
         if es_pdf:
             ext = ".md"
         nou = slug(norm(stem), 80) + ext
@@ -393,6 +398,9 @@ def processa_ra(ra_dir, desti, titol):
         return False
 
     copiats = copia_fitxers(fitxers, teoria, desti)
+    if not copiats:
+        escriu(desti / "index.md", f"# {titol}\n\n{PROPERAMENT}")
+        return False
     ja_hi_ha_index = any(nou == "index.md" for _, _, nou in copiats)
     if not ja_hi_ha_index:
         llistat = llista_fitxers_md(copiats)

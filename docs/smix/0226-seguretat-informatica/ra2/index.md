@@ -1,10 +1,8 @@
 # RA2 - Còpies de seguretat
 
 ## Teoria
-- [Conceptes bàsics.pdf](conceptes-basics.pdf)
-- [Còpies de Seguretat.pdf](copies-de-seguretat.pdf)
+- [Còpies de Seguretat i Emmagatzematge](copies-de-seguretat-i-emmagatzematge.md)
 - [desktop.ini](desktop.ini)
-- [Gestió del procés de creació de còpies de seguretat.pdf](gestio-del-proces-de-creacio-de-copies-de-seguretat.pdf)
-- [Questionari Inicial.pdf](questionari-inicial.pdf)
-- [Sistemes d’emmagatzematge redundant.pdf](sistemes-d-emmagatzematge-redundant.pdf)
-- [Teoría.pdf](teoria.pdf)
+- [Gestió del procés de creació de còpies de seguretat](gestio-del-proces-de-creacio-de-copies-de-seguretat.md)
+- [Questionari Inicial](questionari-inicial.md)
+- [Sistemes d'Emmagatzematge Redundant (RAID)](sistemes-d-emmagatzematge-redundant-raid.md)

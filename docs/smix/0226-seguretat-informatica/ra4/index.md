@@ -2,9 +2,8 @@
 
 ## Teoria
 - [desktop.ini](desktop.ini)
-- [Firewall i VPN.pdf](firewall-i-vpn.pdf)
-- [Monitoratge de xarxes 1.pdf](monitoratge-de-xarxes-1.pdf)
-- [Monitoratge de xarxes 2.pdf](monitoratge-de-xarxes-2.pdf)
-- [Seguretat en xarxes de cable i control de monitoratge.pdf](seguretat-en-xarxes-de-cable-i-control-de-monitoratge.pdf)
-- [Seguretat en Xarxes Sense Fil i Mobilitat.pdf](seguretat-en-xarxes-sense-fil-i-mobilitat.pdf)
-- [Teoría.pdf](teoria.pdf)
+- [Firewall i VPN](firewall-i-vpn.md)
+- [Monitoratge de Xarxes 1](monitoratge-de-xarxes-1.md)
+- [Monitoratge de Xarxes 2](monitoratge-de-xarxes-2.md)
+- [Seguretat en Xarxes de Cable i Control](seguretat-en-xarxes-de-cable-i-control.md)
+- [Seguretat en Xarxes Sense Fil i Mobilitat](seguretat-en-xarxes-sense-fil-i-mobilitat.md)

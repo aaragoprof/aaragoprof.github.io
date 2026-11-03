@@ -19,6 +19,7 @@ Si una carpeta de teoria és buida (o no existeix), a la web apareix
 script, apareixen sols. Si dins de teoria hi poses un index.md, aquest
 serà la pàgina de l'RA (així pots escriure en Markdown).
 """
+import hashlib
 import json
 import os
 import re
@@ -45,6 +46,21 @@ CICLES = {
     "DAW": "Desenvolupament d'Aplicacions Web",
     "SMIX": "Sistemes Microinformàtics i Xarxes",
 }
+
+# Els PDF NO es pugen a GitHub: es converteixen a Markdown (text + imatges).
+CONVERTIR_PDF = True
+# Extreure les imatges dels PDF (ocupen espai; posa False per només text).
+IMATGES_PDF = True
+# Si un PDF no té text (diapositives exportades com a imatge, escanejats...),
+# es publica pàgina a pàgina com a imatges lleugeres en lloc de descartar-lo.
+PDF_SENSE_TEXT_COM_IMATGES = True
+AMPLADA_PAGINA_PX = 1400   # amplada de cada pàgina-imatge
+QUALITAT_JPG = 80
+
+# Mida màxima (en MB) dels fitxers NO-PDF que es copien tal qual; avisa si en passa.
+AVIS_MB_FITXER = 20
+# Avisa si la web (carpeta docs) passa d'aquesta mida total (MB).
+AVIS_MB_TOTAL = 300
 
 PROPERAMENT = (
     '!!! info "Material properament"\n'
@@ -115,8 +131,190 @@ def troba_teoria(carpeta):
     return None
 
 
+class ConversorFaltant(Exception):
+    pass
+
+
+CACHE = ROOT / ".cache_pdf"
+TOKEN_IMG = "@@IMG@@/"
+AVISAT = []
+FALLITS = []      # PDF que no s'han pogut convertir (escanejats, errors...)
+GRANS = []        # fitxers no-PDF grans
+STATS = {"convertits": 0, "cache": 0}
+
+
+def _pdf_a_markdown(pdf_tmp, img_dir):
+    """Converteix un PDF a Markdown. Prova pymupdf4llm i, si no hi és o
+    falla, markitdown. Retorna (markdown, motor)."""
+    err_import = None
+    try:
+        import pymupdf4llm  # pip install pymupdf4llm
+    except Exception as e:  # noqa: BLE001  (ImportError o error en carregar-lo)
+        pymupdf4llm = None
+        err_import = f"{type(e).__name__}: {e}"
+
+    if pymupdf4llm is not None:
+        try:
+            kw = {}
+            if IMATGES_PDF:
+                kw = dict(
+                    write_images=True,
+                    image_path=str(img_dir),
+                    image_format="jpg",
+                    dpi=100,
+                )
+            return pymupdf4llm.to_markdown(str(pdf_tmp), **kw), "pymupdf4llm"
+        except Exception as e:  # noqa: BLE001
+            print(f"  (pymupdf4llm ha fallat: {e}; provo amb markitdown)")
+
+    if err_import and not AVISAT:
+        AVISAT.append(1)
+        print(
+            f"  AVÍS: no puc carregar pymupdf4llm ({err_import}).\n"
+            "  Faig servir un conversor més simple (sense títols ni taules)."
+        )
+
+    try:
+        from markitdown import MarkItDown
+    except Exception:  # noqa: BLE001
+        MarkItDown = None
+    if MarkItDown is not None:
+        return MarkItDown().convert(str(pdf_tmp)).text_content, "markitdown"
+
+    try:
+        from pypdf import PdfReader
+    except Exception:  # noqa: BLE001
+        raise ConversorFaltant(
+            "\nNo puc convertir els PDF: no es pot carregar cap conversor.\n"
+            f"  Python que s'està fent servir: {sys.executable}\n"
+            f"  Motiu (pymupdf4llm): {err_import}\n\n"
+            "Solució: instal·la'l amb EXACTAMENT aquest Python:\n"
+            f'  "{sys.executable}" -m pip install pypdf pillow\n'
+        )
+    pagines = [(p.extract_text() or "").strip() for p in PdfReader(str(pdf_tmp)).pages]
+    return "\n\n".join(t for t in pagines if t), "pypdf"
+
+
+def _reescriu_imatges(md, img_dir):
+    """Deixa els enllaços d'imatge com TOKEN_IMG + nom (rutes relatives)."""
+    def canvia(m):
+        nom = re.split(r"[\\/]", m.group(2).strip())[-1]
+        if (img_dir / nom).is_file():
+            return f"![{m.group(1)}]({TOKEN_IMG}{nom})"
+        return ""
+
+    return re.sub(r"!\[([^\]]*)\]\(([^)]*)\)", canvia, md)
+
+
+def _pdf_com_imatges(pdf_tmp, img_dir, titol):
+    """PDF sense text: cada pàgina es desa com a JPG lleuger i el Markdown
+    només les mostra en ordre. Prova PyMuPDF i, si no hi és, pypdf+Pillow."""
+    shutil.rmtree(img_dir, ignore_errors=True)
+    img_dir.mkdir(parents=True)
+    n = 0
+    try:
+        import fitz  # PyMuPDF (s'instal·la amb pymupdf4llm)
+
+        doc = fitz.open(str(pdf_tmp))
+        for i, page in enumerate(doc, 1):
+            z = AMPLADA_PAGINA_PX / page.rect.width
+            pix = page.get_pixmap(matrix=fitz.Matrix(z, z))
+            nom = img_dir / f"pagina-{i:02d}.jpg"
+            try:
+                nom.write_bytes(pix.tobytes("jpeg", jpg_quality=QUALITAT_JPG))
+            except TypeError:
+                pix.save(str(nom))
+            n += 1
+    except Exception:  # noqa: BLE001
+        shutil.rmtree(img_dir, ignore_errors=True)
+        img_dir.mkdir(parents=True)
+        n = 0
+        try:
+            from pypdf import PdfReader
+            from PIL import Image
+            import io
+        except ImportError:
+            raise RuntimeError(
+                "PDF sense text. Per publicar-lo com a imatges instal·la: "
+                f'"{sys.executable}" -m pip install pymupdf4llm pypdf pillow'
+
+            )
+        for i, page in enumerate(PdfReader(str(pdf_tmp)).pages, 1):
+            imgs = list(page.images)
+            if not imgs:
+                continue
+            gran = max(imgs, key=lambda im: len(im.data))
+            im = Image.open(io.BytesIO(gran.data)).convert("RGB")
+            if im.width > AMPLADA_PAGINA_PX:
+                h = round(im.height * AMPLADA_PAGINA_PX / im.width)
+                im = im.resize((AMPLADA_PAGINA_PX, h), Image.LANCZOS)
+            im.save(img_dir / f"pagina-{i:02d}.jpg", "JPEG",
+                    quality=QUALITAT_JPG, optimize=True)
+            n += 1
+    if n == 0:
+        raise RuntimeError("sense text i no he pogut extreure les pàgines com a imatge")
+    cos = [f"# {titol}\n", "*Material en format diapositives.*\n"]
+    for i in range(1, n + 1):
+        cos.append(f"![Pàgina {i}]({TOKEN_IMG}pagina-{i:02d}.jpg){{ loading=lazy }}\n")
+    return "\n".join(cos), "imatges"
+
+
+def converteix_pdf(pdf):
+    """Retorna (markdown_amb_token, carpeta_imatges_o_None) o None si falla.
+    Fa servir una memòria cau a .cache_pdf perquè no tardi cada vegada."""
+    st = pdf.stat()
+    clau = hashlib.sha1(
+        f"{pdf.resolve()}|{st.st_size}|{st.st_mtime_ns}|{IMATGES_PDF}".encode()
+    ).hexdigest()[:16]
+    cdir = CACHE / clau
+    cmd, cimg = cdir / "doc.md", cdir / "img"
+    if cmd.is_file():
+        STATS["cache"] += 1
+        return cmd.read_text(encoding="utf-8"), (cimg if cimg.is_dir() else None)
+
+    # Treballem directament a la carpeta final de la memòria cau (sense
+    # renombrar carpetes, que a Windows falla si OneDrive o l'antivirus
+    # tenen fitxers oberts). doc.md s'escriu l'últim: si no hi és, la
+    # conversió es considera incompleta i es repeteix.
+    work = cdir
+    shutil.rmtree(work, ignore_errors=True)
+    (work / "img").mkdir(parents=True, exist_ok=True)
+    tmp_pdf = work / "doc.pdf"  # nom simple perquè les imatges no portin espais
+    try:
+        shutil.copy2(pdf, tmp_pdf)
+        md, motor = _pdf_a_markdown(tmp_pdf, work / "img")
+        md = _reescriu_imatges(md, work / "img")
+        text_pla = re.sub(r"!\[[^\]]*\]\([^)]*\)|\s+", "", md)
+        if len(text_pla) < 40:
+            if not PDF_SENSE_TEXT_COM_IMATGES:
+                raise RuntimeError("sense text (PDF escanejat o només imatges?)")
+            md, motor = _pdf_com_imatges(tmp_pdf, work / "img", norm(pdf.stem))
+        try:
+            tmp_pdf.unlink(missing_ok=True)
+        except OSError:
+            pass  # si Windows el té obert, no passa res
+        try:
+            if not any((work / "img").iterdir()):
+                (work / "img").rmdir()
+        except OSError:
+            pass
+        (work / "doc.md").write_text(md, encoding="utf-8")
+    except ConversorFaltant as e:
+        shutil.rmtree(work, ignore_errors=True)
+        print(e)
+        sys.exit(1)
+    except Exception as e:  # noqa: BLE001
+        FALLITS.append((norm(pdf.name), f"{type(e).__name__}: {e}"))
+        shutil.rmtree(work, ignore_errors=True)
+        return None
+    STATS["convertits"] += 1
+    print(f"  PDF convertit ({motor}): {norm(pdf.name)}")
+    return md, (cimg if cimg.is_dir() else None)
+
+
 def copia_fitxers(fitxers, origen_base, desti_dir):
-    """Copia fitxers a desti_dir amb noms 'nets' per a URL.
+    """Copia fitxers a desti_dir amb noms 'nets' per a URL. Els PDF es
+    converteixen a .md (no es copien).
     Retorna llista de (carpeta_relativa, nom_original, nom_nou)."""
     usats = set()
     res = []
@@ -124,18 +322,41 @@ def copia_fitxers(fitxers, origen_base, desti_dir):
         rel = f.relative_to(origen_base)
         parts = [slug(norm(p)) for p in rel.parts[:-1]]
         stem, ext = f.stem, f.suffix.lower()
+        es_pdf = CONVERTIR_PDF and ext == ".pdf"
+        if es_pdf:
+            ext = ".md"
         nou = slug(norm(stem), 80) + ext
         rel_dest = Path(*parts) / nou if parts else Path(nou)
         k = 2
         while str(rel_dest) in usats:
             rel_dest = rel_dest.with_name(slug(norm(stem), 80) + f"-{k}" + ext)
             k += 1
-        usats.add(str(rel_dest))
         dest = desti_dir / rel_dest
-        dest.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(f, dest)
+
+        if es_pdf:
+            r = converteix_pdf(f)
+            if r is None:
+                continue
+            md, cimg = r
+            usats.add(str(rel_dest))
+            img_nom = rel_dest.stem + "-img"
+            if cimg is not None:
+                shutil.copytree(cimg, dest.parent / img_nom, dirs_exist_ok=True)
+            md = md.replace(TOKEN_IMG, img_nom + "/")
+            if not re.match(r"\s*#\s", md):
+                md = f"# {norm(stem)}\n\n" + md
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            dest.write_text(md, encoding="utf-8")
+            nom_vist = norm(stem)
+        else:
+            usats.add(str(rel_dest))
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(f, dest)
+            nom_vist = norm(f.name)
+            if f.stat().st_size > AVIS_MB_FITXER * 1024 * 1024:
+                GRANS.append((norm(f.name), f.stat().st_size // (1024 * 1024)))
         carpeta_rel = " / ".join(norm(p) for p in rel.parts[:-1])
-        res.append((carpeta_rel, norm(f.name), rel_dest.as_posix()))
+        res.append((carpeta_rel, nom_vist, rel_dest.as_posix()))
     return res
 
 
@@ -389,6 +610,20 @@ def main():
         print("\nCarpetes NO publicades (no segueixen el patró '0000 Nom del mòdul'):")
         for i in ignorades:
             print("  -", i)
+    mida = sum(f.stat().st_size for f in DOCS.rglob("*") if f.is_file()) / 1048576
+    print(f"\nMida de la web (docs): {mida:.1f} MB")
+    if mida > AVIS_MB_TOTAL:
+        print(f"  ATENCIÓ: passa de {AVIS_MB_TOTAL} MB. GitHub Pages admet 1 GB com a màxim.")
+    if STATS["convertits"] or STATS["cache"]:
+        print(f"PDF convertits ara: {STATS['convertits']} · reutilitzats de la memòria cau: {STATS['cache']}")
+    if FALLITS:
+        print("\nPDF NO convertits (no apareixen a la web):")
+        for n, e in FALLITS:
+            print(f"  - {n}: {e}")
+    if GRANS:
+        print(f"\nFitxers (no PDF) de més de {AVIS_MB_FITXER} MB que es pujaran tal qual:")
+        for n, mb in GRANS:
+            print(f"  - {n} ({mb} MB)")
     print("\nSegüent pas: mkdocs serve   (per veure-la) o fes commit i push.")
 
 

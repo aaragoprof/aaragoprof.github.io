@@ -1,0 +1,121 @@
+I E S  D a n i e l  B l a n x a r t
+DOCKER
+0614 Desplegament d'aplicacions Web
+
+Que es docker?
+Docker és una plataforma de programari de codi
+obert que facilita la creació, el desplegament i
+l'execució d'aplicacions mitjançant els containers
+0614 Desplegament d'aplicacions Web
+
+0614 Desplegament d'aplicacions Web
+Què és un contenidor?
+Un contenidor és una unitat de programari estandarditzada, lleugera i
+executable que inclou tot el necessari perquè una aplicació s'executi: el codi, el
+temps d'execució (runtime), les llibreries, les eines del sistema i els fitxers de
+configuració.
+A diferència de les màquines virtuals (VMs), els contenidors de Docker
+comparteixen el nucli (kernel) del sistema operatiu amfitrió (host), cosa que els
+fa molt més lleugers, ràpids d'iniciar i eficients en l'ús de recursos.
+
+Per a què es fa servir Docker?
+0614 Desplegament d'aplicacions Web
+Docker s'utilitza principalment per garantir que una
+aplicació funcioni de manera uniforme i previsible
+independentment de l'entorn on s'executi.
+
+Per a què es fa servir Docker?
+0614 Desplegament d'aplicacions Web
+1.Consistència de l'Entorn
+Els contenidors aïllen l'aplicació i totes les seves dependències, eliminant els
+problemes de compatibilitat entre els entorns de desenvolupament. 
+Un desenvolupador empaqueta l'aplicació i el seu entorn en una Imatge Docker (la
+plantilla del contenidor) i es garanteix que aquesta imatge crearà un contenidor
+idèntic en qualsevol lloc.
+   2. Desplegament Ràpid i Escalable
+Simplifica el procés de llançar aplicacions. Un cop es crea la imatge, es pot desplegar
+instantàniament en qualsevol servidor amb Docker instal·lat. Això permet que les
+aplicacions s'escalin ràpidament afegint o eliminant contenidors segons la demanda.
+
+Per a què es fa servir Docker?
+0614 Desplegament d'aplicacions Web
+   3.  Integració i Desplegament Continú
+Docker és essencial per a les pràctiques DevOps. S'integra fàcilment en els pipelines
+de CI/CD per automatitzar les proves i el desplegament d'aplicacions d'una manera
+consistent i fiable. (Els pipelines de CI/CD (Integració Contínua / Lliurament o
+Desplegament Continu) són fluxos de treball automatitzats que permeten construir,
+provar i desplegar programari de manera ràpida, segura i sense intervenció
+manual.)
+   4. Arquitectures de Microserveis
+És ideal per a construir aplicacions com a col·leccions de microserveis petits i
+independents. Cada microservei (per exemple, un servei d'usuaris, un de
+pagaments, etc.) pot residir al seu propi contenidor, aïllant-lo i permetent que es
+desenvolupi, desplegui i s'escali de manera independent.
+
+0614 Desplegament d'aplicacions Web
+Docker VS MV
+
+0614 Desplegament d'aplicacions Web
+Quan utilitzar docker i quan MV
+Fes servir Docker si:
+vols desplegar aplicacions ràpidament
+treballes amb microserveis
+necessites escalar automàticament
+vols un entorn lleuger i repetible per al teu projecte
+necessites molts entorns similars (dev, test, prod)
+Fes servir MV si:
+necessites un sistema operatiu complet (Windows, Linux, etc.)
+vols aïllament total a nivell de kernel
+t'interessa provar o simular hardware o OS diferents
+necessites entorns pesats o d’escriptori
+
+Arxius de configuracio de Docker
+0614 Desplegament d'aplicacions Web
+Dockerfile
+El Dockerfile és el fitxer central de Docker. És un conjunt d’instruccions que descriuen
+com construir una imatge, és a dir, una plantilla que després s’utilitza per crear
+contenidors.
+Que pots definir?
+Quin sistema base vols utilitzar
+Quins fitxers vols copiar dins la imatge
+Quines dependències s’han d’instal·lar
+Quina comanda s’ha d’executar quan arrenca el contenidor
+Ports oberts
+Variables d’entorn
+Volums per informació
+
+Arxius de configuracio de Docker
+0614 Desplegament d'aplicacions Web
+Dockerignore
+Aquest fitxer funciona com un .gitignore. Indica quins fitxers no s’han de copiar
+quan es construeix la imatge.
+Docker-compose.yml
+Permet definir i gestionar diversos serveis alhora, ideal per a aplicacions amb base
+de dades, backend, frontend, etc.
+
+Arxius de configuracio de Docker
+0614 Desplegament d'aplicacions Web
+Docker-compose.yml
+Permet definir i gestionar diversos serveis alhora, ideal per a aplicacions amb base
+de dades, backend, frontend, etc.
+Que pots configurar?
+Ports
+Xarxes entre serveis
+Variables d’entorn
+Volums persistents
+Dependències (qui arrenca abans o després)
+Imatges personalitzades o oficials
+Pots aixecar tot un sistema amb un sol comandament (docker-compose up -d)
+
+Arxius de configuracio de Docker
+0614 Desplegament d'aplicacions Web
+Daemon.json
+És el fitxer que configura Docker Engine, el servei que controla contenidors, imatges,
+xarxes i volums.
+Que pots configurar?
+Tipus d’emmagatzematge
+Control de logs
+Xarxes per defecte
+Registres insegurs
+Mirror de Docker Hub
+Ajustos de rendiment i debugging

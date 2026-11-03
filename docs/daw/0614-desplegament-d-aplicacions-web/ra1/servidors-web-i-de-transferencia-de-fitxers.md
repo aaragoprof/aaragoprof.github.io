@@ -1,0 +1,165 @@
+# Servidors web i de transferencia de fitxers
+
+I E S  D a n i e l  B l a n x a r t
+Servidors web i de
+transferència de
+fitxers
+Implantació d’arquitectures
+0614 Desplegament d'aplicacions Web
+
+Arquitectures web
+Models
+Una aplicació distribuïda està formada per una
+col·lecció d’ordinadors autònoms
+enllaçats per una xarxa d’ordinadors i suportats per
+un programari que fa que la
+col·lecció actuï com un servei integrat.
+0614 Desplegament d'aplicacions Web
+
+0614 Desplegament d'aplicacions Web
+El model client-servidor bàsic
+Tal com el seu nom indica tenim dos ordinadors un que fa de
+client i l’altra que fa de servidor.
+El model client-servidor bàsic és adequat només per a aplicacions
+web petites, senzilles i amb una càrrega de treball baixa.
+
+Tipus de client-servidor
+0614 Desplegament d'aplicacions Web
+No guarda cap informació de la sessió entre peticions
+consecutives. Exemples típics són els servidors de
+pàgines web estàtiques. 
+Per exemple un lloc web creat per a un esdeveniment
+específic amb tota la informació de l'horari i els
+ponents o la web d’una empresa que ofereix algun
+tipus de servei.
+https://www.mibarq.net/
+Servidor sense estat (Stateless)
+
+Tipus de client-servidor
+0614 Desplegament d'aplicacions Web
+Servidor amb estat (Stateful)
+Pot recordar informació i l'estat de la interacció entre
+peticions. Un exemple clar són els servidors que
+gestionen contingut web dinàmic.
+El contingut canvia segons l'usuari, el moment, o les
+dades emmagatzemades en una base de dades.
+Requereix lògica de programació al costat del servidor.
+Si el lloc web té inicis de sessió, formularis
+interactius, contingut personalitzat o carrets de
+compra, és dinàmic i gestionat per servidors amb
+estat.
+
+Model client-servidor complexos
+0614 Desplegament d'aplicacions Web
+Per a entorns reals (aplicacions web de mida mitjana o gran, complexes o amb un nombre
+elevat de clients simultanis), cal implementar arquitectures més complexes. 
+Aquestes arquitectures es basen en el model client-servidor, però l'amplien per garantir:
+1.Bon rendiment de l'aplicació.
+2.Fiabilitat del servei.
+3.Capacitat d'atendre simultàniament un gran volum de peticions.
+
+Model client-servidor complexos
+0614 Desplegament d'aplicacions Web
+
+Model client-servidor complexos
+0614 Desplegament d'aplicacions Web
+Separacio de responsabilitats: cada servidor nomes esta encarregat d’una “feina”
+cosa que augmenta la seguretat, el rendiment i el manteniment
+Escalabilitat: es poden afegir més servidors web o d’aplicacions de forma
+independent
+Servidors de suport: solen intervenir altres servidors auxiliars, com per exemple
+un servidor de AD o servidors de cache per accelerar la resposta
+Per què és un sistema complex?
+
+0614 Desplegament d'aplicacions Web
+Aplicacions basades en
+el web
+La idea principal és que gairebé tota la capacitat de
+processament de l'aplicació resideix en un servidor o en un
+conjunt de servidors (el backend).
+Servidor: S’encarrega de la lògica de negoci, les consultes
+a les bases de dades i generar el contingut HTML final
+Client, es el navegador web, la unica feina que te es
+enviar peticions i rebre/mostrar la informació
+Per exemple la càrrega de la portada d’un diari digital.
+
+Coding School
+Model d’igual a igual
+Tots els ordinadors es comporten al mateix temps
+com a clients i com a servidors (peer-to-peer)
+Es caracteritza per ser un sistema distribuït en què
+tots els nodes
+tenen les mateixes capacitats i responsabilitats, és
+a dir, tots són clients i servidors al mateix
+temps i, per tant, tota la comunicació és simètrica.
+
+Instal·lació i
+configuració bàsica
+Durant les fases de desenvolupament, de posada
+en producció i de manteniment
+d’una aplicació web podem trobar-nos amb
+diversos tipus de servidors que duen
+a terme tasques concretes dins el funcionament
+global.
+0614 Desplegament d'aplicacions Web
+
+0614 Desplegament d'aplicacions Web
+Servidors web
+Servidors capaços de gestionar i donar accés a recursos estàtics
+(documents HTML, imatges, vídeos, etc.) com a resposta a
+peticions de clients. Aquests recursos s'emmagatzemen com a
+fitxers al servidor.
+La majoria de servidors web moderns permeten la instal·lació de
+mòduls per generar continguts dinàmics mitjançant l'execució de
+codi (PHP, Javascript, Python, etc.). Aquesta funcionalitat, però, és
+més característica dels servidors d'aplicacions.
+Exemple Apache HTTP Server (per a sistemes operatius Linux) i
+Microsoft Internet Information Server (IIS) (per a Windows).
+En resum, un servidor web actua com a punt d'intercanvi de dades
+basat en HTTP, inicialment per a contingut fix, però actualment
+ampliat per gestionar la generació de contingut variable.
+
+Servidors d’aplicacions
+0614 Desplegament d'aplicacions Web
+La funció del Servidor d'Aplicacions és crear o generar el
+contingut de manera dinàmica abans de servir-lo. Penseu-hi
+com el cuiner que agafa ingredients (dades), segueix una recepta
+(el codi de l'aplicació) i munta un plat personalitzat.
+Què fa? Executa programes (escrits en PHP, Java, Python, .NET,
+etc.) i realitza lògiques complexes (com ara consultar una base de
+dades, processar un pagament, o verificar una sessió d'usuari).
+Com ho fa? S'encarrega d'executar el codi de l'aplicació i de
+generar el document HTML final a temps real com a resposta a la
+petició del client.
+Contingut: És personalitzat. Si 100 usuaris miren la seva bústia de
+correu, cadascú veu contingut diferent, generat dinàmicament
+pel servidor d'aplicacions.
+Serveis Addicionals: Ofereix eines essencials per a aplicacions
+complexes (gestió de transaccions, seguretat, persistència de
+dades, etc.).
+
+0614 Desplegament d'aplicacions Web
+Servidors de fitxers
+És un servidor que permet gestionar a través de xarxa la
+càrrega, descàrrega, actualització i eliminació de fitxers
+emmagatzemats en els seus dispositius des d’ordinadors
+client.
+Els servidors de fitxers s’utilitzen principalment per desplegar
+les aplicacions sobre el servidor on s’executaran.
+El desplegament comporta habitualment la càrrega de grans
+quantitats de fitxers sobre aquets servidors.
+Un dels protocols més usats és el protocol FTPS i SFTP
+
+Coding School
+Servidors de directori
+Permet gestionar informació administrativa
+respecte a l’entorn d’una aplicació web, com poden
+ser, per exemple, els usuaris autoritzats amb els
+seus rols o permisos, etc.
+La utilitat principal dels servidors de directori és
+facilitar la gestió d’informació relativa a l’explotació
+d’aplicacions web. 
+L’avantatge de gestionar aquesta informació
+mitjançant aquest tipus de servidors és la
+centralització de dades i la facilitat d’accés
+mitjançant protocols estàndard com LDAP.

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Virtual Hosts en Apache · Material docent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/style.css">
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="back" href="index.html">← Tornar a RA1</a>
+    <div class="eyebrow">DAW · M0614 · RA1</div>
+  </header>
+  <div class="rule"></div>
+  <article class="prose">
+<h1 id="virtual-hosts-en-apache">Virtual Hosts en Apache</h1>
+<p>I E S  D a n i e l  B l a n x a r t
+Virtual Hosts en
+Apache
+Administració de servidors web
+0614 Desplegament d'aplicacions Web</p>
+<p>Apache
+Apache és un servidor web de codi obert, el més popular que
+trobem en el món del web. Com tot servidor web, gestiona
+sol·licituds HTTP. És a dir, està atent a les demandes dels usuaris
+que volen consultar una URL i els envia el contingut sol·licitat
+com a resposta.
+Segons les dades mes recents Apache es fa servir aprox en el 25%
+dels servidors a nivell mundial i en el 20% dels servidors Top 1 000
+000
+0614 Desplegament d'aplicacions Web</p>
+<p>Virtual Host
+El "virtual host" és l’eina que Apache posa a la nostra disposició
+per poder publicar més d’una pàgina web en un mateix servidor
+Apache, i que, a més, ens permet mantenir configuracions
+diferents per a cada host virtual.
+ Quan es realitza una petició al servidor web, Apache pot
+identificar a quin lloc (host virtual) volem accedir en funció de
+tres variables relacionades amb la sol·licitud feta al servidor:
+La IP
+El nom del host (Host Name)
+El port
+0614 Desplegament d'aplicacions Web</p>
+<p>0614 Desplegament d'aplicacions Web
+Configuracio
+Tota la configuració d'Apache 2 es troba sota la carpeta
+/var/apache2 . Els fitxers de configuració per als virtual hosts
+es troben dins de dues carpetes en particular:
+1./var/apache2/sites-available: En aquesta carpeta es
+troben tots els fitxers de configuració dels hosts virtuals,
+cada host es correspon amb un fitxer.
+2./var/apache2/sites-enabled: En aquesta carpeta es
+crearan enllaços simbòlics als fitxers de la carpeta sites-
+available per als hosts que vulguem activar en cada
+moment.</p>
+  </article>
+
+  <footer>Material docent · Formació Professional · Informàtica</footer>
+</div>
+</body>
+</html>

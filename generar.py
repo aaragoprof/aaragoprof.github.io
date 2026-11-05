@@ -12,23 +12,7 @@ Estructura que espera la carpeta d'origen:
             └── RA2 - ...
 
 Ús:
-    python generar.py "C:\\ruta\\a\\la\\carpeta\\de\\material"
-
-Què fa amb el contingut de cada carpeta Teoria:
-  - .md            -> pàgina web amb el disseny de la web
-  - .pdf           -> es converteix a pàgina (text o, si és una imatge,
-                      pàgines-imatge lleugeres); el PDF NO es publica
-  - .html          -> es publica tal qual (amb el seu propi disseny)
-  - altres fitxers -> es copien i apareixen com a descàrrega
-Si hi ha un .md o .html amb el mateix nom que un PDF, el PDF s'ignora.
-
-Qualsevol fitxer o carpeta el nom dels quals comenci per "_" (p. ex.
-"_privat" o "_Solucions.pdf") NO es publica.
-
-Opcional: un fitxer "descripcio.txt" dins d'una carpeta de mòdul o d'RA
-(fora de Teoria) es mostra com a descripció a la targeta.
-
-Els mòduls o RA sense material surten en gris amb "Properament".
+    python generar.py "C:\ruta\a\la\carpeta\de\material"
 """
 import hashlib
 import html
@@ -55,11 +39,8 @@ SITE_LEDE = (
 )
 FOOTER = "Material docent · Formació Professional · Informàtica"
 
-# Carpetes que MAI es publiquen (en qualsevol nivell; no distingeix
-# majúscules ni accents).
 EXCLOURE = {"gestio", "gestions", "ordenar", ".git", "examen", "exercicis"}
 
-# Cicles: carpeta -> nom complet. L'ordre és el de la portada.
 CICLES = {
     "ASIX": "Administració de Sistemes Informàtics en Xarxa",
     "DAM": "Desenvolupament d'Aplicacions Multiplataforma",
@@ -67,17 +48,12 @@ CICLES = {
     "SMIX": "Sistemes Microinformàtics i Xarxes",
 }
 
-# Els PDF NO es pugen a GitHub: es converteixen a pàgina web.
 CONVERTIR_PDF = True
-# Extreure les imatges dels PDF amb text (ocupen espai; False = només text).
 IMATGES_PDF = True
-# PDF sense text (diapositives exportades com a imatge, escanejats...):
-# es publiquen pàgina a pàgina com a imatges lleugeres.
 PDF_SENSE_TEXT_COM_IMATGES = True
 AMPLADA_PAGINA_PX = 1400
 QUALITAT_JPG = 80
 
-# Avisos de mida
 AVIS_MB_FITXER = 20     # fitxer (no PDF) que es puja tal qual
 AVIS_MB_TOTAL = 300     # mida total de docs/
 
@@ -89,7 +65,6 @@ DOCS = ROOT / "docs"
 # Utilitats i conversió de PDF
 # ----------------------------------------------------------------------------
 def norm(s):
-    """Normalitza Unicode (Mac guarda els accents separats)."""
     return unicodedata.normalize("NFC", s)
 
 
@@ -105,8 +80,6 @@ def slug(s, maxlen=60):
 
 
 def excluit(nom):
-    # Es descarta si és a EXCLOURE, si comença per "." o si comença per "_"
-    # (per exemple "_privat" o "_Solucions.pdf": fitxers o carpetes que no es publiquen).
     return (sense_accents(nom).lower() in EXCLOURE
             or nom.startswith(".") or nom.startswith("_"))
 
@@ -123,7 +96,6 @@ def subcarpetes(p):
 
 
 def fitxers_teoria(carpeta):
-    """Tots els fitxers (recursiu) d'una carpeta de teoria, sense excloure's."""
     res = []
     if not carpeta or not carpeta.is_dir():
         return res
@@ -155,18 +127,16 @@ class ConversorFaltant(Exception):
 CACHE = ROOT / ".cache_pdf"
 TOKEN_IMG = "@@IMG@@/"
 AVISAT = []
-FALLITS = []      # PDF que no s'han pogut convertir (escanejats, errors...)
-GRANS = []        # fitxers no-PDF grans
+FALLITS = []
+GRANS = []
 STATS = {"convertits": 0, "cache": 0}
 
 
 def _pdf_a_markdown(pdf_tmp, img_dir):
-    """Converteix un PDF a Markdown. Prova pymupdf4llm i, si no hi és o
-    falla, markitdown. Retorna (markdown, motor)."""
     err_import = None
     try:
-        import pymupdf4llm  # pip install pymupdf4llm
-    except Exception as e:  # noqa: BLE001  (ImportError o error en carregar-lo)
+        import pymupdf4llm
+    except Exception as e:
         pymupdf4llm = None
         err_import = f"{type(e).__name__}: {e}"
 
@@ -181,39 +151,36 @@ def _pdf_a_markdown(pdf_tmp, img_dir):
                     dpi=100,
                 )
             return pymupdf4llm.to_markdown(str(pdf_tmp), **kw), "pymupdf4llm"
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             print(f"  (pymupdf4llm ha fallat: {e}; provo amb markitdown)")
 
     if err_import and not AVISAT:
         AVISAT.append(1)
         print(
             f"  AVÍS: no puc carregar pymupdf4llm ({err_import}).\n"
-            "  Faig servir un conversor més simple (sense títols ni taules)."
+            "  Faig servir un conversor més simple."
         )
 
     try:
         from markitdown import MarkItDown
-    except Exception:  # noqa: BLE001
+    except Exception:
         MarkItDown = None
     if MarkItDown is not None:
         return MarkItDown().convert(str(pdf_tmp)).text_content, "markitdown"
 
     try:
         from pypdf import PdfReader
-    except Exception:  # noqa: BLE001
+    except Exception:
         raise ConversorFaltant(
             "\nNo puc convertir els PDF: no es pot carregar cap conversor.\n"
-            f"  Python que s'està fent servir: {sys.executable}\n"
-            f"  Motiu (pymupdf4llm): {err_import}\n\n"
-            "Solució: instal·la'l amb EXACTAMENT aquest Python:\n"
-            f'  "{sys.executable}" -m pip install pypdf pillow\n'
+            f"  Python: {sys.executable}\n"
+            f"  Motiu: {err_import}\n"
         )
     pagines = [(p.extract_text() or "").strip() for p in PdfReader(str(pdf_tmp)).pages]
     return "\n\n".join(t for t in pagines if t), "pypdf"
 
 
 def _reescriu_imatges(md, img_dir):
-    """Deixa els enllaços d'imatge com TOKEN_IMG + nom (rutes relatives)."""
     def canvia(m):
         nom = re.split(r"[\\/]", m.group(2).strip())[-1]
         if (img_dir / nom).is_file():
@@ -224,13 +191,11 @@ def _reescriu_imatges(md, img_dir):
 
 
 def _pdf_com_imatges(pdf_tmp, img_dir, titol):
-    """PDF sense text: cada pàgina es desa com a JPG lleuger i el Markdown
-    només les mostra en ordre. Prova PyMuPDF i, si no hi és, pypdf+Pillow."""
     shutil.rmtree(img_dir, ignore_errors=True)
     img_dir.mkdir(parents=True)
     n = 0
     try:
-        import fitz  # PyMuPDF (s'instal·la amb pymupdf4llm)
+        import fitz
 
         doc = fitz.open(str(pdf_tmp))
         for i, page in enumerate(doc, 1):
@@ -242,7 +207,7 @@ def _pdf_com_imatges(pdf_tmp, img_dir, titol):
             except TypeError:
                 pix.save(str(nom))
             n += 1
-    except Exception:  # noqa: BLE001
+    except Exception:
         shutil.rmtree(img_dir, ignore_errors=True)
         img_dir.mkdir(parents=True)
         n = 0
@@ -254,7 +219,6 @@ def _pdf_com_imatges(pdf_tmp, img_dir, titol):
             raise RuntimeError(
                 "PDF sense text. Per publicar-lo com a imatges instal·la: "
                 f'"{sys.executable}" -m pip install pymupdf4llm pypdf pillow'
-
             )
         for i, page in enumerate(PdfReader(str(pdf_tmp)).pages, 1):
             imgs = list(page.images)
@@ -277,8 +241,6 @@ def _pdf_com_imatges(pdf_tmp, img_dir, titol):
 
 
 def converteix_pdf(pdf):
-    """Retorna (markdown_amb_token, carpeta_imatges_o_None) o None si falla.
-    Fa servir una memòria cau a .cache_pdf perquè no tardi cada vegada."""
     st = pdf.stat()
     clau = hashlib.sha1(
         f"{pdf.resolve()}|{st.st_size}|{st.st_mtime_ns}|{IMATGES_PDF}".encode()
@@ -289,14 +251,10 @@ def converteix_pdf(pdf):
         STATS["cache"] += 1
         return cmd.read_text(encoding="utf-8"), (cimg if cimg.is_dir() else None)
 
-    # Treballem directament a la carpeta final de la memòria cau (sense
-    # renombrar carpetes, que a Windows falla si OneDrive o l'antivirus
-    # tenen fitxers oberts). doc.md s'escriu l'últim: si no hi és, la
-    # conversió es considera incompleta i es repeteix.
     work = cdir
     shutil.rmtree(work, ignore_errors=True)
     (work / "img").mkdir(parents=True, exist_ok=True)
-    tmp_pdf = work / "doc.pdf"  # nom simple perquè les imatges no portin espais
+    tmp_pdf = work / "doc.pdf"
     try:
         shutil.copy2(pdf, tmp_pdf)
         md, motor = _pdf_a_markdown(tmp_pdf, work / "img")
@@ -309,7 +267,7 @@ def converteix_pdf(pdf):
         try:
             tmp_pdf.unlink(missing_ok=True)
         except OSError:
-            pass  # si Windows el té obert, no passa res
+            pass
         try:
             if not any((work / "img").iterdir()):
                 (work / "img").rmdir()
@@ -320,7 +278,7 @@ def converteix_pdf(pdf):
         shutil.rmtree(work, ignore_errors=True)
         print(e)
         sys.exit(1)
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         FALLITS.append((norm(pdf.name), f"{type(e).__name__}: {e}"))
         shutil.rmtree(work, ignore_errors=True)
         return None
@@ -335,8 +293,6 @@ def escriu(path, text):
 
 
 def esborra_docs():
-    """Esborra docs/ de forma robusta a Windows (fitxers de només lectura,
-    carpetes bloquejades un instant per l'antivirus o OneDrive...)."""
     def _treu_readonly(func, path, exc):
         try:
             os.chmod(path, stat.S_IWRITE)
@@ -348,125 +304,166 @@ def esborra_docs():
         try:
             if DOCS.exists():
                 try:
-                    shutil.rmtree(DOCS, onexc=_treu_readonly)  # Python 3.12+
+                    shutil.rmtree(DOCS, onexc=_treu_readonly)
                 except TypeError:
-                    shutil.rmtree(DOCS, onerror=_treu_readonly)  # més antic
+                    shutil.rmtree(DOCS, onerror=_treu_readonly)
             return
         except Exception:
             time.sleep(1)
-    print(
-        "\nNo puc esborrar la carpeta 'docs'. Tanca 'mkdocs serve' si el tens "
-        "en marxa,\ntanca qualsevol terminal o finestra de l'Explorador que "
-        "tingui oberta una carpeta dins de 'docs',\ni torna-ho a provar. "
-        "(Si persisteix, esborra la carpeta 'docs' a mà.)"
-    )
+    print("No puc esborrar la carpeta 'docs'. Tanca terminals o exploradors oberts.")
     sys.exit(1)
 
 
-CSS = r''':root{
-  --bg:#F6F8FB;--surface:#FFFFFF;--ink:#1A2230;--muted:#5A6677;--hairline:#E3E8EF;
-  --accent:#2563EB;--accent-soft:#E6EEFD;--slate-soft:#EDF1F6;--slate-ink:#3A4658;
-  --display:"Space Grotesk",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  --body:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+# ----------------------------------------------------------------------------
+# DISSENY CSS INTEGRAL (AZULES PROFESIONALES)
+# ----------------------------------------------------------------------------
+CSS = r''':root {
+  --bg: #F8FAFC;
+  --surface: #FFFFFF;
+  --ink: #0F172A;
+  --muted: #64748B;
+  --border: #E2E8F0;
+  --primary: #1E40AF;
+  --primary-hover: #1E3A8A;
+  --accent: #2563EB;
+  --accent-soft: #EFF6FF;
+  --accent-border: #BFDBFE;
+  --sidebar-w: 290px;
+  --topbar-h: 64px;
+  --font-display: "Space Grotesk", -apple-system, sans-serif;
+  --font-body: "Inter", -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
 }
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{font-family:var(--body);color:var(--ink);background:var(--bg);line-height:1.55;-webkit-font-smoothing:antialiased;padding:clamp(1.5rem,5vw,4.5rem) clamp(1.25rem,5vw,3rem) 3rem}
-.wrap{max-width:1080px;margin:0 auto}
 
-.back{font-family:var(--mono);font-size:.78rem;color:var(--muted);text-decoration:none;display:inline-flex;align-items:center;gap:.4rem;transition:color .2s ease;margin-bottom:1.1rem}
-.back:hover,.back:focus-visible{color:var(--accent)}
-.eyebrow{font-family:var(--mono);font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:.55rem}
-.eyebrow::before{content:"";width:1.6rem;height:2px;background:var(--accent);display:inline-block;flex-shrink:0}
-h1{font-family:var(--display);font-weight:700;font-size:clamp(2.1rem,5.5vw,3.4rem);letter-spacing:-.02em;line-height:1.05;margin:1.1rem 0 0}
-h1 .code{color:var(--accent)}
-.lede{color:var(--muted);font-size:clamp(1rem,1.6vw,1.18rem);max-width:60ch;margin-top:1.1rem}
-.rule{height:1px;background:var(--hairline);margin:clamp(2rem,5vw,3rem) 0}
-.section-title{font-family:var(--mono);font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 1rem}
-.section-title:not(:first-child){margin-top:2.4rem}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); color: var(--ink); background: var(--bg); line-height: 1.6; -webkit-font-smoothing: antialiased; }
 
-/* Targetes */
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(.9rem,2vw,1.4rem)}
-.card{position:relative;display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--hairline);border-radius:16px;padding:1.6rem 1.6rem 1.4rem;text-decoration:none;color:inherit;overflow:hidden;transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease}
-.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--accent);transform:scaleY(0);transform-origin:top;transition:transform .26s ease}
-a.card:hover,a.card:focus-visible{transform:translateY(-4px);border-color:#D6DEE8;box-shadow:0 14px 34px -18px rgba(26,34,48,.34);outline:none}
-a.card:hover::before,a.card:focus-visible::before{transform:scaleY(1)}
-a.card:focus-visible{box-shadow:0 0 0 3px var(--accent-soft),0 14px 34px -18px rgba(26,34,48,.34)}
-.card-top{display:flex;align-items:center;justify-content:space-between;gap:.75rem;margin-bottom:1rem}
-.aea-code{font-family:var(--mono);font-weight:600;font-size:.8rem;letter-spacing:.04em;color:#fff;background:var(--ink);padding:.32rem .6rem;border-radius:7px}
-.tags{display:flex;gap:.4rem;flex-wrap:wrap;justify-content:flex-end}
-.tag{font-family:var(--mono);font-size:.7rem;padding:.28rem .55rem;border-radius:6px;white-space:nowrap}
-.tag.ra{background:var(--accent-soft);color:#1D4ED8}
-.tag.soon{background:var(--slate-soft);color:var(--slate-ink)}
-.card h2{font-family:var(--display);font-weight:600;font-size:1.18rem;letter-spacing:-.01em;line-height:1.25}
-.card p{color:var(--muted);font-size:.93rem;margin-top:.55rem;flex:1}
-.card .spacer{flex:1}
-.open{margin-top:1.25rem;font-family:var(--mono);font-size:.8rem;font-weight:600;color:var(--accent);display:inline-flex;align-items:center;gap:.4rem}
-.open .arrow{transition:transform .22s ease}
-a.card:hover .open .arrow,a.card:focus-visible .open .arrow{transform:translateX(4px)}
-.card.disabled{cursor:not-allowed;background:#FAFBFC;opacity:.62;filter:grayscale(.4)}
-.card.disabled .aea-code{background:#9aa4b2}
-.card.disabled .open{color:#9aa4b2}
+/* Barra Superior Fija con Buscador */
+.topbar {
+  position: fixed; top: 0; left: 0; right: 0; height: var(--topbar-h);
+  background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border); display: flex; align-items: center;
+  justify-content: space-between; padding: 0 1.5rem; z-index: 1000;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+}
+.topbar-brand { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: var(--ink); font-weight: 700; font-family: var(--font-display); font-size: 1.1rem; }
+.topbar-brand svg { width: 26px; height: 26px; color: var(--accent); }
+.search-container { position: relative; width: 320px; }
+.search-container input {
+  width: 100%; padding: 0.5rem 1rem 0.5rem 2.4rem; border-radius: 999px;
+  border: 1px solid var(--border); background: var(--bg); font-size: 0.85rem;
+  color: var(--ink); outline: none; transition: all 0.2s ease;
+}
+.search-container input:focus { border-color: var(--accent); background: #FFF; box-shadow: 0 0 0 3px rgba(37,99,235,0.15); }
+.search-container svg { position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: var(--muted); }
 
-/* Llista de recursos */
-.resource-list{border-top:1px solid var(--hairline);margin-bottom:.5rem}
-.resource{display:flex;align-items:center;gap:1rem;padding:1.05rem .35rem;border-bottom:1px solid var(--hairline);text-decoration:none;color:inherit;transition:background .18s ease}
-.resource:hover,.resource:focus-visible{background:var(--surface);outline:none}
-.resource-icon{flex-shrink:0;width:38px;height:38px;border-radius:10px;background:var(--slate-soft);display:flex;align-items:center;justify-content:center;color:var(--slate-ink)}
-.resource-icon svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.resource-body{flex:1;min-width:0;display:flex;align-items:baseline;gap:.55rem;flex-wrap:wrap}
-.resource-type{font-family:var(--mono);font-size:.7rem;color:var(--accent);background:var(--accent-soft);padding:.2rem .5rem;border-radius:6px;white-space:nowrap;flex-shrink:0}
-.resource-title{font-weight:500;font-size:.96rem;color:var(--ink);min-width:0;word-break:break-word}
-.empty{background:var(--surface);border:1px dashed #C9D2DE;border-radius:16px;padding:2rem 1.6rem;color:var(--muted);text-align:center}
-.empty strong{display:block;font-family:var(--display);font-size:1.15rem;color:var(--ink);margin-bottom:.3rem}
+/* Layout Base */
+.wrap { max-width: 1120px; margin: 0 auto; padding: calc(var(--topbar-h) + 2rem) 1.5rem 3rem; }
 
-/* Pàgines de contingut */
-.toc{display:flex;flex-wrap:wrap;gap:.45rem;align-items:center;margin:0 0 1.8rem;font-family:var(--mono);font-size:.74rem}
-.toc span{color:var(--muted);margin-right:.3rem;text-transform:uppercase;letter-spacing:.1em}
-.toc a{color:var(--slate-ink);background:var(--surface);border:1px solid var(--hairline);padding:.3rem .65rem;border-radius:999px;text-decoration:none}
-.toc a:hover{color:var(--accent);border-color:var(--accent)}
-.prose{background:var(--surface);border:1px solid var(--hairline);border-radius:16px;padding:clamp(1.4rem,4vw,2.6rem);font-size:1rem}
-.prose>*+*{margin-top:1rem}
-.prose h1{font-size:clamp(1.8rem,4.2vw,2.5rem);margin:0 0 .4rem}
-.prose h2{font-family:var(--display);font-weight:600;font-size:1.55rem;letter-spacing:-.01em;line-height:1.2;margin-top:2.4rem;padding-top:1.6rem;border-top:1px solid var(--hairline)}
-.prose h3{font-family:var(--display);font-weight:600;font-size:1.15rem;margin-top:1.6rem}
-.prose h4{font-weight:600;margin-top:1.3rem}
-.prose p,.prose li{color:#2b3546}
-.prose ul,.prose ol{padding-left:1.4rem}
-.prose li+li{margin-top:.35rem}
-.prose a{color:var(--accent)}
-.prose strong{color:var(--ink)}
-.prose em{color:var(--muted)}
-.prose code{font-family:var(--mono);font-size:.86em;background:var(--slate-soft);color:var(--slate-ink);padding:.12em .4em;border-radius:5px}
-.prose pre{background:#0F1724;color:#E6EDF5;border-radius:12px;padding:1.1rem 1.3rem;overflow-x:auto;line-height:1.5}
-.prose pre code{background:none;color:inherit;padding:0;font-size:.85rem}
-.prose img{max-width:100%;height:auto;display:block;border-radius:12px;border:1px solid var(--hairline);box-shadow:0 10px 30px -22px rgba(26,34,48,.5);margin-top:1.4rem}
-.prose table{border-collapse:collapse;width:100%;font-size:.93rem;display:block;overflow-x:auto}
-.prose th{background:var(--ink);color:#fff;text-align:left;font-weight:600;padding:.65rem .85rem}
-.prose td{padding:.6rem .85rem;border-bottom:1px solid var(--hairline)}
-.prose tr:nth-child(even) td{background:#FAFBFD}
-.prose blockquote{border-left:4px solid var(--accent);background:var(--accent-soft);padding:.8rem 1.1rem;border-radius:0 10px 10px 0}
-.prose hr{border:0;height:1px;background:var(--hairline)}
-.admonition{border-left:4px solid #3b82c4;background:#EEF5FC;border-radius:0 12px 12px 0;padding:.85rem 1.15rem}
-.admonition>*+*{margin-top:.6rem}
-.admonition-title{font-family:var(--mono);font-size:.74rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#2b6aa3}
-.admonition.tip,.admonition.success,.admonition.example{border-color:#1f9d55;background:#EDF8F1}
-.admonition.tip .admonition-title,.admonition.success .admonition-title,.admonition.example .admonition-title{color:#17783f}
-.admonition.warning,.admonition.danger,.admonition.failure{border-color:#d9534f;background:#FDF0EF}
-.admonition.warning .admonition-title,.admonition.danger .admonition-title,.admonition.failure .admonition-title{color:#b03a37}
-.admonition.abstract,.admonition.question{border-color:var(--accent);background:var(--accent-soft)}
-.admonition.abstract .admonition-title,.admonition.question .admonition-title{color:#1D4ED8}
+/* Cabecera Hero con Degradado */
+.hero {
+  background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 50%, #3B82F6 100%);
+  color: #FFF; border-radius: 20px; padding: 3.5rem 2.5rem 3rem;
+  box-shadow: 0 10px 30px -10px rgba(30,58,138,0.3); margin-bottom: 2.5rem;
+}
+.hero .back { display: inline-flex; align-items: center; gap: 0.4rem; color: #93C5FD; font-family: var(--font-mono); font-size: 0.82rem; text-decoration: none; margin-bottom: 1.2rem; transition: color 0.2s; }
+.hero .back:hover { color: #FFF; }
+.hero .eyebrow { font-family: var(--font-mono); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.12em; color: #BFDBFE; display: flex; align-items: center; gap: 0.5rem; }
+.hero h1 { font-family: var(--font-display); font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; line-height: 1.15; margin-top: 0.6rem; color: #FFF; }
+.hero .lede { color: #E0F2FE; font-size: 1.1rem; max-width: 65ch; margin-top: 1rem; opacity: 0.95; }
 
-footer{margin-top:clamp(2.5rem,6vw,4rem);padding-top:1.5rem;border-top:1px solid var(--hairline);color:var(--muted);font-size:.82rem;font-family:var(--mono);letter-spacing:.01em}
-@media (max-width:680px){.grid{grid-template-columns:1fr}}
-@media (prefers-reduced-motion:reduce){*{transition:none !important;scroll-behavior:auto}}
+/* Grid de Tarjetas */
+.section-title { font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin: 2rem 0 1rem; }
+.grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; }
+.card {
+  position: relative; background: var(--surface); border: 1px solid var(--border);
+  border-radius: 16px; padding: 1.5rem; text-decoration: none; color: inherit;
+  display: flex; flex-direction: column; transition: all 0.25s ease;
+  overflow: hidden;
+}
+.card:hover:not(.disabled) { transform: translateY(-4px); border-color: var(--accent-border); box-shadow: 0 12px 30px -10px rgba(37,99,235,0.15); }
+.card-top { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; margin-bottom: 1rem; }
+.card-icon { width: 44px; height: 44px; border-radius: 12px; background: var(--accent-soft); color: var(--primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.card-icon svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.aea-code { font-family: var(--font-mono); font-weight: 600; font-size: 0.82rem; color: var(--primary); background: var(--accent-soft); padding: 0.3rem 0.65rem; border-radius: 8px; border: 1px solid var(--accent-border); }
+.tags .tag { font-family: var(--font-mono); font-size: 0.72rem; padding: 0.25rem 0.55rem; border-radius: 6px; white-space: nowrap; }
+.tag.ra { background: #DCFCE7; color: #166534; }
+.tag.soon { background: #F1F5F9; color: #64748B; }
+.card h2 { font-family: var(--font-display); font-weight: 600; font-size: 1.2rem; line-height: 1.3; margin-bottom: 0.4rem; }
+.card p { color: var(--muted); font-size: 0.92rem; flex: 1; }
+.open { margin-top: 1.25rem; font-family: var(--font-mono); font-size: 0.82rem; font-weight: 600; color: var(--accent); display: inline-flex; align-items: center; gap: 0.4rem; }
+.open .arrow { transition: transform 0.2s ease; }
+.card:hover .open .arrow { transform: translateX(4px); }
+.card.disabled { opacity: 0.6; cursor: not-allowed; background: #F8FAFC; }
+
+/* Lista de Recursos */
+.resource-list { border: 1px solid var(--border); border-radius: 14px; background: var(--surface); overflow: hidden; margin-bottom: 1.5rem; }
+.resource { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.2rem; text-decoration: none; color: inherit; border-bottom: 1px solid var(--border); transition: background 0.15s; }
+.resource:last-child { border-bottom: none; }
+.resource:hover { background: var(--accent-soft); }
+.resource-icon { width: 38px; height: 38px; border-radius: 10px; background: var(--accent-soft); color: var(--accent); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.resource-icon svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2; }
+.resource-body { flex: 1; min-width: 0; display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+.resource-type { font-family: var(--font-mono); font-size: 0.72rem; color: var(--primary); background: #DBEAFE; padding: 0.2rem 0.5rem; border-radius: 6px; }
+.resource-title { font-weight: 500; font-size: 0.95rem; color: var(--ink); }
+
+/* Layout de Apunte con Menú Lateral */
+.apunt-layout { display: flex; margin-top: var(--topbar-h); min-height: calc(100vh - var(--topbar-h)); }
+.sidebar {
+  width: var(--sidebar-w); background: var(--surface); border-right: 1px solid var(--border);
+  padding: 2rem 1.25rem; position: fixed; top: var(--topbar-h); bottom: 0; overflow-y: auto;
+}
+.sidebar-head { font-family: var(--font-mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 1rem; padding-left: 0.5rem; }
+.sidebar-menu { list-style: none; }
+.sidebar-menu a {
+  display: flex; align-items: center; gap: 0.6rem; padding: 0.65rem 0.75rem; border-radius: 10px;
+  text-decoration: none; color: var(--muted); font-size: 0.88rem; font-weight: 500; transition: all 0.15s; margin-bottom: 0.25rem;
+}
+.sidebar-menu a:hover { background: var(--accent-soft); color: var(--accent); }
+.sidebar-menu a.active { background: var(--accent-soft); color: var(--primary); font-weight: 600; border: 1px solid var(--accent-border); }
+
+.apunt-content { margin-left: var(--sidebar-w); flex: 1; padding: 2.5rem 3.5rem 4rem; max-width: 960px; }
+.apunt-header { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
+.apunt-eyebrow { font-family: var(--font-mono); font-size: 0.78rem; text-transform: uppercase; color: var(--accent); margin-bottom: 0.4rem; }
+
+/* Prosa */
+.prose { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2.5rem; }
+.prose > * + * { margin-top: 1.1rem; }
+.prose h1 { font-family: var(--font-display); font-size: 2rem; color: var(--ink); margin-bottom: 0.5rem; }
+.prose h2 { font-family: var(--font-display); font-size: 1.4rem; padding-top: 1.5rem; border-top: 1px solid var(--border); margin-top: 2rem; }
+.prose h3 { font-family: var(--font-display); font-size: 1.15rem; margin-top: 1.5rem; }
+.prose p, .prose li { color: #334155; line-height: 1.65; }
+.prose ul, .prose ol { padding-left: 1.4rem; }
+.prose a { color: var(--accent); font-weight: 500; }
+.prose code { font-family: var(--font-mono); font-size: 0.85em; background: #F1F5F9; color: #0F172A; padding: 0.15em 0.4em; border-radius: 6px; }
+.prose pre { background: #0F172A; color: #F8FAFC; border-radius: 12px; padding: 1.25rem; overflow-x:auto; }
+.prose pre code { background: none; color: inherit; padding: 0; }
+.prose img { max-width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--border); margin: 1.5rem 0; }
+
+/* Botones Anterior / Siguiente */
+.pager { display: flex; justify-content: space-between; gap: 1rem; margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+.pager-btn {
+  display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.75rem 1.25rem;
+  border-radius: 10px; border: 1px solid var(--border); background: var(--surface);
+  text-decoration: none; color: var(--ink); font-weight: 500; font-size: 0.88rem;
+  transition: all 0.2s ease;
+}
+.pager-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); transform: translateY(-1px); }
+
+.empty { background: var(--surface); border: 1px dashed var(--border); border-radius: 16px; padding: 2.5rem; color: var(--muted); text-align: center; }
+.empty strong { display: block; font-family: var(--font-display); font-size: 1.15rem; color: var(--ink); margin-bottom: 0.4rem; }
+footer { margin-top: 4rem; padding-top: 1.5rem; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.82rem; font-family: var(--font-mono); text-align: center; }
+
+@media (max-width: 768px) {
+  .grid { grid-template-columns: 1fr; }
+  .apunt-layout { flex-direction: column; }
+  .sidebar { position: relative; width: 100%; height: auto; top: 0; border-right: none; border-bottom: 1px solid var(--border); }
+  .apunt-content { margin-left: 0; padding: 1.5rem; }
+  .search-container { width: 180px; }
+}
 '''
 
-
-# ----------------------------------------------------------------------------
-# Disseny: HTML, targetes i pàgines
-# ----------------------------------------------------------------------------
 esc = html.escape
 MARCADOR_DIAPOSITIVES = "Material en format diapositives."
 
@@ -486,7 +483,6 @@ def natural(s):
 
 
 def rel_href(destino, des_de_dir):
-    """Ruta relativa (codificada per a URL) des d'una carpeta fins a un fitxer."""
     r = os.path.relpath(str(destino), str(des_de_dir)).replace(os.sep, "/")
     return quote(r, safe="/#")
 
@@ -496,8 +492,47 @@ def prefix_de(path):
     return "../" * prof
 
 
-def pagina(path, titol, cos):
+def barra_superior(pre=""):
+    return f"""
+<header class="topbar">
+  <a class="topbar-brand" href="{pre}index.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 14l9-5-9-5-9 5 9 5z"/><path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0112 20.055a11.952 11.952 0 01-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
+    <span>Portal Docent</span>
+  </a>
+  <div class="search-container">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" id="site-search" placeholder="Cercar material o temari..." onkeyup="filtrarContingut()">
+  </div>
+</header>
+"""
+
+
+def pagina(path, titol, cos, es_apunt=False, sidebar_html=""):
     pre = prefix_de(path)
+    topbar = barra_superior(pre)
+
+    if es_apunt:
+        body_content = f"""
+{topbar}
+<div class="apunt-layout">
+  <aside class="sidebar">
+    {sidebar_html}
+  </aside>
+  <main class="apunt-content">
+    {cos}
+    <footer>{esc(FOOTER)}</footer>
+  </main>
+</div>
+"""
+    else:
+        body_content = f"""
+{topbar}
+<div class="wrap">
+{cos}
+  <footer>{esc(FOOTER)}</footer>
+</div>
+"""
+
     return f"""<!DOCTYPE html>
 <html lang="ca">
 <head>
@@ -506,14 +541,21 @@ def pagina(path, titol, cos):
 <title>{esc(titol)} · {esc(SITE_NAME)}</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{pre}assets/style.css">
 </head>
 <body>
-<div class="wrap">
-{cos}
-  <footer>{esc(FOOTER)}</footer>
-</div>
+{body_content}
+<script>
+function filtrarContingut() {{
+  let input = document.getElementById('site-search').value.toLowerCase();
+  let items = document.querySelectorAll('.card, .resource');
+  items.forEach(item => {{
+    let text = item.innerText.toLowerCase();
+    item.style.display = text.includes(input) ? '' : 'none';
+  }});
+}}
+</script>
 </body>
 </html>
 """
@@ -522,23 +564,25 @@ def pagina(path, titol, cos):
 def capcalera(eyebrow, h1_html, lede=None, back=None):
     b = f'<a class="back" href="{back[0]}">← {esc(back[1])}</a>\n    ' if back else ""
     l = f'\n    <p class="lede">{esc(lede)}</p>' if lede else ""
-    return f"""  <header>
+    return f"""  <section class="hero">
     {b}<div class="eyebrow">{esc(eyebrow)}</div>
     <h1>{h1_html}</h1>{l}
-  </header>
-
-  <div class="rule"></div>
+  </section>
 """
 
 
 def titol_h1(codi, titol):
-    return f'{esc(codi)} <span class="code">—</span> {esc(titol)}'
+    return f'{esc(codi)} <span style="opacity:0.6">—</span> {esc(titol)}'
 
 
 def targeta(codi, titol, desc, href, tag=None, disabled=False):
     t = f'<span class="tags"><span class="tag {"soon" if disabled else "ra"}">{esc(tag)}</span></span>' if tag else ""
-    d = f"<p>{esc(desc)}</p>" if desc else '<div class="spacer"></div>'
+    d = f"<p>{esc(desc)}</p>" if desc else ''
+    icona = f"""<div class="card-icon">
+        <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      </div>"""
     cont = f"""      <div class="card-top">
+        {icona}
         <span class="aea-code">{esc(codi)}</span>
         {t}
       </div>
@@ -547,7 +591,7 @@ def targeta(codi, titol, desc, href, tag=None, disabled=False):
     if disabled:
         return f"""    <div class="card disabled" aria-disabled="true">
 {cont}
-      <span class="open">Properament</span>
+      <span class="open" style="color:var(--muted)">Properament</span>
     </div>
 """
     return f"""    <a class="card" href="{href}">
@@ -574,15 +618,12 @@ def properament_caixa(text="El material d'aquest apartat estarà disponible avia
 """
 
 
-# ----------------------------------------------------------------------------
-# Markdown -> HTML
-# ----------------------------------------------------------------------------
 def md_a_html(text):
     try:
         import markdown
-    except Exception:  # noqa: BLE001
+    except Exception:
         print(
-            "\nFalta la llibreria 'markdown'. Instal·la-la amb EXACTAMENT aquest Python:\n"
+            "\nFalta la llibreria 'markdown'. Instal·la-la amb:\n"
             f'  "{sys.executable}" -m pip install markdown\n'
         )
         sys.exit(1)
@@ -615,26 +656,7 @@ def assegura_h1(text, titol):
     return f"# {titol}\n\n{text}"
 
 
-def pagina_contingut(path, md_text, titol, back_href, back_text, eyebrow):
-    cos, h2 = md_a_html(md_text)
-    toc = ""
-    if len(h2) >= 3:
-        enllacos = "".join(f'<a href="#{esc(i)}">{esc(re.sub(r"<[^>]+>", "", n))}</a>' for i, n in h2)
-        toc = f'  <nav class="toc"><span>Contingut</span>{enllacos}</nav>\n'
-    cap = f"""  <header>
-    <a class="back" href="{back_href}">← {esc(back_text)}</a>
-    <div class="eyebrow">{esc(eyebrow)}</div>
-  </header>
-  <div class="rule"></div>
-"""
-    return pagina(path, titol, f"{cap}{toc}  <article class=\"prose\">\n{cos}\n  </article>\n")
-
-
-# ----------------------------------------------------------------------------
-# Material d'un RA / mòdul
-# ----------------------------------------------------------------------------
 def te_germa_publicable(f):
-    """Hi ha un .md/.html amb el mateix nom (sense espais/tildes) al costat?"""
     for x in f.parent.iterdir():
         if x.suffix.lower() in (".md", ".html", ".htm") and slug(norm(x.stem)) == slug(norm(f.stem)):
             return True
@@ -642,10 +664,6 @@ def te_germa_publicable(f):
 
 
 def processa_material(fitxers, base, desti, index_path, nom_pagina_tornar, eyebrow):
-    """Genera les pàgines/còpies d'un conjunt de fitxers de teoria.
-    base: carpeta d'origen (Teoria); desti: carpeta de sortida.
-    index_path: pàgina a la qual tornen les pàgines de contingut.
-    Retorna llista de dicts {grup, titol, path, tipus, nova}."""
     res = []
     usats = {"index.html"}
 
@@ -658,6 +676,7 @@ def processa_material(fitxers, base, desti, index_path, nom_pagina_tornar, eyebr
         usats.add((rel_dir + "/" + n).lower())
         return n
 
+    elements_generats = []
     for f in sorted(fitxers, key=lambda x: natural(str(x.relative_to(base)))):
         rel = f.relative_to(base)
         dirs = [norm(p) for p in rel.parts[:-1]]
@@ -667,14 +686,12 @@ def processa_material(fitxers, base, desti, index_path, nom_pagina_tornar, eyebr
         ext = f.suffix.lower()
         stem = norm(f.stem)
 
-        # --- imatges: es copien (per als .md propis) però no es llisten
         if ext in EXT_IMATGE:
             out_dir.mkdir(parents=True, exist_ok=True)
             nom = lliure(rel_dir, norm(f.name))
             shutil.copy2(f, out_dir / nom)
             continue
 
-        # --- PDF -> pàgina (el PDF no es publica)
         if ext == ".pdf" and CONVERTIR_PDF:
             if te_germa_publicable(f):
                 continue
@@ -683,34 +700,28 @@ def processa_material(fitxers, base, desti, index_path, nom_pagina_tornar, eyebr
                 continue
             md, cimg = r
             nom = lliure(rel_dir, slug(stem, 80) + ".html")
-            out_dir.mkdir(parents=True, exist_ok=True)
-            img_nom = Path(nom).stem + "-img"
-            if cimg is not None:
-                shutil.copytree(cimg, out_dir / img_nom, dirs_exist_ok=True)
-            md = md.replace(TOKEN_IMG, quote(img_nom) + "/")
-            md = assegura_h1(md, stem)
             path = out_dir / nom
-            escriu(path, pagina_contingut(
-                path, md, stem, rel_href(index_path, path.parent),
-                nom_pagina_tornar, eyebrow))
             tipus = "diapositives" if MARCADOR_DIAPOSITIVES in md else "pagina"
+            elements_generats.append({
+                "orig": f, "path": path, "stem": stem, "ext": ext, "md": md, "cimg": cimg,
+                "out_dir": out_dir, "nom": nom, "grup": grup, "tipus": tipus, "titol": stem, "nova": False
+            })
             res.append(dict(grup=grup, titol=stem, path=path, tipus=tipus, nova=False))
             continue
 
-        # --- Markdown -> pàgina
         if ext == ".md":
             text = f.read_text(encoding="utf-8-sig", errors="replace")
             titol = titol_md(text, stem)
             text = assegura_h1(text, titol)
             nom = lliure(rel_dir, slug(stem, 80) + ".html")
             path = out_dir / nom
-            escriu(path, pagina_contingut(
-                path, text, titol, rel_href(index_path, path.parent),
-                nom_pagina_tornar, eyebrow))
+            elements_generats.append({
+                "orig": f, "path": path, "stem": stem, "ext": ext, "md": text, "cimg": None,
+                "out_dir": out_dir, "nom": nom, "grup": grup, "tipus": "pagina", "titol": titol, "nova": False
+            })
             res.append(dict(grup=grup, titol=titol, path=path, tipus="pagina", nova=False))
             continue
 
-        # --- HTML propi: es publica tal qual
         out_dir.mkdir(parents=True, exist_ok=True)
         nom = lliure(rel_dir, norm(f.name))
         shutil.copy2(f, out_dir / nom)
@@ -722,12 +733,67 @@ def processa_material(fitxers, base, desti, index_path, nom_pagina_tornar, eyebr
             if f.stat().st_size > AVIS_MB_FITXER * 1024 * 1024:
                 GRANS.append((norm(f.name), f.stat().st_size // (1024 * 1024)))
             res.append(dict(grup=grup, titol=norm(f.name), path=out_dir / nom, tipus="fitxer", nova=True))
+
     res.sort(key=lambda r: (natural(r["grup"]), natural(r["titol"])))
+
+    num_elems = len(elements_generats)
+    for idx, el in enumerate(elements_generats):
+        out_dir = el["out_dir"]
+        path = el["path"]
+        md = el["md"]
+
+        if el["cimg"] is not None:
+            img_nom = Path(el["nom"]).stem + "-img"
+            shutil.copytree(el["cimg"], out_dir / img_nom, dirs_exist_ok=True)
+            md = md.replace(TOKEN_IMG, quote(img_nom) + "/")
+
+        cos_html, h2 = md_a_html(md)
+
+        menu_items = []
+        for r_item in res:
+            if r_item["tipus"] in ("pagina", "diapositives", "html"):
+                is_active = (r_item["path"] == path)
+                active_cls = ' class="active"' if is_active else ''
+                menu_items.append(f'<li><a href="{rel_href(r_item["path"], path.parent)}"{active_cls}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> {esc(r_item["titol"])}</a></li>')
+
+        sidebar_html = f"""
+<div class="sidebar-head">Material del RA</div>
+<ul class="sidebar-menu">
+  {"".join(menu_items)}
+</ul>
+"""
+
+        pager_html = '<nav class="pager">'
+        if idx > 0:
+            ant = elements_generats[idx - 1]
+            pager_html += f'<a class="pager-btn" href="{rel_href(ant["path"], path.parent)}">← {esc(ant["titol"])}</a>'
+        else:
+            pager_html += '<span></span>'
+
+        if idx < num_elems - 1:
+            sig = elements_generats[idx + 1]
+            pager_html += f'<a class="pager-btn" href="{rel_href(sig["path"], path.parent)}">{esc(sig["titol"])} →</a>'
+        pager_html += '</nav>'
+
+        header_apunt = f"""
+<div class="apunt-header">
+  <a class="back" href="{rel_href(index_path, path.parent)}" style="color:var(--accent); text-decoration:none; font-family:var(--font-mono); font-size:0.8rem;">← {esc(nom_pagina_tornar)}</a>
+  <div class="apunt-eyebrow" style="margin-top:0.5rem;">{esc(eyebrow)}</div>
+</div>
+"""
+        full_content = f"""
+{header_apunt}
+<article class="prose">
+  {cos_html}
+</article>
+{pager_html}
+"""
+        escriu(path, pagina(path, el["titol"], full_content, es_apunt=True, sidebar_html=sidebar_html))
+
     return res
 
 
 def llista_recursos(res, pagina_dir):
-    """HTML de la llista de recursos, agrupada per subcarpeta."""
     out = []
     grups = []
     for r in res:
@@ -751,9 +817,6 @@ def llegeix_descripcio(carpeta):
     return ""
 
 
-# ----------------------------------------------------------------------------
-# Construcció de mòduls, cicles i portada
-# ----------------------------------------------------------------------------
 RE_RA = re.compile(r"(?i)^ra\s*(\d+)\s*[-–—:._)]*\s*(.*)$")
 
 
@@ -770,7 +833,6 @@ def construeix_modul(m_dir, c_slug, c_nom, codi, nom):
         ras_dirs += [d for d in subcarpetes(teoria_mod) if RE_RA.match(norm(d.name))]
     ras_dirs.sort(key=lambda d: natural(d.name))
 
-    # Material a nivell de mòdul (fora de les carpetes RA)
     nom_ras = {norm(d.name) for d in ras_dirs}
     fit_mod = []
     if teoria_mod:
@@ -800,7 +862,6 @@ def construeix_modul(m_dir, c_slug, c_nom, codi, nom):
             fit, t, ra_dir_out, ra_index, f"Tornar a RA{n}",
             f"{c_nom} · M{codi} · RA{n}") if fit else []
         desc = llegeix_descripcio(ra)
-        # pàgina de l'RA
         cap = capcalera(
             f"{c_nom} · M{codi} · RA{n}",
             titol_h1(f"RA{n}", titol_ra or f"Resultat d'aprenentatge {n}"),
@@ -813,7 +874,6 @@ def construeix_modul(m_dir, c_slug, c_nom, codi, nom):
         escriu(ra_index, pagina(ra_index, f"RA{n} · {titol_ra or nom}", cos))
         ras.append(dict(n=n, titol=titol_ra or f"RA{n}", index=ra_index, mat=mat, desc=desc))
 
-    # pàgina del mòdul
     desc_mod = llegeix_descripcio(m_dir)
     cap = capcalera(
         eyebrow_mod, titol_h1(f"M{codi}", nom),
@@ -871,7 +931,6 @@ def main():
         for md_ in moduls:
             resum.append((cicle, f"M{md_['codi']} {md_['nom']}", md_["ok"]))
 
-        # pàgina del cicle
         cap = capcalera(
             f"Cicle {cicle}", titol_h1(cicle, c_nom),
             f"Mòduls de {cicle} amb el seu material.",
@@ -894,7 +953,6 @@ def main():
         escriu(c_index, pagina(c_index, f"{cicle} · {c_nom}", cos))
         cicles_info.append((cicle, c_nom, c_index, moduls))
 
-    # portada
     h_index = DOCS / "index.html"
     cos = capcalera(SITE_EYEBROW, esc(SITE_NAME), SITE_LEDE) + '  <main class="grid">\n'
     for cicle, c_nom, c_index, moduls in cicles_info:
@@ -904,29 +962,7 @@ def main():
     cos += "  </main>\n"
     escriu(h_index, pagina(h_index, SITE_NAME, cos))
 
-    # resum per pantalla
-    print("\nWeb generada. Resum:")
-    for cicle, titol, ok in resum:
-        print(f"  [{'amb material' if ok else 'properament'}] {cicle} · {titol}")
-    if ignorades:
-        print("\nCarpetes NO publicades (no segueixen el patró '0000 Nom del mòdul'):")
-        for i in ignorades:
-            print("  -", i)
-    mida = sum(f.stat().st_size for f in DOCS.rglob("*") if f.is_file()) / 1048576
-    print(f"\nMida de la web (docs): {mida:.1f} MB")
-    if mida > AVIS_MB_TOTAL:
-        print(f"  ATENCIÓ: passa de {AVIS_MB_TOTAL} MB. GitHub Pages admet 1 GB com a màxim.")
-    if STATS["convertits"] or STATS["cache"]:
-        print(f"PDF convertits ara: {STATS['convertits']} · reutilitzats de la memòria cau: {STATS['cache']}")
-    if FALLITS:
-        print("\nPDF NO convertits (no apareixen a la web):")
-        for n, e in FALLITS:
-            print(f"  - {n}: {e}")
-    if GRANS:
-        print(f"\nFitxers (no PDF) de més de {AVIS_MB_FITXER} MB que es pujaran tal qual:")
-        for n, mb in GRANS:
-            print(f"  - {n} ({mb} MB)")
-    print("\nSegüent pas: obre docs/index.html al navegador per veure-la, o puja els canvis amb GitHub Desktop.")
+    print("\nWeb generada amb el nou disseny professional en blaus!")
 
 
 if __name__ == "__main__":

@@ -6,21 +6,43 @@
 <title>RA7 · Connecta xarxes privades a xarxes públiques · Material docent</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../../assets/style.css">
 </head>
 <body>
+
+
+<header class="topbar">
+  <a class="topbar-brand" href="../../../index.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 14l9-5-9-5-9 5 9 5z"/><path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0112 20.055a11.952 11.952 0 01-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
+    <span>Portal Docent</span>
+  </a>
+  <div class="search-container">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" id="site-search" placeholder="Cercar material o temari..." onkeyup="filtrarContingut()">
+  </div>
+</header>
+
 <div class="wrap">
-  <header>
+  <section class="hero">
     <a class="back" href="../index.html">← Tornar a M0370</a>
     <div class="eyebrow">ASIX · M0370 · RA7</div>
-    <h1>RA7 <span class="code">—</span> Connecta xarxes privades a xarxes públiques</h1>
-  </header>
-
-  <div class="rule"></div>
+    <h1>RA7 <span style="opacity:0.6">—</span> Connecta xarxes privades a xarxes públiques</h1>
+  </section>
   <div class="empty"><strong>Material properament</strong>El material d&#x27;aquest apartat estarà disponible aviat.</div>
 
   <footer>Material docent · Formació Professional · Informàtica</footer>
 </div>
+
+<script>
+function filtrarContingut() {
+  let input = document.getElementById('site-search').value.toLowerCase();
+  let items = document.querySelectorAll('.card, .resource');
+  items.forEach(item => {
+    let text = item.innerText.toLowerCase();
+    item.style.display = text.includes(input) ? '' : 'none';
+  });
+}
+</script>
 </body>
 </html>

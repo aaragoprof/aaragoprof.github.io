@@ -6,19 +6,42 @@
 <title>Tipus de Llicències de Software · Material docent</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../../assets/style.css">
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <a class="back" href="index.html">← Tornar a RA5</a>
-    <div class="eyebrow">SMIX · M0226 · RA5</div>
-  </header>
-  <div class="rule"></div>
-  <article class="prose">
-<h1 id="tipus-de-llicencies-de-software">Tipus de Llicències de Software</h1>
-<p>GESTIÓ I LEGALITAT DE PROGRAMARI
+
+
+<header class="topbar">
+  <a class="topbar-brand" href="../../../index.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 14l9-5-9-5-9 5 9 5z"/><path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0112 20.055a11.952 11.952 0 01-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
+    <span>Portal Docent</span>
+  </a>
+  <div class="search-container">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" id="site-search" placeholder="Cercar material o temari..." onkeyup="filtrarContingut()">
+  </div>
+</header>
+
+<div class="apunt-layout">
+  <aside class="sidebar">
+    
+<div class="sidebar-head">Material del RA</div>
+<ul class="sidebar-menu">
+  <li><a href="legislacio-de-seguretat-i-proteccio-de-dades.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Legislació de Seguretat i Protecció de Dades</a></li><li><a href="marc-normatiu-actual.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Marc Normatiu Actual</a></li><li><a href="tipus-de-llicencies-de-software.html" class="active"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Tipus de Llicències de Software</a></li>
+</ul>
+
+  </aside>
+  <main class="apunt-content">
+    
+
+<div class="apunt-header">
+  <a class="back" href="index.html" style="color:var(--accent); text-decoration:none; font-family:var(--font-mono); font-size:0.8rem;">← Tornar a RA5</a>
+  <div class="apunt-eyebrow" style="margin-top:0.5rem;">SMIX · M0226 · RA5</div>
+</div>
+
+<article class="prose">
+  <p>GESTIÓ I LEGALITAT DE PROGRAMARI
 Tipus de Llicències de Software
 Programari no lliure OEM, Retail, Volum) vs Programari Lliure GPL, BSD, MPL, Copyleft)</p>
 <p>PROGRAMARI PROPIETARI
@@ -78,9 +101,22 @@ compartir.</p>
 Tria la llicència adequada segons les necessitats del teu projecte: 
  OEM / Retail / Volum per al control propietari tradicional. 
  GPL / BSD / MPL per compartir el codi amb diferents graus de restricció i llibertat.</p>
-  </article>
+</article>
+<nav class="pager"><a class="pager-btn" href="marc-normatiu-actual.html">← Marc Normatiu Actual</a></nav>
 
-  <footer>Material docent · Formació Professional · Informàtica</footer>
+    <footer>Material docent · Formació Professional · Informàtica</footer>
+  </main>
 </div>
+
+<script>
+function filtrarContingut() {
+  let input = document.getElementById('site-search').value.toLowerCase();
+  let items = document.querySelectorAll('.card, .resource');
+  items.forEach(item => {
+    let text = item.innerText.toLowerCase();
+    item.style.display = text.includes(input) ? '' : 'none';
+  });
+}
+</script>
 </body>
 </html>

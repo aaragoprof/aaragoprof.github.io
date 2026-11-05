@@ -315,7 +315,7 @@ def esborra_docs():
 
 
 # ----------------------------------------------------------------------------
-# DISSENY CSS INTEGRAL (AZULES PROFESIONALES)
+# DISSENY CSS INTEGRAL (AJUSTADO TAMAÑO DE ICONOS)
 # ----------------------------------------------------------------------------
 CSS = r''':root {
   --bg: #F8FAFC;
@@ -348,7 +348,8 @@ body { font-family: var(--font-body); color: var(--ink); background: var(--bg); 
   box-shadow: 0 1px 3px rgba(0,0,0,0.03);
 }
 .topbar-brand { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: var(--ink); font-weight: 700; font-family: var(--font-display); font-size: 1.1rem; }
-.topbar-brand svg { width: 26px; height: 26px; color: var(--accent); }
+.topbar-brand svg { width: 22px !important; height: 22px !important; flex-shrink: 0; color: var(--accent); }
+
 .search-container { position: relative; width: 320px; }
 .search-container input {
   width: 100%; padding: 0.5rem 1rem 0.5rem 2.4rem; border-radius: 999px;
@@ -356,7 +357,7 @@ body { font-family: var(--font-body); color: var(--ink); background: var(--bg); 
   color: var(--ink); outline: none; transition: all 0.2s ease;
 }
 .search-container input:focus { border-color: var(--accent); background: #FFF; box-shadow: 0 0 0 3px rgba(37,99,235,0.15); }
-.search-container svg { position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: var(--muted); }
+.search-container svg { position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%); width: 16px !important; height: 16px !important; color: var(--muted); }
 
 /* Layout Base */
 .wrap { max-width: 1120px; margin: 0 auto; padding: calc(var(--topbar-h) + 2rem) 1.5rem 3rem; }
@@ -384,8 +385,8 @@ body { font-family: var(--font-body); color: var(--ink); background: var(--bg); 
 }
 .card:hover:not(.disabled) { transform: translateY(-4px); border-color: var(--accent-border); box-shadow: 0 12px 30px -10px rgba(37,99,235,0.15); }
 .card-top { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; margin-bottom: 1rem; }
-.card-icon { width: 44px; height: 44px; border-radius: 12px; background: var(--accent-soft); color: var(--primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.card-icon svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.card-icon { width: 36px !important; height: 36px !important; border-radius: 10px; background: var(--accent-soft); color: var(--primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.card-icon svg { width: 18px !important; height: 18px !important; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .aea-code { font-family: var(--font-mono); font-weight: 600; font-size: 0.82rem; color: var(--primary); background: var(--accent-soft); padding: 0.3rem 0.65rem; border-radius: 8px; border: 1px solid var(--accent-border); }
 .tags .tag { font-family: var(--font-mono); font-size: 0.72rem; padding: 0.25rem 0.55rem; border-radius: 6px; white-space: nowrap; }
 .tag.ra { background: #DCFCE7; color: #166534; }
@@ -402,8 +403,8 @@ body { font-family: var(--font-body); color: var(--ink); background: var(--bg); 
 .resource { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.2rem; text-decoration: none; color: inherit; border-bottom: 1px solid var(--border); transition: background 0.15s; }
 .resource:last-child { border-bottom: none; }
 .resource:hover { background: var(--accent-soft); }
-.resource-icon { width: 38px; height: 38px; border-radius: 10px; background: var(--accent-soft); color: var(--accent); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.resource-icon svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2; }
+.resource-icon { width: 32px !important; height: 32px !important; border-radius: 10px; background: var(--accent-soft); color: var(--accent); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.resource-icon svg { width: 16px !important; height: 16px !important; stroke: currentColor; fill: none; stroke-width: 2; }
 .resource-body { flex: 1; min-width: 0; display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
 .resource-type { font-family: var(--font-mono); font-size: 0.72rem; color: var(--primary); background: #DBEAFE; padding: 0.2rem 0.5rem; border-radius: 6px; }
 .resource-title { font-weight: 500; font-size: 0.95rem; color: var(--ink); }
@@ -962,7 +963,7 @@ def main():
     cos += "  </main>\n"
     escriu(h_index, pagina(h_index, SITE_NAME, cos))
 
-    print("\nWeb generada amb el nou disseny professional en blaus!")
+    print("\nWeb generada amb el nou disseny professional en blaus i icones ajustades!")
 
 
 if __name__ == "__main__":

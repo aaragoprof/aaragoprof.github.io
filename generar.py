@@ -36,7 +36,7 @@ SITE_EYEBROW = "Formació Professional · Informàtica"
 SITE_LEDE = "Material de les asignatures de ASIX DAM DAW i SMIX"
 FOOTER = "Material docent · Formació Professional · Informàtica"
 
-EXCLOURE = {"gestio", "gestions", "ordenar", ".git", "examen", "exercicis"}
+EXCLOURE = {"gestio", "gestions", "ordenar", ".git", "examen", "exercicis", "desktop.ini"}
 
 CICLES = {
     "ASIX": "Administració de Sistemes Informàtics en Xarxa",
@@ -77,8 +77,11 @@ def slug(s, maxlen=60):
 
 
 def excluit(nom):
-    return (sense_accents(nom).lower() in EXCLOURE
-            or nom.startswith(".") or nom.startswith("_"))
+    n = sense_accents(nom).lower()
+    return (n in EXCLOURE
+            or nom.startswith(".")
+            or nom.startswith("_")
+            or n.endswith(".ini"))
 
 
 def es_teoria(nom):
@@ -960,7 +963,7 @@ def main():
     cos += "  </main>\n"
     escriu(h_index, pagina(h_index, SITE_NAME, cos))
 
-    print("\nWeb generada amb el nou disseny professional en blaus i frase actualitzada!")
+    print("\nWeb generada amb èxit! Els fitxers .ini (com desktop.ini) s'han ignorat.")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>0378 Seguretat física 2.0 · Material docent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/style.css">
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="back" href="index.html">← Tornar a RA1</a>
+    <div class="eyebrow">ASIX · M0378 · RA1</div>
+  </header>
+  <div class="rule"></div>
+  <nav class="toc"><span>Contingut</span><a href="#matriu-de-control-dacces-acl">Matriu de control d’accés - ACL</a><a href="#politiques-demmagatzematge">Polítiques d’emmagatzematge</a><a href="#politiques-demmagatzematge_1">Polítiques d’emmagatzematge</a><a href="#politiques-demmagatzematge_2">Polítiques d’emmagatzematge</a></nav>
+  <article class="prose">
+<p><img alt="" src="0378-seguretat-fisica-2-0-img/doc.pdf-0001-00.jpg" /></p>
+<p>Seguretat física 2.0 </p>
+<p><img alt="" src="0378-seguretat-fisica-2-0-img/doc.pdf-0001-02.jpg" /></p>
+<p><img alt="" src="0378-seguretat-fisica-2-0-img/doc.pdf-0002-00.jpg" /></p>
+<h1 id="que-es-el-hash"><strong>Que es el HASH</strong></h1>
+<p>Una funció hash és una funció matemàtica que fa correspondre una representació de mida fixa a un missatge <em>m</em> de mida variable. Aquesta representació té de 128 a 512 bits (segons la funció que s’empri) i s’anomena valor resum del missatge. </p>
+<p>El valor hash identifica, pràcticament de manera unívoca, un fitxer qualsevol. </p>
+<p>Una característica molt important de les funcions hash és que qualsevol canvi que es produeixi sobre el fitxer comporta un canvi total i impredictible del valor hash. Els algorismes SHA-2 (desenvolupat per la NSA, que inclou variants populars com SHA-256 i SHA512) i SHA-3 (estandarditzat pel NIST) són els que més es fan servir avui dia per implementar les funcions resum. Algorismes històrics com MD5 (128 bits) i SHA-1 (160 bits) han quedat completament obsolets i desaconsellats a causa de vulnerabilitats greus i col·lisions demstrades. Actualment, la família SHA-2 ofereix un balanç ideal entre velocitat i seguretat per a la verificació d'integritat de dades, la signatura digital i la protecció de sistemes. </p>
+<p><img alt="" src="0378-seguretat-fisica-2-0-img/doc.pdf-0002-05.jpg" /></p>
+<p>Pàgina d’exemple on es pot veure els hash de git hub desktop https://github.com/git-for-windows/git/releases/ </p>
+<p><img alt="" src="0378-seguretat-fisica-2-0-img/doc.pdf-0003-00.jpg" /></p>
+<p><strong>Llistes de control d’accés Principi de privilegi mínim</strong> : És aconseguir que l’usuari accedeixi únicament a allò que necessiti. Una vegada s’ha identificat, el sistema controla ( <strong>autoritza</strong> ) l’accés als recursos del sistema informàtic tot registrant ( <strong>auditant</strong> ) com s’utilitza cada recurs. </p>
+<p><strong>Autenticació</strong> : mecanisme de verificació de la identitat del usuari o procés <strong>Autorització</strong> : proces per el qual el sistema autoritza a l’usuari a accedir als recursos <strong>Registre</strong> : log de l’ús que l’usuari fa dels recursos del sistema informàtic </p>
+<p><img alt="" src="0378-seguretat-fisica-2-0-img/doc.pdf-0003-03.jpg" /></p>
+<p>El <strong>control d’accés</strong> , per tant, determina quins privilegis té un usuari dins del sistema informàtic i a quins recursos té accés. </p>
+<p><img alt="" src="0378-seguretat-fisica-2-0-img/doc.pdf-0004-00.jpg" /></p>
+<h2 id="matriu-de-control-dacces-acl"><strong>Matriu de control d’accés - ACL</strong></h2>
+<p><strong>Matriu de control d’accés o matriu d’accés:</strong> model formal de seguretat computacional, que inventaria els drets de cada subjecte respecte als objectes del sistema. </p>
+<p><strong>Llistes de control d’accés ACL:</strong> Les matrius d’accés no solen estar guardades als sistemes informatics. El que es fa és associar a cada objecte una llista amb tots els dominis que poden tenir-hi accés i com ho fan. </p>
+<p><img alt="" src="0378-seguretat-fisica-2-0-img/doc.pdf-0004-04.jpg" /></p>
+<p><img alt="" src="0378-seguretat-fisica-2-0-img/doc.pdf-0004-05.jpg" /></p>
+<p><img alt="" src="0378-seguretat-fisica-2-0-img/doc.pdf-0005-00.jpg" /></p>
+<h2 id="politiques-demmagatzematge"><strong>Polítiques d’emmagatzematge</strong></h2>
+<p>Existeixen quatre polítiques bàsiques d’emmagatzematge, depenent d’on siguin les dades. Polítiques d’emmagatzematge local en els equips de treball: Inclou almenys els aspectes següents: </p>
+<p>Quin tipus d’informació es pot guardar en els equips locals Durant quant de temps Ubicació dins de l’arbre de direcotris de l’equip Normativa d’emmagatzematge de documents personals. </p>
+<ul>
+<li>
+<p>Política d’emmagatzematge a la xarxa corporativa: </p>
+</li>
+<li>
+<p>Els servidors d’emmagatzematge disponibles a la xarxa corporativa estan configurats per poder guardar i compartir informació de l’empresa. Els controls d’accés són definits per direcció i els responsables de sistemes. Ha de cobrir els aspectes següents: Tipus d’informació emmagatzemada Persones encarregades de l’actualització d’aquesta informació </p>
+</li>
+<li>
+<p>Els treballadors poden disposar d’espais personals. Per controlar aquesta informació s’han d’especificar polítiques que determinin els mateixos aspectes que en el cas de l’emmagatzematge local. </p>
+</li>
+</ul>
+<p><img alt="" src="0378-seguretat-fisica-2-0-img/doc.pdf-0005-06.jpg" /></p>
+<p>Política sobre l’ús de dispositius externs. Política de còpies de seguretat </p>
+<p><img alt="" src="0378-seguretat-fisica-2-0-img/doc.pdf-0006-00.jpg" /></p>
+<h2 id="politiques-demmagatzematge_1"><strong>Polítiques d’emmagatzematge</strong></h2>
+<p>Política sobre l’ús de dispositius externs: permeten l’emmagatzematge extra d’informació per tal de transportar-la a una altra ubicació o simplement de disposar d’una còpia de seguretat personal. Aquesta política inclou almenys els aspectes següents: </p>
+<ul>
+<li>
+<p>Si està permès o no l’ús d’aquests dispositius. </p>
+</li>
+<li>
+<p>En cas afirmatiu, quin tipus d’informació no es permet emmagatzemar en cap cas, com, per exemple, dades personals de clients. Quins mètodes d’esborrat s’han de fer servir quan aquesta informació ja no es necessita. </p>
+</li>
+</ul>
+<p><img alt="" src="0378-seguretat-fisica-2-0-img/doc.pdf-0006-05.jpg" /></p>
+<p><img alt="" src="0378-seguretat-fisica-2-0-img/doc.pdf-0007-00.jpg" /></p>
+<h2 id="politiques-demmagatzematge_2"><strong>Polítiques d’emmagatzematge</strong></h2>
+<p>Política de còpies de seguretat: Tot pla de contingència d’una empresa ha de comptar amb una planificació adequada de les còpies de seguretat que es realitzen, ja que la pèrdua de dades pot posar en perill la continuïtat del negoci. Alguns dels requisits que ha de complir la planificació de còpies de seguretat són: Identificar les dades que han de ser preservades. Establir la freqüència amb què es faran les còpies. Disposar el magatzem físic per a les còpies. Cercar la probabilitat d’error mínima. Controlar els suports que contenen les còpies. </p>
+<p><img alt="" src="0378-seguretat-fisica-2-0-img/doc.pdf-0007-03.jpg" /></p>
+<p>Planificar la restauració de les còpies </p>
+<p>Provar el sistema exhaustivament per comprovar la seva correcta planificació i l’eficàcia dels mitjans disposats. </p>
+<p>Definir la vigència de les còpies Controlar l’obsolescència dels dispositius d’emmagatzematge Quan els suports de memòria arriben al final de la seva vida útil (segons la política de còpies de seguretat), s'han d'esborrar de forma segura o destruir per garantir que la informació no es pugui recuperar mai més. </p>
+<p><img alt="" src="0378-seguretat-fisica-2-0-img/doc.pdf-0008-00.jpg" /></p>
+<h3 id="copies-de-seguretat-i-imatges-de-suport"><strong>Còpies de seguretat i imatges de suport</strong></h3>
+<p>Una bona política de còpies de seguretat és clau per tenir segura la informació de l’organització Motius per fer còpies de seguretat: </p>
+<p>Protegir la informació contra una fallada del sistema Protegir la informació dels usuaris contra esborraments accidentals Protegir la informació contra atacs per part de tercers </p>
+<p>Tipus de còpies de seguretat <strong>Completa</strong> : Es fa una còpia de tota la informació <strong>Incremental:</strong> Nomes es guarden els fitxers modificats des de l’ultima còpia de seguretat <strong>Diferencial:</strong> Guarda totes les dades que han canviat des de la darrera còpia de seguretat completa. </p>
+<p><img alt="" src="0378-seguretat-fisica-2-0-img/doc.pdf-0008-05.jpg" /></p>
+<table>
+<thead>
+<tr>
+<th><strong>Criteri</strong></th>
+<th><strong>Còpia incremental</strong></th>
+<th><strong>Còpia diferencial</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Punt de referència</td>
+<td>Darrera còpia (completa o incremental)</td>
+<td>Darrera còpia completa</td>
+</tr>
+</tbody>
+</table>
+<p><img alt="" src="0378-seguretat-fisica-2-0-img/doc.pdf-0009-00.jpg" /></p>
+<h3 id="copies-de-seguretat-i-imatges-de-suport_1"><strong>Còpies de seguretat i imatges de suport</strong></h3>
+<table>
+<thead>
+<tr>
+<th><strong>Criteri</strong></th>
+<th><strong>Còpia incremental</strong></th>
+<th><strong>Còpia diferencial</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Punt de referència</strong></td>
+<td>Darrera còpia (completa o incremental)</td>
+<td>Darrera còpia completa</td>
+</tr>
+<tr>
+<td><strong>Temps de suport</strong></td>
+<td>Ràpid</td>
+<td>Augmenta gradualment cada dia</td>
+</tr>
+<tr>
+<td><strong>Ús d'espai</strong></td>
+<td>Mínim</td>
+<td>Major que la incremental</td>
+</tr>
+<tr>
+<td><strong>Arxius necessaris per restaurar</strong></td>
+<td>Completa + Totes les incrementals</td>
+<td>Completa + Darrera diferencial</td>
+</tr>
+<tr>
+<td><strong>Risc de fallada en restaurar</strong></td>
+<td>Major (depèn de tota la cadena)</td>
+<td>Menor (només depèn de dos arxius)</td>
+</tr>
+</tbody>
+</table>
+<p><img alt="" src="0378-seguretat-fisica-2-0-img/doc.pdf-0010-00.jpg" /></p>
+<h3 id="politiques-de-copies-de-seguretat"><strong>Polítiques de còpies de seguretat</strong></h3>
+<p>La <strong>regla 3-2-1</strong> és l'estàndard d'or de la seguretat de la informació. Tot i que va ser formulada fa més de dues dècades, continua sent la columna vertebral de qualsevol pla de continuïtat de negoci, adaptant-se a les amenaces i tecnologies actuals. </p>
+<p>Què és exactament la regla 3-2-1? </p>
+<ul>
+<li>
+<p>3 còpies de les dades: Mantenir les dades originals més almenys 2 còpies de seguretat addicionals. </p>
+</li>
+<li>
+<p>2 suports diferents: Desar aquestes còpies en almenys dos tipus de tecnologia o mitjans d'emmagatzematge diferents (per exemple, un disc local SSD/NAS i emmagatzematge en l'immaterial/núvol). </p>
+</li>
+</ul>
+<p><img alt="" src="0378-seguretat-fisica-2-0-img/doc.pdf-0010-06.jpg" /></p>
+<ul>
+<li>1 còpia fora de la seu (Offsite): Guardar com a mínim una de les còpies en una ubicació física o lògica diferent per protegir-se de desastres locals (incendis, robatoris o inundacions). </li>
+</ul>
+  </article>
+
+  <footer>Material docent · Formació Professional · Informàtica</footer>
+</div>
+</body>
+</html>

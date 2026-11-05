@@ -1,6 +1,6 @@
 :root{
   --bg:#F6F8FB;--surface:#FFFFFF;--ink:#1A2230;--muted:#5A6677;--hairline:#E3E8EF;
-  --accent:#E07B1E;--accent-soft:#FBEFE0;--slate-soft:#EDF1F6;--slate-ink:#3A4658;
+  --accent:#2563EB;--accent-soft:#E6EEFD;--slate-soft:#EDF1F6;--slate-ink:#3A4658;
   --display:"Space Grotesk",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   --body:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
@@ -32,7 +32,7 @@ a.card:focus-visible{box-shadow:0 0 0 3px var(--accent-soft),0 14px 34px -18px r
 .aea-code{font-family:var(--mono);font-weight:600;font-size:.8rem;letter-spacing:.04em;color:#fff;background:var(--ink);padding:.32rem .6rem;border-radius:7px}
 .tags{display:flex;gap:.4rem;flex-wrap:wrap;justify-content:flex-end}
 .tag{font-family:var(--mono);font-size:.7rem;padding:.28rem .55rem;border-radius:6px;white-space:nowrap}
-.tag.ra{background:var(--accent-soft);color:#9a5410}
+.tag.ra{background:var(--accent-soft);color:#1D4ED8}
 .tag.soon{background:var(--slate-soft);color:var(--slate-ink)}
 .card h2{font-family:var(--display);font-weight:600;font-size:1.18rem;letter-spacing:-.01em;line-height:1.25}
 .card p{color:var(--muted);font-size:.93rem;margin-top:.55rem;flex:1}
@@ -91,7 +91,7 @@ a.card:hover .open .arrow,a.card:focus-visible .open .arrow{transform:translateX
 .admonition.warning,.admonition.danger,.admonition.failure{border-color:#d9534f;background:#FDF0EF}
 .admonition.warning .admonition-title,.admonition.danger .admonition-title,.admonition.failure .admonition-title{color:#b03a37}
 .admonition.abstract,.admonition.question{border-color:var(--accent);background:var(--accent-soft)}
-.admonition.abstract .admonition-title,.admonition.question .admonition-title{color:#9a5410}
+.admonition.abstract .admonition-title,.admonition.question .admonition-title{color:#1D4ED8}
 
 footer{margin-top:clamp(2.5rem,6vw,4rem);padding-top:1.5rem;border-top:1px solid var(--hairline);color:var(--muted);font-size:.82rem;font-family:var(--mono);letter-spacing:.01em}
 @media (max-width:680px){.grid{grid-template-columns:1fr}}

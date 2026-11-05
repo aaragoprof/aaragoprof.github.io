@@ -33,10 +33,7 @@ from urllib.parse import quote
 # ----------------------------------------------------------------------------
 SITE_NAME = "Material docent"
 SITE_EYEBROW = "Formació Professional · Informàtica"
-SITE_LEDE = (
-    "Materials de les assignatures que imparteixo als cicles formatius "
-    "d'informàtica: ASIX, DAM, DAW i SMIX."
-)
+SITE_LEDE = "Material de les asignatures de ASIX DAM DAW i SMIX"
 FOOTER = "Material docent · Formació Professional · Informàtica"
 
 EXCLOURE = {"gestio", "gestions", "ordenar", ".git", "examen", "exercicis"}
@@ -315,7 +312,7 @@ def esborra_docs():
 
 
 # ----------------------------------------------------------------------------
-# DISSENY CSS INTEGRAL (AJUSTADO TAMAÑO DE ICONOS)
+# DISSENY CSS INTEGRAL
 # ----------------------------------------------------------------------------
 CSS = r''':root {
   --bg: #F8FAFC;
@@ -963,7 +960,7 @@ def main():
     cos += "  </main>\n"
     escriu(h_index, pagina(h_index, SITE_NAME, cos))
 
-    print("\nWeb generada amb el nou disseny professional en blaus i icones ajustades!")
+    print("\nWeb generada amb el nou disseny professional en blaus i frase actualitzada!")
 
 
 if __name__ == "__main__":

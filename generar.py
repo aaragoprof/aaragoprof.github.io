@@ -22,6 +22,9 @@ Què fa amb el contingut de cada carpeta Teoria:
   - altres fitxers -> es copien i apareixen com a descàrrega
 Si hi ha un .md o .html amb el mateix nom que un PDF, el PDF s'ignora.
 
+Qualsevol fitxer o carpeta el nom dels quals comenci per "_" (p. ex.
+"_privat" o "_Solucions.pdf") NO es publica.
+
 Opcional: un fitxer "descripcio.txt" dins d'una carpeta de mòdul o d'RA
 (fora de Teoria) es mostra com a descripció a la targeta.
 
@@ -102,7 +105,10 @@ def slug(s, maxlen=60):
 
 
 def excluit(nom):
-    return sense_accents(nom).lower() in EXCLOURE or nom.startswith(".")
+    # Es descarta si és a EXCLOURE, si comença per "." o si comença per "_"
+    # (per exemple "_privat" o "_Solucions.pdf": fitxers o carpetes que no es publiquen).
+    return (sense_accents(nom).lower() in EXCLOURE
+            or nom.startswith(".") or nom.startswith("_"))
 
 
 def es_teoria(nom):

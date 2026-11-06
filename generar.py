@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""
+r"""
 Genera la web (carpeta docs/) a partir de la carpeta de material que tens
 al teu ordinador. Disseny de targetes: Cicle -> Mòdul -> RA -> Material.
 
@@ -10,6 +10,9 @@ Estructura que espera la carpeta d'origen:
             ├── RA1 - Nom del resultat d'aprenentatge
             │     └── Teoria        <- només aquesta carpeta es publica
             └── RA2 - ...
+
+Presentacions .pptx: es converteixen a pàgina (títols, llistes, taules, imatges);
+les notes del presentador i les diapositives ocultes NO es publiquen.
 
 Ús:
     python generar.py "C:\ruta\a\la\carpeta\de\material"
@@ -48,6 +51,12 @@ CICLES = {
 CONVERTIR_PDF = True
 IMATGES_PDF = True
 PDF_SENSE_TEXT_COM_IMATGES = True
+
+# Presentacions PowerPoint (.pptx): es converteixen a pàgina web (el PPTX no es publica).
+CONVERTIR_PPTX = True
+PPTX_IMATGES = True            # extreure les imatges de les diapositives
+PPTX_SALTAR_OCULTES = True     # no publicar les diapositives ocultes
+PPTX_INCLOURE_NOTES = False    # les notes del presentador NO es publiquen (poden ser privades)
 AMPLADA_PAGINA_PX = 1400
 QUALITAT_JPG = 80
 
@@ -81,7 +90,8 @@ def excluit(nom):
     return (n in EXCLOURE
             or nom.startswith(".")
             or nom.startswith("_")
-            or n.endswith(".ini"))
+            or n.endswith(".ini")
+            or nom.startswith("~$"))
 
 
 def es_teoria(nom):
@@ -284,6 +294,353 @@ def converteix_pdf(pdf):
         return None
     STATS["convertits"] += 1
     print(f"  PDF convertit ({motor}): {norm(pdf.name)}")
+    return md, (cimg if cimg.is_dir() else None)
+
+
+# ----------------------------------------------------------------------------
+# PPTX -> Markdown (el PPTX NO es publica: només la pàgina generada)
+# ----------------------------------------------------------------------------
+AVISOS_PPTX = []   # (fitxer, diapositiva, descripció) d'elements no convertits
+_AVIS_LLIBRERIA_PPTX = []
+FONTS_MONO = ("consolas", "courier", "mono", "menlo", "monaco", "lucida console",
+              "jetbrains", "fira code", "source code", "cascadia")
+
+
+def _md_text(t):
+    """Escapa el text perquè el Markdown no el confongui amb format o HTML."""
+    t = t.replace("\\", "\\\\")
+    for c in ("*", "_", "`", "[", "]"):
+        t = t.replace(c, "\\" + c)
+    return t.replace("<", "&lt;").replace(">", "&gt;")
+
+
+def _escapa_inici(t):
+    t = re.sub(r"^(\d+)([.)])(\s)", r"\1\\\2\3", t)
+    if t[:1] in ("-", "+", "#"):
+        t = "\\" + t
+    return t
+
+
+def _envolta(t, marca):
+    nucli = t.strip()
+    if not nucli:
+        return t
+    ini = t[: len(t) - len(t.lstrip())]
+    fi = t[len(t.rstrip()):]
+    return f"{ini}{marca}{nucli}{marca}{fi}"
+
+
+def _paragraf_md(par):
+    """Text d'un paràgraf amb negreta, cursiva, codi i enllaços."""
+    from pptx.oxml.ns import qn
+    from pptx.text.text import _Run
+
+    trossos = []   # [text, negreta, cursiva, codi, enllaç]
+    for fill in par._p:
+        if fill.tag == qn("a:r"):
+            run = _Run(fill, par)
+            t = run.text
+            if not t:
+                continue
+            nom = (run.font.name or "").lower()
+            codi = any(m in nom for m in FONTS_MONO)
+            try:
+                enllac = run.hyperlink.address
+            except Exception:  # noqa: BLE001
+                enllac = None
+            clau = [bool(run.font.bold), bool(run.font.italic), codi, enllac]
+            if trossos and trossos[-1][1:] == clau:
+                trossos[-1][0] += t
+            else:
+                trossos.append([t] + clau)
+        elif fill.tag == qn("a:br"):
+            trossos.append(["\n", False, False, False, None])
+    out = []
+    for t, neg, curs, codi, enllac in trossos:
+        if t == "\n":
+            out.append("  \n")
+            continue
+        if codi:
+            s = t.strip()
+            s = f"{t[:len(t) - len(t.lstrip())]}`{s}`{t[len(t.rstrip()):]}" if s else t
+        else:
+            s = _md_text(t)
+            if neg:
+                s = _envolta(s, "**")
+            if curs:
+                s = _envolta(s, "*")
+        if enllac and not codi and t.strip():
+            nucli = s.strip()
+            s = s.replace(nucli, f"[{nucli}]({enllac})", 1)
+        out.append(s)
+    return "".join(out).strip()
+
+
+def _es_vinyeta(par, forma):
+    from pptx.oxml.ns import qn
+    ppr = par._p.pPr
+    if ppr is not None:
+        if ppr.find(qn("a:buNone")) is not None:
+            return False, False
+        if ppr.find(qn("a:buAutoNum")) is not None:
+            return True, True
+        if ppr.find(qn("a:buChar")) is not None:
+            return True, False
+    if par.level > 0:
+        return True, False
+    try:
+        if forma.is_placeholder:
+            from pptx.enum.shapes import PP_PLACEHOLDER
+            if forma.placeholder_format.type in (PP_PLACEHOLDER.BODY, PP_PLACEHOLDER.OBJECT):
+                return True, False
+    except Exception:  # noqa: BLE001
+        pass
+    return False, False
+
+
+def _text_forma_md(forma):
+    """Markdown del text d'una forma (paràgrafs i llistes)."""
+    linies = []
+    en_llista = False
+    for par in forma.text_frame.paragraphs:
+        t = _paragraf_md(par)
+        if not t:
+            continue
+        vinyeta, numerada = _es_vinyeta(par, forma)
+        if vinyeta:
+            if not en_llista and linies:
+                linies.append("")
+            marca = "1. " if numerada else "- "
+            linies.append("    " * min(par.level, 4) + marca + t)
+            en_llista = True
+        else:
+            if linies:
+                linies.append("")
+            linies.append(_escapa_inici(t))
+            en_llista = False
+    return "\n".join(linies)
+
+
+def _taula_md(taula):
+    files = []
+    for fila in taula.rows:
+        cel = []
+        for c in fila.cells:
+            parts = [_md_text(" ".join(p.text.split())) for p in c.text_frame.paragraphs if p.text.strip()]
+            cel.append((" <br> ".join(parts)).replace("|", "\\|") or " ")
+        files.append(cel)
+    if not files:
+        return ""
+    n = max(len(f) for f in files)
+    files = [f + [" "] * (n - len(f)) for f in files]
+    out = ["| " + " | ".join(files[0]) + " |", "|" + "|".join(["---"] * n) + "|"]
+    out += ["| " + " | ".join(f) + " |" for f in files[1:]]
+    return "\n".join(out)
+
+
+def _grafic_md(grafic):
+    plot = grafic.plots[0]
+    cats = [str(c) for c in plot.categories]
+    series = [(s.name or "Sèrie", list(s.values)) for s in plot.series]
+    cap = "| " + " | ".join([" "] + [_md_text(str(n)) for n, _ in series]) + " |"
+    sep = "|" + "|".join(["---"] * (len(series) + 1)) + "|"
+    files = []
+    for i, c in enumerate(cats):
+        vals = [("" if i >= len(v) or v[i] is None else
+                 (str(int(v[i])) if float(v[i]).is_integer() else str(v[i]))) for _, v in series]
+        files.append("| " + " | ".join([_md_text(c)] + vals) + " |")
+    return "\n".join([cap, sep] + files)
+
+
+def _desa_imatge(blob, img_dir, n):
+    import io
+    from PIL import Image
+    im = Image.open(io.BytesIO(blob))
+    im.load()
+    if im.width < 48 or im.height < 48:
+        return None
+    if im.width > AMPLADA_PAGINA_PX:
+        h = round(im.height * AMPLADA_PAGINA_PX / im.width)
+        im = im.resize((AMPLADA_PAGINA_PX, h), Image.LANCZOS)
+    alfa = im.mode in ("RGBA", "LA") or (im.mode == "P" and "transparency" in im.info)
+    if alfa:
+        nom = f"img-{n:03d}.png"
+        im.convert("RGBA").save(img_dir / nom, "PNG", optimize=True)
+    else:
+        nom = f"img-{n:03d}.jpg"
+        im.convert("RGB").save(img_dir / nom, "JPEG", quality=QUALITAT_JPG, optimize=True)
+    return nom
+
+
+def _formes(formes):
+    from pptx.enum.shapes import MSO_SHAPE_TYPE
+    for f in formes:
+        if f.shape_type == MSO_SHAPE_TYPE.GROUP:
+            yield from _formes(f.shapes)
+        else:
+            yield f
+
+
+def _pptx_a_markdown(path_pptx, img_dir, titol_fitxer, nom_fitxer):
+    from pptx import Presentation
+    from pptx.enum.shapes import MSO_SHAPE_TYPE, PP_PLACEHOLDER
+    import hashlib as _h
+
+    prs = Presentation(str(path_pptx))
+    diapos = list(prs.slides)
+
+    # Imatges que es repeteixen a 3+ diapositives = logos/decoració: s'ometen
+    comptes = {}
+    for sl in diapos:
+        vistes = set()
+        for f in _formes(sl.shapes):
+            if f.shape_type == MSO_SHAPE_TYPE.PICTURE:
+                try:
+                    hsh = _h.sha1(f.image.blob).hexdigest()
+                except Exception:  # noqa: BLE001
+                    continue
+                if hsh not in vistes:
+                    vistes.add(hsh)
+                    comptes[hsh] = comptes.get(hsh, 0) + 1
+    decoratives = {h for h, c in comptes.items() if c >= 3 and len(diapos) >= 4}
+
+    ometre_tipus = (PP_PLACEHOLDER.SLIDE_NUMBER, PP_PLACEHOLDER.FOOTER, PP_PLACEHOLDER.DATE)
+    blocs = []
+    titol_doc = titol_fitxer
+    n_img = 0
+    primera = True
+
+    for num, sl in enumerate(diapos, 1):
+        if PPTX_SALTAR_OCULTES and sl._element.get("show") == "0":
+            continue
+        titol_sl = None
+        forma_titol = None
+        es_portada = False
+        try:
+            if sl.shapes.title is not None and sl.shapes.title.has_text_frame:
+                forma_titol = sl.shapes.title
+                titol_sl = " ".join(forma_titol.text_frame.text.split()) or None
+                es_portada = forma_titol.placeholder_format.type == PP_PLACEHOLDER.CENTER_TITLE
+        except Exception:  # noqa: BLE001
+            pass
+
+        if primera and es_portada and titol_sl:
+            titol_doc = titol_sl
+        elif titol_sl:
+            blocs.append("## " + _md_text(titol_sl))
+        else:
+            blocs.append(f"## Diapositiva {num}")
+        primera = False
+
+        formes = [f for f in _formes(sl.shapes)
+                  if not (forma_titol is not None and f.shape_id == forma_titol.shape_id)]
+        formes.sort(key=lambda f: ((f.top or 0) // 365760, f.left or 0))
+        for f in formes:
+            try:
+                if f.is_placeholder and f.placeholder_format.type in ometre_tipus:
+                    continue
+            except Exception:  # noqa: BLE001
+                pass
+            try:
+                if f.shape_type == MSO_SHAPE_TYPE.PICTURE or (
+                        f.is_placeholder and hasattr(f, "image")):
+                    blob = f.image.blob
+                    if _h.sha1(blob).hexdigest() in decoratives:
+                        continue
+                    if not PPTX_IMATGES:
+                        continue
+                    nom = _desa_imatge(blob, img_dir, n_img + 1)
+                    if nom:
+                        n_img += 1
+                        try:
+                            alt = f._element.xpath(".//p:cNvPr")[0].get("descr") or ""
+                        except Exception:  # noqa: BLE001
+                            alt = ""
+                        alt = re.sub(r"[\[\]\n]", " ", alt).strip()
+                        if not alt or re.search(r"\.(png|jpe?g|gif|bmp|tiff?|emf|wmf)$", alt, re.I):
+                            alt = f"Imatge {n_img}"
+                        blocs.append(f"![{alt}]({TOKEN_IMG}{nom}){{ loading=lazy }}")
+                    continue
+                if getattr(f, "has_table", False) and f.has_table:
+                    blocs.append(_taula_md(f.table))
+                    continue
+                if getattr(f, "has_chart", False) and f.has_chart:
+                    try:
+                        blocs.append(_grafic_md(f.chart))
+                    except Exception:  # noqa: BLE001
+                        AVISOS_PPTX.append((nom_fitxer, num, "gràfic no convertible"))
+                    continue
+                if f.has_text_frame:
+                    t = _text_forma_md(f)
+                    if t:
+                        blocs.append(t)
+                    continue
+                if f.shape_type in (MSO_SHAPE_TYPE.MEDIA, MSO_SHAPE_TYPE.EMBEDDED_OLE_OBJECT,
+                                    MSO_SHAPE_TYPE.LINKED_OLE_OBJECT):
+                    AVISOS_PPTX.append((nom_fitxer, num, "vídeo/àudio/objecte incrustat"))
+                elif f.shape_type == MSO_SHAPE_TYPE.GROUP:
+                    pass
+                elif getattr(f, "_element", None) is not None and f._element.tag.endswith("graphicFrame"):
+                    AVISOS_PPTX.append((nom_fitxer, num, "SmartArt o diagrama (no es publica)"))
+            except Exception as e:  # noqa: BLE001
+                AVISOS_PPTX.append((nom_fitxer, num, f"element omès ({type(e).__name__})"))
+
+        if PPTX_INCLOURE_NOTES:
+            try:
+                if sl.has_notes_slide:
+                    n = sl.notes_slide.notes_text_frame.text.strip()
+                    if n:
+                        cos = "\n".join("    " + _md_text(l) if l.strip() else "" for l in n.splitlines())
+                        blocs.append('!!! note "Notes del professor"\n' + cos)
+            except Exception:  # noqa: BLE001
+                pass
+
+    return f"# {_md_text(titol_doc)}\n\n" + "\n\n".join(b for b in blocs if b.strip()) + "\n"
+
+
+def converteix_pptx(pptx):
+    """Retorna (markdown_amb_token, carpeta_imatges_o_None) o None si falla."""
+    st = pptx.stat()
+    opcions = f"{PPTX_IMATGES}|{PPTX_INCLOURE_NOTES}|{PPTX_SALTAR_OCULTES}|v1"
+    clau = "p" + hashlib.sha1(
+        f"{pptx.resolve()}|{st.st_size}|{st.st_mtime_ns}|{opcions}".encode()
+    ).hexdigest()[:15]
+    cdir = CACHE / clau
+    cmd, cimg = cdir / "doc.md", cdir / "img"
+    if cmd.is_file():
+        STATS["cache"] += 1
+        return cmd.read_text(encoding="utf-8"), (cimg if cimg.is_dir() else None)
+
+    try:
+        import pptx as _p  # noqa: F401
+        from PIL import Image  # noqa: F401
+    except Exception as e:  # noqa: BLE001
+        ordre = f'"{sys.executable}" -m pip install python-pptx pillow'
+        if not _AVIS_LLIBRERIA_PPTX:
+            _AVIS_LLIBRERIA_PPTX.append(1)
+            print(f"\n  AVÍS: no es poden convertir els PPTX ({type(e).__name__}: {e}).\n  Instal·la: {ordre}\n")
+        FALLITS.append((norm(pptx.name), f"Falta python-pptx/pillow. Instal·la: {ordre}"))
+        return None
+
+    shutil.rmtree(cdir, ignore_errors=True)
+    (cdir / "img").mkdir(parents=True, exist_ok=True)
+    try:
+        md = _pptx_a_markdown(pptx, cdir / "img", norm(pptx.stem), norm(pptx.name))
+        text_pla = re.sub(r"!\[[^\]]*\]\([^)]*\)(\{[^}]*\})?|[#\s]+", "", md)
+        if len(text_pla) < 5 and not any((cdir / "img").iterdir()):
+            raise RuntimeError("la presentació no té contingut convertible")
+        try:
+            if not any((cdir / "img").iterdir()):
+                (cdir / "img").rmdir()
+        except OSError:
+            pass
+        (cdir / "doc.md").write_text(md, encoding="utf-8")
+    except Exception as e:  # noqa: BLE001
+        FALLITS.append((norm(pptx.name), f"{type(e).__name__}: {e}"))
+        shutil.rmtree(cdir, ignore_errors=True)
+        return None
+    STATS["convertits"] += 1
+    print(f"  PPTX convertit: {norm(pptx.name)}")
     return md, (cimg if cimg.is_dir() else None)
 
 
@@ -658,8 +1015,12 @@ def assegura_h1(text, titol):
 
 
 def te_germa_publicable(f):
+    """Hi ha una versió millor amb el mateix nom? (.md/.html; i per als PDF, també .pptx)"""
+    exts = [".md", ".html", ".htm"]
+    if f.suffix.lower() == ".pdf" and CONVERTIR_PPTX:
+        exts.append(".pptx")
     for x in f.parent.iterdir():
-        if x.suffix.lower() in (".md", ".html", ".htm") and slug(norm(x.stem)) == slug(norm(f.stem)):
+        if x.suffix.lower() in exts and slug(norm(x.stem)) == slug(norm(f.stem)):
             return True
     return False
 
@@ -708,6 +1069,23 @@ def processa_material(fitxers, base, desti, index_path, nom_pagina_tornar, eyebr
                 "out_dir": out_dir, "nom": nom, "grup": grup, "tipus": tipus, "titol": stem, "nova": False
             })
             res.append(dict(grup=grup, titol=stem, path=path, tipus=tipus, nova=False))
+            continue
+
+        if ext == ".pptx" and CONVERTIR_PPTX:
+            if te_germa_publicable(f):
+                continue
+            r = converteix_pptx(f)
+            if r is None:
+                continue
+            md, cimg = r
+            titol = titol_md(md, stem)
+            nom = lliure(rel_dir, slug(stem, 80) + ".html")
+            path = out_dir / nom
+            elements_generats.append({
+                "orig": f, "path": path, "stem": stem, "ext": ext, "md": md, "cimg": cimg,
+                "out_dir": out_dir, "nom": nom, "grup": grup, "tipus": "diapositives", "titol": titol, "nova": False
+            })
+            res.append(dict(grup=grup, titol=titol, path=path, tipus="diapositives", nova=False))
             continue
 
         if ext == ".md":
@@ -964,8 +1342,17 @@ def main():
     escriu(h_index, pagina(h_index, SITE_NAME, cos))
 
     print("\nWeb generada amb èxit! Els fitxers .ini (com desktop.ini) s'han ignorat.")
+    if STATS["convertits"] or STATS["cache"]:
+        print(f"Presentacions/PDF convertits ara: {STATS['convertits']} · reutilitzats de la memòria cau: {STATS['cache']}")
+    if FALLITS:
+        print("\nNO convertits (no apareixen a la web):")
+        for n, e in FALLITS:
+            print(f"  - {n}: {e}")
+    if AVISOS_PPTX:
+        print("\nElements de PPTX que no s'han pogut convertir (revisa'ls):")
+        for n, d, e in AVISOS_PPTX:
+            print(f"  - {n}, diapositiva {d}: {e}")
 
 
 if __name__ == "__main__":
     main()
-    

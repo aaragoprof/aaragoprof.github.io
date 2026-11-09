@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seguretat Física 1.0 · Material docent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/style.css">
+</head>
+<body>
+
+
+<header class="topbar">
+  <a class="topbar-brand" href="../../../index.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 14l9-5-9-5-9 5 9 5z"/><path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0112 20.055a11.952 11.952 0 01-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
+    <span>Portal Docent</span>
+  </a>
+  <div class="search-container">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" id="site-search" placeholder="Cercar material o temari..." onkeyup="filtrarContingut()">
+  </div>
+</header>
+
+<div class="apunt-layout">
+  <aside class="sidebar">
+    
+<div class="sidebar-head">Material del RA</div>
+<ul class="sidebar-menu">
+  <li><a href="seguretat-fisica-1-0.html" class="active"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Seguretat Física 1.0</a></li><li><a href="seguretat-fisica-2-0.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Seguretat Física 2.0</a></li><li><a href="seguretat-fisica-3-0.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Seguretat Física 3.0</a></li>
+</ul>
+
+  </aside>
+  <main class="apunt-content">
+    
+
+<div class="apunt-header">
+  <a class="back" href="index.html" style="color:var(--accent); text-decoration:none; font-family:var(--font-mono); font-size:0.8rem;">← Tornar a RA1</a>
+  <div class="apunt-eyebrow" style="margin-top:0.5rem;">ASIX · M0378 · RA1</div>
+</div>
+
+<article class="prose">
+  <h1 id="seguretat-fisica-10">Seguretat Física 1.0</h1>
+<h2 id="diapositiva-1">Diapositiva 1</h2>
+<p><img alt="Imatge 1" loading="lazy" src="seguretat-fisica-1-0-img/img-001.jpg" /></p>
+<p><img alt="Imatge 2" loading="lazy" src="seguretat-fisica-1-0-img/img-002.png" /></p>
+<p><strong>Seguretat Física i Lògica</strong></p>
+<p><strong>MÒDUL DE SEGURETAT INFORMÀTICA</strong></p>
+<p>Material d'estudi detallat: Principis de Fiabilitat (CID), Protecció de CPD/SAI, Autenticació i Criptografia Simètrica/Asimètrica</p>
+<h2 id="diapositiva-2">Diapositiva 2</h2>
+<p><strong>CONCEPTES FONAMENTALS</strong></p>
+<p><strong>Seguretat Informàtica i la Triada CID</strong></p>
+<p><strong>Com que la seguretat absoluta és impossible, la gestió de seguretat és un compromís econòmic i operatiu entre el risc assumible i el cost. Parlem de fiabilitat quan es garanteixen aquests 3 pilars:</strong></p>
+<p>Garanteix que la informació i els recursos del sistema només siguin accessibles per als usuaris o processos degudament autoritzats, evitant filtracions no desitjades.</p>
+<p><strong>Confidencialitat</strong></p>
+<p>Assegura que la informació, dades i programari no hagin estat modificats, manipulats o esborrats de forma fraudulenta o accidental per cap entitat no autoritzada.</p>
+<p><strong>Integritat</strong></p>
+<p>Garanteix que els serveis, dades i recursos informàtics (processadors, impressores, memòria) estiguin operatius i accessibles sempre que els usuaris ho requereixin.</p>
+<p><strong>Disponibilitat</strong></p>
+<h2 id="diapositiva-3">Diapositiva 3</h2>
+<p><strong>ACTIUS A PROTEGIR</strong></p>
+<p><strong>Elements Vulnerables del Sistema</strong></p>
+<p><strong>1. Maquinari (Hardware)</strong></p>
+<p><strong>2. Programari (Software)</strong></p>
+<p><strong>3. Dades (Informació)</strong></p>
+<p>Equips físics, servidors, estacions de treball, dispositius de xarxa (encaminadors, switches), cablatge i sistemes d'emmagatzematge. Són vulnerables a avaries, robatoris o desastres ambientals.</p>
+<p>Sistemes operatius, aplicacions de negoci, servidors web i bases de dades. Vulnerables a errors de programació (bugs), defectes de disseny, injeccions de codi i atac de malware.</p>
+<p>L'actiu de més valor de l'organització. Inclou bases de dades de clients, la propietat intel·lectual, fitxers financers i credencials. Vulnerables a la fuga, alteració o destrucció.</p>
+<h2 id="diapositiva-4">Diapositiva 4</h2>
+<p><strong>ANÀLISI DE RISCOS</strong></p>
+<p><strong>Diferència entre Vulnerabilitat i Amenaça</strong></p>
+<p><strong>Vulnerabilitat (Factor Intern)</strong></p>
+<p><strong>Amenaça (Agent Extern)</strong></p>
+<p><strong>Feblesa inherent al sistema</strong></p>
+<p><strong>Esdeveniment que explota una vulnerabilitat</strong></p>
+<p>• <strong>Física/Natural:</strong> CPDs sense control de temperatura o sense control d'accés a la porta.</p>
+<p>• <strong>Físiques:</strong> Incendis, talls de fluid elèctric, inundacions, danys per pols o descàrregues.</p>
+<p>• <strong>Tècnica:</strong> Software desactualitzat, ports oberts innecessaris o absència de xifratge.</p>
+<p>• <strong>Lògiques:</strong> Infecció per Ransomware, atacs DoS/DDoS, Phishing o intromissions no autoritzades.</p>
+<p>• <strong>Humana:</strong> Personal no format en ciberseguretat o contrasenyes febles/reutilitzades.</p>
+<p>• <strong>Objectiu:</strong> Materialitzar un dany directament sobre el maquinari, software o dades.</p>
+<h2 id="diapositiva-5">Diapositiva 5</h2>
+<p><strong>INFRAESTRUCTURES FÍSIQUES</strong></p>
+<p><strong>Protecció del CPD i Estacions de Treball</strong></p>
+<p><strong>CPD (Data Center)</strong></p>
+<p><strong>Estacions de Treball</strong></p>
+<p><strong>Control i Vigilància</strong></p>
+<p>Instal·lació d'alta seguretat dissenyada per allotjar servidors sota condicions ambientalment estrictes.</p>
+<p>Tot i no contingut dades crítiques directament, poden ser la porta d'entrada a la xarxa corporativa.</p>
+<p>Mesures preventives administratives i de monitorització contínua.</p>
+<p>• Control de temperatura i humitat constant.</p>
+<p>• Videovigilància CCTV (complint normativa de privacitat).</p>
+<p>• Protecció electromagnètica i aïllament.</p>
+<p>• Accés físic restringit a personal autoritzat.</p>
+<p>• Sistemes avançats d'extinció d'incendis per gas.</p>
+<p>• Bloqueig automàtic de sessió i protecció per contrasenya.</p>
+<p>• Realització d'inventaris periòdics d'equips.</p>
+<p>• Separació de l'emmagatzematge de dades respecte al HW general.</p>
+<p>• Protecció física de cablatge i connectors.</p>
+<h2 id="diapositiva-6">Diapositiva 6</h2>
+<p><strong>PROTECCIÓ ELÈCTRICA</strong></p>
+<p><strong>Sistemes SAI / UPS per a Servidors</strong></p>
+<p><strong>Perills dels Talls d'Electricitat</strong></p>
+<p>Una apagada repentina sense aturada controlada provoca danys greus en els servidors:</p>
+<p>• <strong>Potència (Watts / VA):</strong> Determina el nombre màxim d'equips i servidors que es poden alimentar simultàniament.</p>
+<p><strong>Factors Claus de Triar un SAI</strong></p>
+<p>• Pèrdua irreversible de dades emmagatzemades a la memòria cau (Cache RAM).</p>
+<p>• <strong>Autonomia (Temps de bateria):</strong> Minuts disponibles per mantenir l'activitat abans d'iniciar l'apagada.</p>
+<p>• Corrupció de fitxers de sistema oberts i bases de dades transaccionals.</p>
+<p>• <strong>Comunicació i Apagada Automàtica (USB/Sèrie):</strong> Envia alertes d'estat de bateria al SO, executa scripts d'aturada segura i ordenada i reinicia el servidor en tornar el corrent.</p>
+<p>• Errors crítics i impossibilitat d'arrencada en el reinici.</p>
+<p>• <strong>Manteniment:</strong> Canvi periòdic de bateries segons especificacions del fabricant.</p>
+<h2 id="diapositiva-7">Diapositiva 7</h2>
+<p><strong>CONTROL D'ACCÉS DIGITAL</strong></p>
+<p><strong>Els 3 Factors d'Autenticació</strong></p>
+<p><strong>1. El que Saps</strong></p>
+<p><strong>2. El que Tens</strong></p>
+<p><strong>3. El que Ets</strong></p>
+<p><strong>Contrasenyes i PINs</strong></p>
+<p><strong>Targetes i Tokens</strong></p>
+<p><strong>Sistemes Biomètrics</strong></p>
+<p>Mètode econòmic però més vulnerable a la filtració o descavells. Requereix ≥12 caràcters, majúscules, minúscules, números, símbols i no reutilització.</p>
+<p>Dispositius físics compactes com targetes intel·ligents (DNIe), claus de seguretat USB (YubiKey) o tokens de fitxatge tipus clauer.</p>
+<p>Característiques físiques úniques: empremta dactilar, reconeixement facial o escàner de retina. Alta fiabilitat sense haver de recordar claus.</p>
+<h2 id="diapositiva-8">Diapositiva 8</h2>
+<p><strong>CRIPTOGRAFIA DE CLAU PRIVADA</strong></p>
+<p><strong>Criptosistemes Simètrics</strong></p>
+<p><strong>Principi de Funcionament</strong></p>
+<p><strong>Evolució dels Algorismes</strong></p>
+<p>L'emissor i el receptor utilitzen la <strong>mateixa clau secreta compartida</strong> tant per xifrar el text en clar com per desxifrar el criptograma.</p>
+<p>• <strong>Obsolets:</strong> DES (1977), Triple DES, Blowfish / IDEA (superats per tenir mides de bloc de dades petites o claus curtes).</p>
+<p>• <strong>Estàndard Actual (AES-256):</strong> Advanced Encryption Standard. Mètode ultra-ràpid, utilitzat globalment i considerat 100% segur fins i tot contra la computació quàntica.</p>
+<p><strong>Problema principal:</strong> Com fer arribar la clau al receptor inicialment de forma segura sense que sigui interceptada.</p>
+<p>• <strong>Modern Mòbil (ChaCha20):</strong> Desenvolupat el 2008, d'alta velocitat en mòbils, emprat a WireGuard i TLS 1.3.</p>
+<h2 id="diapositiva-9">Diapositiva 9</h2>
+<p><strong>CRIPTOGRAFIA DE CLAU PÚBLICA</strong></p>
+<p><strong>Criptosistemes Asimètrics</strong></p>
+<p>Imagina que cada usuari té una bústia al carrer amb un candau especial:</p>
+<p><strong>Analogia de la Bústia i el Candau</strong></p>
+<p>Com que les claus estan vinculades matemàticament, allò que es tanca amb la clau privada (Su) es pot verificar amb la pública (Pu).</p>
+<p><strong>Signatura Digital i No-Repudi</strong></p>
+<p>• <strong>Clau Pública (Pu):</strong> És el candau obert disponible a un directori públic. Qualsevol persona pot agafar la clau Pu per tancar una carta a la bústia. Un cop tancada, ningú al carrer la pot obrir.</p>
+<p><strong>Propietat de No-Repudi:</strong> Permet signar digitalment documents confirmant l'autoria. L'emissor no pot negar haguer-ho enviat.</p>
+<p>• <strong>Clau Privada (Su):</strong> És la clau física secreta que només té el propietari per obrir el candau i llegir el missatge.</p>
+<h2 id="diapositiva-10">Diapositiva 10</h2>
+<p><img alt="Imatge 3" loading="lazy" src="seguretat-fisica-1-0-img/img-003.jpg" /></p>
+<p><img alt="Imatge 4" loading="lazy" src="seguretat-fisica-1-0-img/img-004.png" /></p>
+<p><strong>Resum d'Estudi - Seguretat Física 1.0</strong></p>
+<p>La seguretat integral combina la protecció ambiental del maquinari (CPD i SAI), mètodes robusos d'autenticació multifactor i l'ús combinat de criptografia simètrica (AES-256 per a velocitat) i asimètrica (RSA/Pu-Su per a intercanvi i signatures).</p>
+</article>
+<nav class="pager"><span></span><a class="pager-btn" href="seguretat-fisica-2-0.html">Seguretat Física 2.0 →</a></nav>
+
+    <footer>Material docent · Formació Professional · Informàtica</footer>
+  </main>
+</div>
+
+<script>
+function filtrarContingut() {
+  let input = document.getElementById('site-search').value.toLowerCase();
+  let items = document.querySelectorAll('.card, .resource');
+  items.forEach(item => {
+    let text = item.innerText.toLowerCase();
+    item.style.display = text.includes(input) ? '' : 'none';
+  });
+}
+</script>
+</body>
+</html>

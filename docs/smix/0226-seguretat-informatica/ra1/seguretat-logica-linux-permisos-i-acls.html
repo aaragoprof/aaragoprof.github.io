@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seguretat Lògica Linux - Permisos i ACLs · Material docent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/style.css">
+</head>
+<body>
+
+
+<header class="topbar">
+  <a class="topbar-brand" href="../../../index.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 14l9-5-9-5-9 5 9 5z"/><path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0112 20.055a11.952 11.952 0 01-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
+    <span>Portal Docent</span>
+  </a>
+  <div class="search-container">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" id="site-search" placeholder="Cercar material o temari..." onkeyup="filtrarContingut()">
+  </div>
+</header>
+
+<div class="apunt-layout">
+  <aside class="sidebar">
+    
+<div class="sidebar-head">Material del RA</div>
+<ul class="sidebar-menu">
+  <li><a href="questionari-inicial.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Questionari Inicial</a></li><li><a href="sai.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> SAI</a></li><li><a href="seguretat-logica-control-d-acces-dac-i-matrius.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Seguretat Lògica - Control d&#x27;Accés, DAC i Matrius</a></li><li><a href="seguretat-logica-linux-permisos-i-acls.html" class="active"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Seguretat Lògica Linux - Permisos i ACLs</a></li><li><a href="seguretat-passiva-i-fisica.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Seguretat Passiva i Física</a></li>
+</ul>
+
+  </aside>
+  <main class="apunt-content">
+    
+
+<div class="apunt-header">
+  <a class="back" href="index.html" style="color:var(--accent); text-decoration:none; font-family:var(--font-mono); font-size:0.8rem;">← Tornar a RA1</a>
+  <div class="apunt-eyebrow" style="margin-top:0.5rem;">SMIX · M0226 · RA1</div>
+</div>
+
+<article class="prose">
+  <h1 id="seguretat-logica-linux-permisos-i-acls">Seguretat Lògica Linux - Permisos i ACLs</h1>
+<h2 id="diapositiva-1">Diapositiva 1</h2>
+<p><img alt="Imatge 1" loading="lazy" src="seguretat-logica-linux-permisos-i-acls-img/img-001.jpg" /></p>
+<p><img alt="Imatge 2" loading="lazy" src="seguretat-logica-linux-permisos-i-acls-img/img-002.png" /></p>
+<p><strong>Seguretat Lògica en Linux</strong></p>
+<p><strong>MÒDUL D'ADMINISTRACIÓ DE SISTEMES OPERATIUS</strong></p>
+<p>Material d'estudi: Grups de Permisos, Notació Simbòlica i Numèrica Octal, Comanda chmod i Llistes ACL Avançades</p>
+<h2 id="diapositiva-2">Diapositiva 2</h2>
+<p><strong>ESTRUCTURA D'ACCÉS</strong></p>
+<p><strong>Els 3 Grups de Permisos (u, g, o, a)</strong></p>
+<p>En crear qualsevol fitxer o directori en GNU/Linux, el sistema operatiu divideix la gestió dels drets d'accés en <strong>tres categories principals d'usuaris</strong>:</p>
+<p><strong>Usuari Propietari (u)</strong></p>
+<p><strong>Grup Propietari (g)</strong></p>
+<p><strong>Altres Usuaris (o)</strong></p>
+<p>L'usuari concret (User) que ha creat el fitxer o a qui se li ha assignat la propietat individual.</p>
+<p>El grup d'usuaris (Group) assignat al fitxer. Tots els membres d'aquest grup comparteixen els mateixos drets.</p>
+<p>La resta d'usuaris del sistema (Others) que no són ni el propietari ni pertanyen al grup assignat.</p>
+<p><strong>* Comodí All (a): Representa la totalitat dels usuaris de manera simultània (Equivalent a u + g + o).</strong></p>
+<h2 id="diapositiva-3">Diapositiva 3</h2>
+<p><strong>DRETS D'ACCÉS</strong></p>
+<p><strong>Tipus de Permisos: Lectura, Escriptura i Execució</strong></p>
+<p><strong>Lectura (r - Read)</strong></p>
+<p><strong>Escriptura (w - Write)</strong></p>
+<p><strong>Execució (x - Execute)</strong></p>
+<p>• <strong>Fitxers:</strong> Permet obrir i veure el contingut intern del fitxer (ex: cat, nano).</p>
+<p>• <strong>Fitxers:</strong> Permet modificar, afegir o alterar el contingut del fitxer.</p>
+<p>• <strong>Fitxers:</strong> Converteix el fitxer en un programa executable o script (ex: ./script.sh).</p>
+<p>• <strong>Directoris:</strong> Permet llistar el contingut dels arxius que inclou el directori (ex: ls).</p>
+<p>• <strong>Directoris:</strong> Permet crear nous fitxers o eliminar fitxers existents a l'interior de la carpeta.</p>
+<p>• <strong>Directoris:</strong> Permet entrar o accedir al directori (ex: cd carpeta/).</p>
+<h2 id="diapositiva-4">Diapositiva 4</h2>
+<p><strong>VISUALITZACIÓ EN TERMINAL</strong></p>
+<p><strong>Interpretació de la Notació Simbòlica (ls -l)</strong></p>
+<p>En executar la comanda ls -l, la primera columna consta de <strong>10 caràcters</strong> que es llegeixen d'esquerra a dreta:</p>
+<p>drwxr-xr-- 5 yuri yuri 4096 Feb 15 10:30 directori_web 
+ -rw-rw-r-- 1 yuri yuri 824 Oct 17 11:15 fitxer.txt</p>
+<p><strong>Caràcter 1 (Tipus)</strong></p>
+<p><strong>Caràcters 2-4 (u)</strong></p>
+<p><strong>Caràcters 5-7 (g)</strong></p>
+<p><strong>Caràcters 8-10 (o)</strong></p>
+<p>- Fitxer normal 
+ d Directori 
+ l Enllaç simbòlic</p>
+<p>Permisos de l'<strong>Usuari propietari</strong>. 
+ Ex: rwx o rw-</p>
+<p>Permisos del <strong>Grup propietari</strong>. 
+ Ex: r-x o rw-</p>
+<p>Permisos de <strong>Altres usuaris</strong>. 
+ Ex: r-- o ---</p>
+<h2 id="diapositiva-5">Diapositiva 5</h2>
+<p><strong>MODIFICACIÓ DE PERMISOS</strong></p>
+<p><strong>Modificació Simbòlica amb la Comanda chmod</strong></p>
+<p><strong>Operadors Simbòlics</strong></p>
+<p><strong>Exemples Pràctics</strong></p>
+<p>• <strong>+ (Afegir):</strong> Afegeix un permís concret sense alterar els que ja existien.</p>
+<p># Afegeix permís d'escriptura al grup: 
+ $ chmod g+w document.txt </p>
+<p># Treu el permís de lectura als altres usuaris: 
+ $ chmod o-r document.txt </p>
+<p># Assigna exactament rwx al propietari: 
+ $ chmod u=rwx script.sh</p>
+<p>• <strong>- (Treure):</strong> Elimina un permís concret conservant la resta intactes.</p>
+<p>• <strong>= (Establir):</strong> Sobreescriu i assigna exactament els permisos indicats, esborrant els anteriors.</p>
+<h2 id="diapositiva-6">Diapositiva 6</h2>
+<p><strong>SISTEMA NUMÈRIC</strong></p>
+<p><strong>Notació Numèrica Octal (Valors 4, 2, 1)</strong></p>
+<p>La notació numèrica assigna un valor binari/octal ponderat a cada tipus de permís individual. Sumant aquests valors s'obté un digit decimal (0-7) per a cada grup (u, g, o):</p>
+<table>
+<thead>
+<tr>
+<th>Permís</th>
+<th>Lletra</th>
+<th>Valor Numèric</th>
+<th>Significat i funció del permís</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Lectura</td>
+<td>r</td>
+<td>4</td>
+<td>Permet llegir el contingut del fitxer o llistar directori.</td>
+</tr>
+<tr>
+<td>Escriptura</td>
+<td>w</td>
+<td>2</td>
+<td>Permet editar, modificar o esborrar el fitxer/directori.</td>
+</tr>
+<tr>
+<td>Execució</td>
+<td>x</td>
+<td>1</td>
+<td>Permet executar com a programa o accedir (cd) al directori.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="diapositiva-7">Diapositiva 7</h2>
+<p><strong>CÀLCUL DE COMBINACIONS</strong></p>
+<p><strong>Combinacions Octals de Permisos</strong></p>
+<table>
+<thead>
+<tr>
+<th>Valor Octal</th>
+<th>Símbol</th>
+<th>Suma de Valors</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>---</td>
+<td>Cap permís assignat (0+0+0)</td>
+</tr>
+<tr>
+<td>1</td>
+<td>--x</td>
+<td>Només Execució (1)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>-w-</td>
+<td>Només Escriptura (2)</td>
+</tr>
+<tr>
+<td>3</td>
+<td>-wx</td>
+<td>Escriptura + Execució (2+1)</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Valor Octal</th>
+<th>Símbol</th>
+<th>Suma de Valors</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4</td>
+<td>r--</td>
+<td>Només Lectura (4)</td>
+</tr>
+<tr>
+<td>5</td>
+<td>r-x</td>
+<td>Lectura + Execució (4+1)</td>
+</tr>
+<tr>
+<td>6</td>
+<td>rw-</td>
+<td>Lectura + Escriptura (4+2)</td>
+</tr>
+<tr>
+<td>7</td>
+<td>rwx</td>
+<td>Tots els permisos (4+2+1)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="diapositiva-8">Diapositiva 8</h2>
+<p><strong>CÀLCUL RESOLUT</strong></p>
+<p><strong>Exemple de Càlcul Octal (chmod 755 i 644)</strong></p>
+<p>• <strong>Propietari (7):</strong> 4+2+1 = rwx (Control total)</p>
+<p><strong>chmod 755 (Directoris/Scripts)</strong></p>
+<p>• <strong>Propietari (6):</strong> 4+2+0 = rw- (Llegir i modificar)</p>
+<p><strong>chmod 644 (Fitxers Estàndard)</strong></p>
+<p>• <strong>Grup (5):</strong> 4+0+1 = r-x (Llegir i accedir)</p>
+<p>• <strong>Grup (4):</strong> 4+0+0 = r-- (Només lectura)</p>
+<p>• <strong>Altres (5):</strong> 4+0+1 = r-x (Llegir i accedir)</p>
+<p>• <strong>Altres (4):</strong> 4+0+0 = r-- (Només lectura)</p>
+<p>$ chmod 755 /var/www/html 
+ Resultat: drwxr-xr-x</p>
+<p>$ chmod 644 document.pdf 
+ Resultat: -rw-r--r--</p>
+<h2 id="diapositiva-9">Diapositiva 9</h2>
+<p><strong>PERMISOS AVANÇATS</strong></p>
+<p><strong>Llistes de Control d'Accés (ACL)</strong></p>
+<p><strong>Per què calen les ACLs?</strong></p>
+<p><strong>Instal·lació i Identificadors</strong></p>
+<p>Els permisos tradicionals POSIX (u, g, o) són molt limitats: només permeten assignar un sol usuari i un sol grup a cada fitxer.</p>
+<p>En distribucions Debian/Ubuntu cal instal·lar el paquet:</p>
+<p>Les <strong>ACLs (Access Control Lists)</strong> permeten assignar permisos específics i individualitzats a múltiples usuaris i múltiples grups diferents sobre el mateix recurs.</p>
+<p>$ sudo apt-get install acl</p>
+<p>• u:usuari:permisos (Usuari específic)</p>
+<p>• g:grup:permisos (Grup específic)</p>
+<p>• m::permisos (Màscara de límit)</p>
+<h2 id="diapositiva-10">Diapositiva 10</h2>
+<p><strong>MECANISME DE SEGURETAT</strong></p>
+<p><strong>La Màscara (m) com a Sostre de Seguretat</strong></p>
+<p><strong>Concepte de la Màscara (m)</strong></p>
+<p><strong>Utilitat Pràctica de la Màscara</strong></p>
+<p>La màscara defineix el <strong>sostre o límit màxim de permisos efectius</strong> que poden tenir tots els usuaris addicionals i grups assignats mitjançant l'ACL.</p>
+<p>Permet restringir de cop l'accés a tots els usuaris externs d'un directori compartit sense haver d'esborrar o editar les regles ACL una per una:</p>
+<p>Si un usuari té permís rwx a l'ACL però la màscara s'estableix en r--, el permís efectiu de l'usuari serà només de lectura (r--).</p>
+<p># Bloquejar tot l'accés ACL: 
+ $ setfacl -m m::--- carpeta </p>
+<p># Restablir el sostre màxim: 
+ $ setfacl -m m::rwx carpeta</p>
+<h2 id="diapositiva-11">Diapositiva 11</h2>
+<p><strong>EINES DE LÍNIA D'ORDRES</strong></p>
+<p><strong>Comandes de Gestió d'ACLs (getfacl i setfacl)</strong></p>
+<p><strong>getfacl</strong></p>
+<p><strong>setfacl -m</strong></p>
+<p><strong>setfacl -d</strong></p>
+<p>Mostra la llista detallada d'ACLs d'un fitxer o directori (propietari, grup, usuaris addicionals i màscara).</p>
+<p>Modifica o afegeix una nova regla d'ACL a l'element.</p>
+<p>Defineix permisos per defecte (Default) que s'heretaran automàticament en crear nous fitxers.</p>
+<p>$ setfacl -m u:marta:rw fitxer.txt</p>
+<p>$ getfacl fitxer.txt</p>
+<p>$ setfacl -d -m g:profe:rwx /dir</p>
+<h2 id="diapositiva-12">Diapositiva 12</h2>
+<p><img alt="Imatge 3" loading="lazy" src="seguretat-logica-linux-permisos-i-acls-img/img-003.jpg" /></p>
+<p><img alt="Imatge 4" loading="lazy" src="seguretat-logica-linux-permisos-i-acls-img/img-004.png" /></p>
+<p><strong>Resum d'Estudi - Seguretat Lògica Linux</strong></p>
+<p>La gestió de permisos en Linux combina la notació simbòlica/octal bàsica (u, g, o amb valors 4, 2, 1) amb el control d'accés avançat mitjançant <strong>ACLs</strong> (setfacl / getfacl) i la <strong>màscara m</strong> per a la màxima flexibilitat i seguretat.</p>
+</article>
+<nav class="pager"><a class="pager-btn" href="seguretat-logica-control-d-acces-dac-i-matrius.html">← Seguretat Lògica - Control d&#x27;Accés, DAC i Matrius</a><a class="pager-btn" href="seguretat-passiva-i-fisica.html">Seguretat Passiva i Física →</a></nav>
+
+    <footer>Material docent · Formació Professional · Informàtica</footer>
+  </main>
+</div>
+
+<script>
+function filtrarContingut() {
+  let input = document.getElementById('site-search').value.toLowerCase();
+  let items = document.querySelectorAll('.card, .resource');
+  items.forEach(item => {
+    let text = item.innerText.toLowerCase();
+    item.style.display = text.includes(input) ? '' : 'none';
+  });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IDS, IPS i Gestió d&#x27;Incidències · Material docent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/style.css">
+</head>
+<body>
+
+
+<header class="topbar">
+  <a class="topbar-brand" href="../../../index.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 14l9-5-9-5-9 5 9 5z"/><path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0112 20.055a11.952 11.952 0 01-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
+    <span>Portal Docent</span>
+  </a>
+  <div class="search-container">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" id="site-search" placeholder="Cercar material o temari..." onkeyup="filtrarContingut()">
+  </div>
+</header>
+
+<div class="apunt-layout">
+  <aside class="sidebar">
+    
+<div class="sidebar-head">Material del RA</div>
+<ul class="sidebar-menu">
+  <li><a href="ids-ips-i-gestio-d-incidencies.html" class="active"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> IDS, IPS i Gestió d&#x27;Incidències</a></li><li><a href="malware-avancat-siem-i-zero-trust.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Malware Avançat, SIEM i Zero Trust</a></li><li><a href="recuperacio-de-dades-i-identitat-digital.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Recuperació de Dades i Identitat Digital</a></li><li><a href="seguretat-activa-i-verificacio-de-software.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Seguretat Activa i Verificació de Software</a></li>
+</ul>
+
+  </aside>
+  <main class="apunt-content">
+    
+
+<div class="apunt-header">
+  <a class="back" href="index.html" style="color:var(--accent); text-decoration:none; font-family:var(--font-mono); font-size:0.8rem;">← Tornar a RA3</a>
+  <div class="apunt-eyebrow" style="margin-top:0.5rem;">SMIX · M0226 · RA3</div>
+</div>
+
+<article class="prose">
+  <h1 id="ids-ips-i-gestio-dincidencies">IDS, IPS i Gestió d'Incidències</h1>
+<h2 id="diapositiva-1">Diapositiva 1</h2>
+<p><img alt="Imatge 1" loading="lazy" src="ids-ips-i-gestio-d-incidencies-img/img-001.jpg" /></p>
+<p><img alt="Imatge 2" loading="lazy" src="ids-ips-i-gestio-d-incidencies-img/img-002.png" /></p>
+<p><strong>Alarmes i Gestió d'Incidències</strong></p>
+<p><strong>MÒDUL DE SEGURETAT INFORMÀTICA (PART 3)</strong></p>
+<p>Material d'estudi: Detecció i Prevenció d'Intrusions (IDS vs IPS), Canals de Detecció, Resolució de Crisi i Documentació Retroalimentada</p>
+<h2 id="diapositiva-2">Diapositiva 2</h2>
+<p><strong>MONITORATGE DE SEGURETAT</strong></p>
+<p><strong>IDS i IPS: Monitoratge i Resposta Activa</strong></p>
+<p>Dins del marc de la seguretat activa, els sistemes de vigilància de xarxa i equips s'especialitzen en dues tasques complementàries: <strong>detectar</strong> i <strong>prevenir</strong> accions no autoritzades.</p>
+<p><strong>IDS (Intrusion Detection System)</strong></p>
+<p><strong>IPS (Intrusion Prevention System)</strong></p>
+<p>Sistema de Detecció d'Intrusions. Vigila la xarxa o l'equip per identificar activitats sospitoses o violacions de polítiques. <strong>Acció: Observa i avisa.</strong></p>
+<p>Evolució natural de l'IDS. No només detecta sinó que intervé de manera immediata per tallar l'amenaça. <strong>Acció: Observa i actua.</strong></p>
+<h2 id="diapositiva-3">Diapositiva 3</h2>
+<p><strong>EXPLICACIÓ DIDÀCTICA</strong></p>
+<p><strong>Analogia: Firewall, IDS i IPS a la Protecció Físic</strong></p>
+<p><strong>Tallafoc (Firewall)</strong></p>
+<p><strong>IDS (Alarma)</strong></p>
+<p><strong>IPS (Vigilant Actiu)</strong></p>
+<p>És la <strong>porta blindada</strong> de casa teva. Controla qui pot entrar o sortir segons les claus (regles de xarxa) establertes.</p>
+<p>És l'<strong>alarma amb sensors</strong> de moviment. Sona i t'avisa si algú ha forçat una finestra o aconseguit entrar a la casa.</p>
+<p>És el <strong>vigilant de seguretat presencial</strong>. En veure l'intrús, el deté immediatament abans que pugui tocar o robar res.</p>
+<h2 id="diapositiva-4">Diapositiva 4</h2>
+<p><strong>IDENTIFICACIÓ DE PROBLEMES</strong></p>
+<p><strong>Com es Detecta una Incidència de Seguretat?</strong></p>
+<p><strong>1. Alarma Automàtica del Sistema</strong></p>
+<p><strong>2. Comportament Anòmal del Sistema</strong></p>
+<p>Notificació directa generada per alguna de les eines de seguretat instal·lades:</p>
+<p>L'usuari o administrador nota indicis estranys en l'ús diari de l'equip.</p>
+<p>• Alertes de l'antivirus o programes EDR.</p>
+<p>• Notificacions del detector d'intrusos (IDS/IPS).</p>
+<p>• Aparició o desaparició de fitxers de cop i volta.</p>
+<p>• Lentitud extrema del disc o CPU sense estar fent tasques intenses.</p>
+<p>• Bloquejos i avisos del tallafoc (Firewall).</p>
+<p>• Fallades o tancaments inesperats de programes.</p>
+<h2 id="diapositiva-5">Diapositiva 5</h2>
+<p><strong>SIMPTOMATOLOGIA D'INFECCIÓ</strong></p>
+<p><strong>Indicis de Comportament Anòmal a la Màquina</strong></p>
+<p><strong>Alteració de Fitxers</strong></p>
+<p><strong>Degradació de Rendiment</strong></p>
+<p><strong>Inestabilitat i Tancaments</strong></p>
+<p>Fitxers o carpetes que s'esborren soles, o aparició d'arxius desconeguts en ubicacions del sistema.</p>
+<p>El disc dur treballa de forma constant o la CPU se satura sense que l'usuari estigui executant tasques feixugues.</p>
+<p>Tancaments inesperats d'aplicacions, reinicis automàtics de l'equip o bloquejos permanents de la pantalla.</p>
+<h2 id="diapositiva-6">Diapositiva 6</h2>
+<p><strong>PROTOCOL D'ACTUACIÓ</strong></p>
+<p><strong>Com Actuar en Detectar una Incidència?</strong></p>
+<p><strong>Opció A: Existeix Pla de Contingència</strong></p>
+<p><strong>Opció B: Sense Pla o Incidència Nova</strong></p>
+<p>Si l'empresa disposa d'un pla de contingència i la incidència està prevista:</p>
+<p>Si no hi ha pla o la incidència és imprevista:</p>
+<p><strong>Seguir estrictament el procediment pas a pas indicat en el document organitzatiu per pal·liar efectes.</strong></p>
+<p>Cenyir-se a les <strong>instruccions i documentació tècnica</strong> subministrada pels mateixos programes de seguretat que han donat l'alarma.</p>
+<h2 id="diapositiva-7">Diapositiva 7</h2>
+<p><strong>MILLORA CONTÍNUA</strong></p>
+<p><strong>Documentació de les Incidències Resoltes</strong></p>
+<p><strong>Obligatorietat de Documentar</strong></p>
+<p><strong>Actualització del Pla de Contingència</strong></p>
+<p>Un cop detectada i resolta la incidència de seguretat, és imprescindible realitzar un <strong>informe detallat de l'incident</strong>.</p>
+<p>Si la incidència no constava al pla perquè no estava prevista, <strong>convindrà incloure-hi el nou protocol immediatament</strong> per estar preparats davant d'esdeveniments futurs.</p>
+<p>• Registrar la causa de la fallada o atac.</p>
+<p>• Anotar les accions realitzades per a la seva resolució.</p>
+<h2 id="diapositiva-8">Diapositiva 8</h2>
+<p><strong>PROCÉS ESTRUCTURAT</strong></p>
+<p><strong>El Cicle de Vida de la Gestió d'Incidències</strong></p>
+<p><strong>1. Detecció:</strong> Recepció d'alerta d'eines (IDS/Antivirus) o identificació d'anomalies en el sistema.</p>
+<p><strong>2. Diagnòstic i Aïllament:</strong> Identificació de l'origen de l'atac i contenció per pal·liar els efectes immediats.</p>
+<p><strong>3. Resolució:</strong> Aplicació del pla de contingència o de les instruccions tècniques del software.</p>
+<p><strong>4. Documentació i Retroalimentació:</strong> Registre de l'incident i actualització del pla per a incidències meva futures.</p>
+<h2 id="diapositiva-9">Diapositiva 9</h2>
+<p><strong>COMPARATIVA TECNOLÒGICA</strong></p>
+<p><strong>Firewall vs. IDS vs. IPS</strong></p>
+<table>
+<thead>
+<tr>
+<th>Eina / Sistema</th>
+<th>Funció Principal</th>
+<th>Acció Davant l'Amenaça</th>
+<th>Analogia Física</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tallafoc (Firewall)</td>
+<td>Filtratge de ports i trànsit de xarxa segons regles</td>
+<td>Bloqueja o permet l'accés d'entrada/sortida</td>
+<td>Porta blindada de l'edifici</td>
+</tr>
+<tr>
+<td>IDS (Detecció)</td>
+<td>Vigilància i anàlisi de patrons d'intrusió</td>
+<td>Genera una alerta als administradors</td>
+<td>Alarma de seguretat amb sensors</td>
+</tr>
+<tr>
+<td>IPS (Prevenció)</td>
+<td>Vigilància contínua i tall de comunicacions</td>
+<td>Bloqueja i deté l'atac en temps real</td>
+<td>Vigilant de seguretat actiu</td>
+</tr>
+</tbody>
+</table>
+<h2 id="diapositiva-10">Diapositiva 10</h2>
+<p><strong>GESTIÓ DEL CONEIXEMENT</strong></p>
+<p><strong>Per què cal Documentar Sempre les Incidències?</strong></p>
+<p><strong>Historial Tecnològic</strong></p>
+<p><strong>Enfortiment del Pla</strong></p>
+<p><strong>Compliment Normatiu</strong></p>
+<p>Permet crear una base de coneixement per resoldre amb més velocitat futurs atacs similars.</p>
+<p>Transforma el pla de contingència en un document viu que evoluciona amb les noves amenaces.</p>
+<p>Demostra la diligència deguda en l'administració de sistemes davant d'auditories de seguretat.</p>
+<h2 id="diapositiva-11">Diapositiva 11</h2>
+<p><strong>SÍNTESI D'ESTUDI</strong></p>
+<p><strong>Cadena de Gestió d'Alarmes</strong></p>
+<p><strong>Detecció Precoç</strong></p>
+<p><strong>Resolució Guiada</strong></p>
+<p><strong>Registre Post-Mortem</strong></p>
+<p>Combinació de sensors automàtics (IDS/IPS) i observació de la conducta de l'equip.</p>
+<p>Seguiment del pla de contingència o documentació del software d'alarma.</p>
+<p>Documentar l'incident i actualitzar el pla organitzatiu.</p>
+<h2 id="diapositiva-12">Diapositiva 12</h2>
+<p><img alt="Imatge 3" loading="lazy" src="ids-ips-i-gestio-d-incidencies-img/img-003.jpg" /></p>
+<p><img alt="Imatge 4" loading="lazy" src="ids-ips-i-gestio-d-incidencies-img/img-004.png" /></p>
+<p><strong>Resum d'Estudi - Seguretat Activa 3</strong></p>
+<p>Una estratègia eficaç de gestió d'alarmes requereix diferir entre observació (<strong>IDS</strong>) i acció immediata (<strong>IPS</strong>), detectar anomalies ràpidament, actuar segons el <strong>pla de contingència</strong> i registrar cada esdeveniment per enfortir el sistema.</p>
+</article>
+<nav class="pager"><span></span><a class="pager-btn" href="malware-avancat-siem-i-zero-trust.html">Malware Avançat, SIEM i Zero Trust →</a></nav>
+
+    <footer>Material docent · Formació Professional · Informàtica</footer>
+  </main>
+</div>
+
+<script>
+function filtrarContingut() {
+  let input = document.getElementById('site-search').value.toLowerCase();
+  let items = document.querySelectorAll('.card, .resource');
+  items.forEach(item => {
+    let text = item.innerText.toLowerCase();
+    item.style.display = text.includes(input) ? '' : 'none';
+  });
+}
+</script>
+</body>
+</html>

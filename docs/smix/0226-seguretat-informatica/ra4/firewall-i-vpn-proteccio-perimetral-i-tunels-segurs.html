@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Firewall i VPN - Protecció Perimetral i Túnels Segurs · Material docent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/style.css">
+</head>
+<body>
+
+
+<header class="topbar">
+  <a class="topbar-brand" href="../../../index.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 14l9-5-9-5-9 5 9 5z"/><path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0112 20.055a11.952 11.952 0 01-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
+    <span>Portal Docent</span>
+  </a>
+  <div class="search-container">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" id="site-search" placeholder="Cercar material o temari..." onkeyup="filtrarContingut()">
+  </div>
+</header>
+
+<div class="apunt-layout">
+  <aside class="sidebar">
+    
+<div class="sidebar-head">Material del RA</div>
+<ul class="sidebar-menu">
+  <li><a href="byod-i-mdm.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> BYOD i MDM</a></li><li><a href="firewall-i-vpn-proteccio-perimetral-i-tunels-segurs.html" class="active"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Firewall i VPN - Protecció Perimetral i Túnels Segurs</a></li><li><a href="monitoratge-de-xarxes-snmp-phishing.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Monitoratge\de\xarxes\SNMP\Phishing</a></li><li><a href="seguretat-en-xarxes-de-cable-i-control-de-monitoratge.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Seguretat en Xarxes de Cable i Control de Monitoratge</a></li><li><a href="seguretat-en-xarxes-sense-fil-i-mobilitat-material-d-estudi.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Seguretat en Xarxes Sense Fil i Mobilitat - Material d&#x27;Estudi</a></li>
+</ul>
+
+  </aside>
+  <main class="apunt-content">
+    
+
+<div class="apunt-header">
+  <a class="back" href="index.html" style="color:var(--accent); text-decoration:none; font-family:var(--font-mono); font-size:0.8rem;">← Tornar a RA4</a>
+  <div class="apunt-eyebrow" style="margin-top:0.5rem;">SMIX · M0226 · RA4</div>
+</div>
+
+<article class="prose">
+  <h1 id="firewall-i-vpn-proteccio-perimetral-i-tunels-segurs">Firewall i VPN - Protecció Perimetral i Túnels Segurs</h1>
+<h2 id="diapositiva-1">Diapositiva 1</h2>
+<p><img alt="Imatge 1" loading="lazy" src="firewall-i-vpn-proteccio-perimetral-i-tunels-segurs-img/img-001.jpg" /></p>
+<p><img alt="Imatge 2" loading="lazy" src="firewall-i-vpn-proteccio-perimetral-i-tunels-segurs-img/img-002.png" /></p>
+<p><strong>Firewall i VPN</strong></p>
+<p><strong>MÒDUL DE SEGURETAT I XARXES</strong></p>
+<p>Material d'estudi: Protecció Perimetral, Arquitectura DMZ, Servidors Proxy i Túnels Xifrats de Xarxa Privada Virtual</p>
+<h2 id="diapositiva-2">Diapositiva 2</h2>
+<p><strong>PROTECCIÓ PERIMETRAL</strong></p>
+<p><strong>Què és i per a què serveix un Firewall (Tallafocs)?</strong></p>
+<p>Si la xarxa corporativa és un edifici, el <strong>Firewall</strong> és el porter situat a l'entrada decidint de manera rigorosa quin trànsit té permès l'accés i quin queda bloquejat.</p>
+<p><strong>Inspecció de Paquets</strong></p>
+<p><strong>Polítiques de Configuració</strong></p>
+<p>Examina cada paquet de dades que intenta creuar entre xarxes (per exemple, d'Internet a la xarxa local) aplicant un conjunt de regles definides.</p>
+<p>• <strong>Permissiva:</strong> Tot el que no està prohibit, està permès.</p>
+<p>• <strong>Restrictiva (Recomanada):</strong> Tot el que no està permès, està estrictament prohibit.</p>
+<h2 id="diapositiva-3">Diapositiva 3</h2>
+<p><strong>EVOLUCIÓ TECNOLÒGICA</strong></p>
+<p><strong>Filtre de Paquets Clàssic vs. NGFW (Next-Gen)</strong></p>
+<p><strong>Filtre Clàssic (Capa 3 / 4)</strong></p>
+<p><strong>NGFW - Next-Generation (Capa 7)</strong></p>
+<p>Només avalua adreces IP d'origen/destí i el número de port.</p>
+<p>Inspecciona el contingut real de l'aplicació dins del paquet (Deep Packet Inspection).</p>
+<p><strong>Analogia:</strong> Com un porter que només revisa el DNI a la porta sense comprovar què porta la persona a la bossa.</p>
+<p><strong>Detecta si el trànsit pel port segur 443 (HTTPS) és navegació legítima o un malware intentant camuflar-se.</strong></p>
+<h2 id="diapositiva-4">Diapositiva 4</h2>
+<p><strong>DISSENY DE XARXA SEGURA</strong></p>
+<p><strong>Què és una DMZ (Zona Desmilitaritzada)?</strong></p>
+<p><strong>Aïllament de Servidors Públics</strong></p>
+<p><strong>Estrutura de 3 Potes (Zones)</strong></p>
+<p>Xarxa intermèdia aïllada on es col·loquen els servidors que han de rebre connexions des d'Internet (Web, Correu, DNS).</p>
+<p>• <strong>1. Internet:</strong> Zona no fiable (pública).</p>
+<p><strong>Objectiu:</strong> Si un atacant compromet un servidor de la DMZ, el Firewall impedeix que pugui saltar directament a la xarxa interna.</p>
+<p>• <strong>2. DMZ:</strong> Zona de servidors d'accés extern.</p>
+<p>• <strong>3. LAN Interna:</strong> Zona d'alta seguretat (equips d'usuaris i bases de dades).</p>
+<h2 id="diapositiva-5">Diapositiva 5</h2>
+<p><strong>INTERMEDIACIÓ D'APLICACIÓ</strong></p>
+<p><strong>Què és el Servidor Proxy?</strong></p>
+<p><strong>El "Missatger" d'Aplicació</strong></p>
+<p><strong>Avantatges Principals</strong></p>
+<p>Actua com a intermediari entre el client i el servidor de destinació. L'usuari mai no connecta directament a la web final.</p>
+<p>• <strong>Filtratge de contingut:</strong> Bloqueig de categories o llocs web no permesos.</p>
+<p>• El client demana el contingut al Proxy.</p>
+<p>• <strong>Caché local:</strong> Emmagatzema continguts freqüents per accelerar la xarxa.</p>
+<p>• El Proxy sol·licita la pàgina a Internet i la lliura al client.</p>
+<p>• <strong>Privadesa d'IP:</strong> Mascara l'adreça IP real del client intern.</p>
+<h2 id="diapositiva-6">Diapositiva 6</h2>
+<p><strong>DIFERÈNCIES CLAU</strong></p>
+<p><strong>Firewall vs. Proxy: Roles i Diferències</strong></p>
+<table>
+<thead>
+<tr>
+<th>Característica</th>
+<th>El Firewall ("El Porter")</th>
+<th>El Proxy ("L'Intermediari")</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Capa d'Actuació</td>
+<td>Nivell de Xarxa i Transport (Capa 3 / 4)</td>
+<td>Nivell d'Aplicació (Capa 7 - Navegador Web)</td>
+</tr>
+<tr>
+<td>Criteri de Decisió</td>
+<td>Adreces IP d'origen/destí i número de port</td>
+<td>Contingut del fitxer, lloc web i usuari concret</td>
+</tr>
+<tr>
+<td>Acció Principal</td>
+<td>Obre o tanca la connexió física de trànsit</td>
+<td>Fa la petició en nom de l'usuari i gestiona memòria cau</td>
+</tr>
+<tr>
+<td>Exemple d'Ús</td>
+<td>"Bloquejar totes les connexions d'entrada al port 22"</td>
+<td>"Bloquejar l'accés a xarxes socials durant l'horari lectiu"</td>
+</tr>
+</tbody>
+</table>
+<h2 id="diapositiva-7">Diapositiva 7</h2>
+<p><strong>TÚNELS DE SEGURETAT</strong></p>
+<p><strong>Què és una VPN (Virtual Private Network)?</strong></p>
+<p><strong>L'Analogia de l'Autopista i el Túnel</strong></p>
+<p><strong>Protecció contra l'Escoltai</strong></p>
+<p>Internet és com una <strong>autopista pública</strong> per on circula el trànsit de tothom. Si envies paquets sense protecció, qualsevol <em>sniffer</em> pot veure les dades.</p>
+<p>Encara que un atacant estigui monitoritzant la xarxa pública, no pot desxifrar les dades que circulen a l'interior del túnel VPN.</p>
+<p><strong>Una VPN construeix un túnel privat i acorçat que discorre per dins d'aquesta autopista pública. Tot el que viatja pel túnel va xifrat.</strong></p>
+<h2 id="diapositiva-8">Diapositiva 8</h2>
+<p><strong>MECANISME TÈCNIC</strong></p>
+<p><strong>Com Funciona una Connexió VPN?</strong></p>
+<p><strong>1. Xifratge de dades:</strong> L'ordinador del client embolcalla les dades originals en un sobre xifrat que només el servidor VPN destí pot obrir.</p>
+<p><strong>2. Encapsulament (Tunneling):</strong> Aquest sobre xifrat s'introdueix dins d'un altre paquet estàndard per poder viatjar per Internet sense ser interceptat.</p>
+<p><strong>3. Desencapsulament i Lliurament:</strong> En arribar al servidor VPN de l'empresa, es desxifra el contingut i es lliura a la LAN com si el client estigués connectat per cable presencial.</p>
+<h2 id="diapositiva-9">Diapositiva 9</h2>
+<p><strong>APLICACIONS PRÀCTIQUES</strong></p>
+<p><strong>Per a què es Fà Servir una VPN?</strong></p>
+<p><strong>Teletreball Segur</strong></p>
+<p><strong>Protecció en Wi-Fi Públiques</strong></p>
+<p><strong>Privadesa d'Ubicació (IP)</strong></p>
+<p>Permet que els empleats accedeixin a carpetes compartides i aplicacions internes des de casa de forma xifrada.</p>
+<p>Mantingues les dades il·legibles per a altres usuaris o hackers que estiguin a la mateixa xarxa en cafeteries o aeroports.</p>
+<p>Oculta la IP real del client; a ulls d'Internet la connexió prové de la IP pública del servidor VPN.</p>
+<h2 id="diapositiva-10">Diapositiva 10</h2>
+<p><strong>TECNOLOGIES DE TÚNEL</strong></p>
+<p><strong>Principals Protocols de VPN</strong></p>
+<p><strong>OpenVPN</strong></p>
+<p><strong>WireGuard</strong></p>
+<p><strong>IPsec</strong></p>
+<p>L'estàndard tradicional més utilitzat. De codi obert, altament segur i compatible amb la majoria de sistemes operatius.</p>
+<p>El protocol més modern. Extremadament ràpid, eficient en codi i basat en criptografia d'última generació.</p>
+<p>S'utilitza principalment per connectar dues seus corporatives fixes entre si (túnel Site-to-Site entre routers).</p>
+<h2 id="diapositiva-11">Diapositiva 11</h2>
+<p><strong>SÍNTESI DEL RA</strong></p>
+<p><strong>Integració: Firewall, DMZ, Proxy i VPN</strong></p>
+<p><strong>1. Filtre Externe (FW + DMZ)</strong></p>
+<p><strong>2. Control d'Aplicació (Proxy)</strong></p>
+<p><strong>3. Accés Remot (VPN)</strong></p>
+<p>El Firewall controla l'accés perimetral i aïlla els servidors públics a la DMZ per evitar intrusions a la LAN.</p>
+<p>El Proxy gestiona la navegació web dels usuaris interns, aplicant filtratge de continguts i acceleració per caché.</p>
+<p>La VPN garanteix un túnel xifrat per connectar equips remots o seus de forma 100% segura.</p>
+<h2 id="diapositiva-12">Diapositiva 12</h2>
+<p><img alt="Imatge 3" loading="lazy" src="firewall-i-vpn-proteccio-perimetral-i-tunels-segurs-img/img-003.jpg" /></p>
+<p><img alt="Imatge 4" loading="lazy" src="firewall-i-vpn-proteccio-perimetral-i-tunels-segurs-img/img-004.png" /></p>
+<p><strong>Resum d'Estudi - Firewall i VPN</strong></p>
+<p>Una arquitectura de xarxa robusta exigeix la combinació de <strong>Firewalls NGFW</strong> per al control de paquets, estructures <strong>DMZ</strong> per a servidors públics, <strong>Proxies</strong> per al filtratge web d'aplicació i túnels <strong>VPN (WireGuard/OpenVPN)</strong> per garantir el xifratge d'extrem a extrem.</p>
+</article>
+<nav class="pager"><a class="pager-btn" href="byod-i-mdm.html">← BYOD i MDM</a><a class="pager-btn" href="monitoratge-de-xarxes-snmp-phishing.html">Monitoratge\de\xarxes\SNMP\Phishing →</a></nav>
+
+    <footer>Material docent · Formació Professional · Informàtica</footer>
+  </main>
+</div>
+
+<script>
+function filtrarContingut() {
+  let input = document.getElementById('site-search').value.toLowerCase();
+  let items = document.querySelectorAll('.card, .resource');
+  items.forEach(item => {
+    let text = item.innerText.toLowerCase();
+    item.style.display = text.includes(input) ? '' : 'none';
+  });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gestió de Còpies de Seguretat · Material docent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/style.css">
+</head>
+<body>
+
+
+<header class="topbar">
+  <a class="topbar-brand" href="../../../index.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 14l9-5-9-5-9 5 9 5z"/><path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0112 20.055a11.952 11.952 0 01-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
+    <span>Portal Docent</span>
+  </a>
+  <div class="search-container">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" id="site-search" placeholder="Cercar material o temari..." onkeyup="filtrarContingut()">
+  </div>
+</header>
+
+<div class="apunt-layout">
+  <aside class="sidebar">
+    
+<div class="sidebar-head">Material del RA</div>
+<ul class="sidebar-menu">
+  <li><a href="copies-de-seguretat-i-gestio-d-emmagatzematge.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Còpies de Seguretat i Gestió d&#x27;Emmagatzematge</a></li><li><a href="gestio-de-copies-de-seguretat.html" class="active"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Gestió de Còpies de Seguretat</a></li><li><a href="questionari-inicial.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Questionari Inicial</a></li><li><a href="sistemes-d-emmagatzematge-redundant-raid.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Sistemes d&#x27;Emmagatzematge Redundant (RAID)</a></li>
+</ul>
+
+  </aside>
+  <main class="apunt-content">
+    
+
+<div class="apunt-header">
+  <a class="back" href="index.html" style="color:var(--accent); text-decoration:none; font-family:var(--font-mono); font-size:0.8rem;">← Tornar a RA2</a>
+  <div class="apunt-eyebrow" style="margin-top:0.5rem;">SMIX · M0226 · RA2</div>
+</div>
+
+<article class="prose">
+  <h1 id="gestio-de-copies-de-seguretat">Gestió de Còpies de Seguretat</h1>
+<h2 id="diapositiva-1">Diapositiva 1</h2>
+<p><img alt="Imatge 1" loading="lazy" src="gestio-de-copies-de-seguretat-img/img-001.jpg" /></p>
+<p><img alt="Imatge 2" loading="lazy" src="gestio-de-copies-de-seguretat-img/img-002.png" /></p>
+<p><strong>Gestió del Procés de Còpies de Seguretat</strong></p>
+<p><strong>MÒDUL D'ADMINISTRACIÓ I PLANIFICACIÓ DE BACKUPS</strong></p>
+<p>Material d'estudi: Models de Backup (Incremental vs Diferencial), Imatges de Sistema, Finestra de Còpia, Limitacions i Checksums vs Hashes</p>
+<h2 id="diapositiva-2">Diapositiva 2</h2>
+<p><strong>OBJECTIUS OPERATIUS</strong></p>
+<p><strong>Objectius del Procés de Còpia de Seguretat</strong></p>
+<p>La creació d'una còpia de seguretat és un procés continu i dinàmic que s'ha d'actualitzar a mesura que es modifiquen les dades originals. Tant usuaris domèstics com empreses comparteixen objectius fonamentals:</p>
+<p><strong>Recuperació en un Punt Temporal</strong></p>
+<p><strong>Protecció contra Accés No Autoritzat</strong></p>
+<p><strong>Garantia de Restauració</strong></p>
+<p>Permet conservar l'estat exacte de les dades en un moment determinat del temps per poder tornar enrere si es produeix una fallada o corrupció.</p>
+<p>Un sistema de còpies només és tan bo com la seva <strong>estratègia de restauració</strong>. Cal validar contínuament que la recuperació sigui funcional.</p>
+<p>Les còpies s'han de protegir per evitar que usuaris no autoritzats puguin accedir-hi o robar-les en cas de pèrdua dels arxius originals.</p>
+<h2 id="diapositiva-3">Diapositiva 3</h2>
+<p><strong>AVALUACIÓ NUMÈRICA DE MODELS</strong></p>
+<p><strong>Cas Pràctic: Còpia Incremental (Dia a Dia)</strong></p>
+<p>Tenim una base inicial de <strong>100 GB el Diumenge</strong> i cada dia es modifiquen o s'afegeixen <strong>10 GB</strong> de dades noves.</p>
+<p><strong>Escenari de Dades (Base 100 GB)</strong></p>
+<p>Per restaurar l'estat del Dimecres es necessiten:</p>
+<p><strong>Procés de Restauració</strong></p>
+<p><strong>Completa Diumenge + Inc. Dilluns + Inc. Dimarts + Inc. Dimecres (4 fitxers en total).</strong></p>
+<p>• <strong>Diumenge:</strong> Còpia Completa → <strong>100 GB</strong></p>
+<p>• <strong>Dilluns:</strong> Incremental (canvis dilluns) → <strong>10 GB</strong></p>
+<p>• <strong>Dimarts:</strong> Incremental (canvis dimarts) → <strong>10 GB</strong></p>
+<p>* Risc: Si una sola còpia de la cadena falla, la restauració no es pot dur a terme.</p>
+<p>• <strong>Dimecres:</strong> Incremental (canvis dimecres) → <strong>10 GB</strong></p>
+<h2 id="diapositiva-4">Diapositiva 4</h2>
+<p><strong>AVALUACIÓ NUMÈRICA DE MODELS</strong></p>
+<p><strong>Cas Pràctic: Còpia Diferencial (Acumulativa)</strong></p>
+<p>Cada dia guarda <strong>tots els canvis acumulats</strong> des de la darrera còpia completa del diumenge:</p>
+<p><strong>Escenari de Dades (Base 100 GB)</strong></p>
+<p>Per restaurar l'estat del Dimecres només calen:</p>
+<p><strong>Procés de Restauració</strong></p>
+<p><strong>Completa Diumenge + Diferencial Dimecres (Només 2 fitxers en total).</strong></p>
+<p>• <strong>Diumenge:</strong> Còpia Completa → <strong>100 GB</strong></p>
+<p>• <strong>Dilluns:</strong> Diferencial (canvis dilluns) → <strong>10 GB</strong></p>
+<p>✓ Avantatge: Restauració molt més ràpida i amb menor risc de fallada.</p>
+<p>• <strong>Dimarts:</strong> Diferencial (dilluns + dimarts) → <strong>20 GB</strong></p>
+<p>• <strong>Dimecres:</strong> Diferencial (dilluns + dimarts + dimecres) → <strong>30 GB</strong></p>
+<h2 id="diapositiva-5">Diapositiva 5</h2>
+<p><strong>RECUPERACIÓ DEL SISTEMA</strong></p>
+<p><strong>Imatges del Sistema vs. Punts de Restauració</strong></p>
+<p><strong>Imatge del Sistema (System Image)</strong></p>
+<p><strong>Punt de Restauració (Restore Point)</strong></p>
+<p>Còpia exacta bloc a bloc de tot el sistema informàtic:</p>
+<p>• Inclou SO, particions, aplicacions instal·lades i configuracions de serveis.</p>
+<p>Instantània de l'estat del sistema operatiu:</p>
+<p>• Còpia fitxers de sistema, registre del SO, configuracions i controladors (drivers).</p>
+<p>• Permet reinstal·lacions completes molt més ràpides des de zero en cas de fallada total del disc duro.</p>
+<p>• Permet tornar a un estat anterior estable sense haver de reinstal·lar el SO complet.</p>
+<h2 id="diapositiva-6">Diapositiva 6</h2>
+<p><strong>RESTRICCIONS TÈCNIQUES</strong></p>
+<p><strong>Finestra de Còpia i Impacte en el Rendiment</strong></p>
+<p><strong>Finestra de Còpia (Backup Window)</strong></p>
+<p><strong>Impacte en el Rendiment</strong></p>
+<p>Interval de temps durant el qual es planifica l'execució de les còpies de seguretat.</p>
+<p>Qualsevol procés de còpia utilitza recursos de CPU, lectura de disc i memòria RAM.</p>
+<p>• S'ha de planificar en hores d'inactivitat per no interrompre els usuaris.</p>
+<p>• Si la duració es prolonga massa, cal decidir si avortar o deixar que acabi afectant l'horari d'oficina.</p>
+<p>L'execució de backups durant l'activitat normal pot ralentitzar greument les aplicacions de producció.</p>
+<h2 id="diapositiva-7">Diapositiva 7</h2>
+<p><strong>RESTRICCIONS TÈCNIQUES</strong></p>
+<p><strong>Costos HW/SW i Amplada de Banda de Xarxa</strong></p>
+<p><strong>Cost de HW i SW</strong></p>
+<p><strong>Amplada de Banda de Xarxa</strong></p>
+<p>• <strong>Capacitat d'Emmagatzematge:</strong> Els suports tenen un cost financer. Cal preveure el creixement de dades a mitjà/llarg termini.</p>
+<p>Els backups distribuïts cap a NAS, servidors remots o el Núvol utilitzen la xarxa intensivament.</p>
+<p>• <strong>Cost de Software:</strong> Llicències de programari específic d'alta disponibilitat o de gestió empresarial.</p>
+<p>Un volum massiu de dades pot saturar els enllaços de xarxa i reduir el rendiment per a la resta de serveis corporatius.</p>
+<h2 id="diapositiva-8">Diapositiva 8</h2>
+<p><strong>BONES PRÀCTIQUES</strong></p>
+<p><strong>Planificació i Seguretat en la Implementació</strong></p>
+<p><strong>Planificació Automàtica</strong></p>
+<p><strong>Autenticació i Accés</strong></p>
+<p>Cal utilitzar un planificador de tasques integrat per automatitzar la creació periòdica.</p>
+<p>Política estricta d'accés per protegir el repositori de backups:</p>
+<p>• Evita intromissions no autoritzades a les còpies emmagatzemades.</p>
+<p><strong>Les còpies manuals estan subjectes a errors humans i oblits catastròfics.</strong></p>
+<p>• Protegeix la informació mitjançant credencials i xifratge.</p>
+<h2 id="diapositiva-9">Diapositiva 9</h2>
+<p><strong>CONTROL DE QUALITAT</strong></p>
+<p><strong>Mesura, Monitoratge i Informes de Còpia</strong></p>
+<p><strong>Validació de les Còpies</strong></p>
+<p><strong>Creació d'Informes i Logs</strong></p>
+<p><strong>Verificació per Suma de Bits</strong></p>
+<p>Procediments de verificació per assegurar que la còpia s'ha creat correctament i que les dades són 100% íntegres.</p>
+<p>Revisió dels historials generats automàticament per l'ordinador per detectar errors, omissions o canvis no previstos.</p>
+<p>Utilització d'algorismes de verificació per comparar les dades d'origen i destinació byte a byte.</p>
+<h2 id="diapositiva-10">Diapositiva 10</h2>
+<p><strong>CONCEPTE TEÒRIC CLAU</strong></p>
+<p><strong>Diferència entre Checksum i Hash Criptogràfic</strong></p>
+<p>Dissenyat principalment per detectar <strong>canvis accidentals</strong> en les dades (errors d'escriptura al disc o soroll de xarxa).</p>
+<p><strong>Checksum (Suma de Verificació)</strong></p>
+<p>Dissenyat específicament per protegir contra <strong>canvis maliciosos i alteracions intencionades</strong>.</p>
+<p><strong>Hash Criptogràfic</strong></p>
+<p>Ex: CRC32, sumes de comprovació simples.</p>
+<p>Ex: SHA-256, SHA-3. Impossibilita generar col·lisions falses.</p>
+<h2 id="diapositiva-11">Diapositiva 11</h2>
+<p><strong>BONES PRÀCTIQUES FINALS</strong></p>
+<p><strong>Consells Pràctics i Formats Oberts</strong></p>
+<p><strong>Separació de Mitjans</strong></p>
+<p><strong>Formats Oberts</strong></p>
+<p><strong>Automatització</strong></p>
+<p><strong>Mai no és aconsellable</strong> desar les còpies de seguretat dins del mateix disc o sistema del qual s'ha fet la còpia.</p>
+<p>Emmagatzemar les dades en formats oberts i no propietaris per facilitar la recuperació en el futur sense dependre d'un software concret.</p>
+<p>Automatitzar la creació de backups per evitar la dependència d'execucions manuals subjectes a oblits i errors.</p>
+<h2 id="diapositiva-12">Diapositiva 12</h2>
+<p><img alt="Imatge 3" loading="lazy" src="gestio-de-copies-de-seguretat-img/img-003.jpg" /></p>
+<p><img alt="Imatge 4" loading="lazy" src="gestio-de-copies-de-seguretat-img/img-004.png" /></p>
+<p><strong>Resum d'Estudi - Gestió de Backups</strong></p>
+<p>Una gestió eficaç de backups combina una tria adequada del model (<strong>Incremental vs Diferencial</strong>), la gestió de la <strong>finestra de còpia</strong> i l'amplada de banda, l'automatització planificada, la verificació d'integritat amb <strong>hashes</strong> i l'emmagatzematge en mitjans externs i formats oberts.</p>
+</article>
+<nav class="pager"><a class="pager-btn" href="copies-de-seguretat-i-gestio-d-emmagatzematge.html">← Còpies de Seguretat i Gestió d&#x27;Emmagatzematge</a><a class="pager-btn" href="questionari-inicial.html">Questionari Inicial →</a></nav>
+
+    <footer>Material docent · Formació Professional · Informàtica</footer>
+  </main>
+</div>
+
+<script>
+function filtrarContingut() {
+  let input = document.getElementById('site-search').value.toLowerCase();
+  let items = document.querySelectorAll('.card, .resource');
+  items.forEach(item => {
+    let text = item.innerText.toLowerCase();
+    item.style.display = text.includes(input) ? '' : 'none';
+  });
+}
+</script>
+</body>
+</html>

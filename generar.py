@@ -330,7 +330,7 @@ def _envolta(t, marca):
     return f"{ini}{marca}{nucli}{marca}{fi}"
 
 
-def _paragraf_md(par):
+def _paragraf_md(par, treu_vinyeta=False):
     """Text d'un paràgraf amb negreta, cursiva, codi i enllaços."""
     from pptx.oxml.ns import qn
     from pptx.text.text import _Run
@@ -355,6 +355,8 @@ def _paragraf_md(par):
                 trossos.append([t] + clau)
         elif fill.tag == qn("a:br"):
             trossos.append(["\n", False, False, False, None])
+    if treu_vinyeta and trossos:
+        trossos[0][0] = re.sub(r"^\s*[•·▪◦‣\-–]\s*", "", trossos[0][0])
     out = []
     for t, neg, curs, codi, enllac in trossos:
         if t == "\n":
@@ -481,6 +483,277 @@ def _formes(formes):
             yield f
 
 
+# ---- Lectura "intel·ligent" de diapositives fetes de caixes (p. ex. Google Slides) ----
+EMU_IN = 914400
+BUSTIA_VINYETA = "•·▪◦‣"
+
+
+def _in(v):
+    return (v or 0) / EMU_IN
+
+
+def _rgb_hex(forma):
+    try:
+        if forma.fill.type == 1:   # MSO_FILL.SOLID
+            return str(forma.fill.fore_color.rgb)
+    except Exception:  # noqa: BLE001
+        pass
+    return None
+
+
+def _es_neutre(h):
+    if not h or len(h) != 6:
+        return True
+    r, g, b = int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16)
+    return max(r, g, b) - min(r, g, b) < 24
+
+
+def _mida_font(forma):
+    """(mida màxima en pt, tot en negreta?)"""
+    mida, neg, hi_ha = 0, True, False
+    for p in forma.text_frame.paragraphs:
+        for r in p.runs:
+            if not r.text.strip():
+                continue
+            hi_ha = True
+            mida = max(mida, r.font.size.pt if r.font.size else 0)
+            neg = neg and bool(r.font.bold)
+    return mida, (neg and hi_ha)
+
+
+def _text_pla(forma):
+    return " ".join(forma.text_frame.text.split())
+
+
+def _contenidors(formes, ample, alt):
+    """Rectangles grans sense text = fons de targeta/destacat."""
+    from pptx.enum.shapes import MSO_SHAPE_TYPE
+    out = []
+    for f in formes:
+        if f.shape_type != MSO_SHAPE_TYPE.AUTO_SHAPE:
+            continue
+        if f.has_text_frame and f.text_frame.text.strip():
+            continue
+        w, h = _in(f.width), _in(f.height)
+        if w < 1.2 or h < 0.35:
+            continue
+        if (f.width or 0) >= 0.9 * ample and (f.height or 0) >= 0.85 * alt:
+            continue   # fons de la diapositiva
+        out.append(dict(sh=f, l=_in(f.left), t=_in(f.top), w=w, h=h,
+                        textos=[], fills=[], pare=None, color=None))
+    return out
+
+
+def _color_contenidor(c, formes):
+    """Color d'accent de la targeta: la línia fina de dalt o de l'esquerra."""
+    from pptx.enum.shapes import MSO_SHAPE_TYPE
+    for f in formes:
+        if f is c["sh"] or f.shape_type != MSO_SHAPE_TYPE.AUTO_SHAPE:
+            continue
+        w, h, l, t = _in(f.width), _in(f.height), _in(f.left), _in(f.top)
+        vora_dalt = h < 0.1 and w > c["w"] * 0.8 and abs(t - c["t"]) < 0.06 and abs(l - c["l"]) < 0.1
+        vora_esq = w < 0.1 and h > c["h"] * 0.8 and abs(l - c["l"]) < 0.06 and abs(t - c["t"]) < 0.1
+        if vora_dalt or vora_esq:
+            hx = _rgb_hex(f)
+            if hx and not _es_neutre(hx):
+                return "#" + hx
+    return None
+
+
+def _items_text(forma, permet_titol):
+    """Paràgrafs d'una caixa de text -> [(top, left, tipus, text)]. tipus: h3 | li | p"""
+    out = []
+    top, left = _in(forma.top), _in(forma.left)
+    mida, neg = _mida_font(forma)
+    for i, par in enumerate(forma.text_frame.paragraphs):
+        brut = "".join(r.text for r in par.runs).strip()
+        if not brut:
+            continue
+        es_li = brut[0] in BUSTIA_VINYETA or _es_vinyeta(par, forma)[0]
+        t = (top + i * 1e-4, left)
+        if permet_titol and i == 0 and mida >= 12 and neg and not es_li:
+            out.append((t[0], t[1], "h3", _md_text(_text_pla(forma))))
+            permet_titol = False
+            continue
+        md = _paragraf_md(par, treu_vinyeta=es_li)
+        if not md:
+            continue
+        out.append((t[0], t[1], "li" if es_li else "p", md if es_li else _escapa_inici(md)))
+    return out
+
+
+def _uneix_items(items):
+    """Uneix [(top,left,tipus,text)] en Markdown: les viñetes seguides formen una llista."""
+    blocs, llista = [], []
+
+    def buida():
+        nonlocal llista
+        if llista:
+            blocs.append("\n".join(llista))
+            llista = []
+
+    for _, _, tipus, text in items:
+        if tipus == "li":
+            llista.append("- " + text)
+            continue
+        buida()
+        blocs.append(("### " + text) if tipus == "h3" else text)
+    buida()
+    return "\n\n".join(b for b in blocs if b.strip())
+
+
+def _md_contenidor(c, formes):
+    es_destacat = c["pare"] is not None or (len(c["textos"]) == 1 and not c["fills"] and c["w"] >= 8.0)
+    items = []
+    primer = min(c["textos"], key=lambda f: (_in(f.top), _in(f.left))) if c["textos"] else None
+    for f in c["textos"]:
+        items += _items_text(f, permet_titol=(not es_destacat and f is primer))
+    for n in c["fills"]:
+        items.append((n["t"], n["l"], "raw_p", _md_contenidor(n, formes)))
+    items.sort(key=lambda x: (x[0], x[1]))
+    items = [(a, b, "p" if k == "raw_p" else k, t) for a, b, k, t in items]
+    cos = _uneix_items(items)
+    estil = f' style="--card:{c["color"]}"' if c["color"] else ""
+    classe = "md-callout" if es_destacat else "md-card"
+    return f'<div class="{classe}"{estil} markdown="1">\n\n{cos}\n\n</div>'
+
+
+def _bloc_especial(f, num, ctx):
+    """Imatge, taula o gràfic -> Markdown (o None si s'ha d'ometre)."""
+    from pptx.enum.shapes import MSO_SHAPE_TYPE
+    import hashlib as _h
+    try:
+        if f.shape_type == MSO_SHAPE_TYPE.PICTURE or (f.is_placeholder and hasattr(f, "image")):
+            if _in(f.width) < 1.5 and _in(f.height) < 1.5:
+                return None   # icona o insígnia decorativa
+            if (f.width or 0) >= 0.9 * ctx["ample"] and (f.height or 0) >= 0.9 * ctx["alt"]:
+                return None   # imatge de fons
+            blob = f.image.blob
+            if _h.sha1(blob).hexdigest() in ctx["decoratives"] or not PPTX_IMATGES:
+                return None
+            nom = _desa_imatge(blob, ctx["img_dir"], ctx["n_img"] + 1)
+            if not nom:
+                return None
+            ctx["n_img"] += 1
+            try:
+                alt = f._element.xpath(".//p:cNvPr")[0].get("descr") or ""
+            except Exception:  # noqa: BLE001
+                alt = ""
+            alt = re.sub(r"[\[\]\n]", " ", alt).strip()
+            if not alt or re.search(r"\.(png|jpe?g|gif|bmp|tiff?|emf|wmf)$", alt, re.I):
+                alt = f"Imatge {ctx['n_img']}"
+            return f"![{alt}]({TOKEN_IMG}{nom}){{ loading=lazy }}"
+        if getattr(f, "has_table", False) and f.has_table:
+            return _taula_md(f.table)
+        if getattr(f, "has_chart", False) and f.has_chart:
+            try:
+                return _grafic_md(f.chart)
+            except Exception:  # noqa: BLE001
+                AVISOS_PPTX.append((ctx["nom"], num, "gràfic no convertible"))
+                return None
+        if f.shape_type in (MSO_SHAPE_TYPE.MEDIA, MSO_SHAPE_TYPE.EMBEDDED_OLE_OBJECT,
+                            MSO_SHAPE_TYPE.LINKED_OLE_OBJECT):
+            AVISOS_PPTX.append((ctx["nom"], num, "vídeo/àudio/objecte incrustat"))
+        elif getattr(f, "_element", None) is not None and f._element.tag.endswith("graphicFrame"):
+            AVISOS_PPTX.append((ctx["nom"], num, "SmartArt o diagrama (no es publica)"))
+    except Exception as e:  # noqa: BLE001
+        AVISOS_PPTX.append((ctx["nom"], num, f"element omès ({type(e).__name__})"))
+    return None
+
+
+def _slide_layout(sl, formes, ctx, num):
+    """Reconstrueix una diapositiva feta de targetes. Retorna None si no en té."""
+    from pptx.enum.shapes import MSO_SHAPE_TYPE, PP_PLACEHOLDER
+    ample, alt = ctx["ample"], ctx["alt"]
+    cont = _contenidors(formes, ample, alt)
+    fons = any(f.shape_type == MSO_SHAPE_TYPE.PICTURE and (f.width or 0) >= 0.9 * ample
+               and (f.height or 0) >= 0.9 * alt for f in formes)
+    if not cont and not fons:
+        return None
+
+    def es_peu(f):
+        try:
+            return f.is_placeholder and f.placeholder_format.type in (
+                PP_PLACEHOLDER.SLIDE_NUMBER, PP_PLACEHOLDER.FOOTER, PP_PLACEHOLDER.DATE)
+        except Exception:  # noqa: BLE001
+            return False
+
+    textos = [f for f in formes if f.has_text_frame and f.text_frame.text.strip() and not es_peu(f)
+              and not any(f is c["sh"] for c in cont)]
+
+    def dins(c, x, y):
+        return c["l"] <= x <= c["l"] + c["w"] and c["t"] <= y <= c["t"] + c["h"]
+
+    for c in cont:
+        cx, cy = c["l"] + c["w"] / 2, c["t"] + c["h"] / 2
+        pares = [p for p in cont if p is not c and p["w"] * p["h"] > c["w"] * c["h"] and dins(p, cx, cy)]
+        if pares:
+            c["pare"] = min(pares, key=lambda p: p["w"] * p["h"])
+            c["pare"]["fills"].append(c)
+        c["color"] = _color_contenidor(c, formes)
+
+    lliures = []
+    for f in textos:
+        x, y = _in(f.left) + _in(f.width) / 2, _in(f.top) + _in(f.height) / 2
+        cands = [c for c in cont if dins(c, x, y)]
+        if cands:
+            min(cands, key=lambda c: c["w"] * c["h"])["textos"].append(f)
+        else:
+            lliures.append(f)
+
+    # Capçalera: etiqueta petita + títol (a dalt, fora de targetes)
+    if cont:
+        cap = sorted([f for f in lliures if _in(f.top) < 1.4], key=lambda f: _in(f.top))
+        resta = [f for f in lliures if f not in cap]
+    else:
+        cap = sorted(lliures, key=lambda f: _in(f.top))
+        resta = []
+    kicker = titol = None
+    extra = []
+    if cap:
+        mides = [_mida_font(f)[0] for f in cap]
+        i_t = mides.index(max(mides))
+        titol = _text_pla(cap[i_t])
+        if i_t > 0 and mides[i_t - 1] < mides[i_t]:
+            kicker = _text_pla(cap[i_t - 1])
+        usades = {i_t, i_t - 1 if (i_t > 0 and mides[i_t - 1] < mides[i_t]) else -99}
+        extra = [f for j, f in enumerate(cap) if j not in usades]
+    resta += extra
+
+    # Blocs (ordenats per posició)
+    elements = []
+    tops = sorted([c for c in cont if c["pare"] is None], key=lambda c: (c["t"], c["l"]))
+    files, actual = [], []
+    for c in tops:
+        if actual and abs(c["t"] - actual[0]["t"]) <= 0.3:
+            actual.append(c)
+        else:
+            if actual:
+                files.append(actual)
+            actual = [c]
+    if actual:
+        files.append(actual)
+    for fila in files:
+        fila.sort(key=lambda c: c["l"])
+        blocs = [_md_contenidor(c, formes) for c in fila]
+        if len(fila) >= 2:
+            md = '<div class="md-cards" markdown="1">\n\n' + "\n\n".join(blocs) + "\n\n</div>"
+        else:
+            md = blocs[0]
+        elements.append((fila[0]["t"], fila[0]["l"], "p", md))
+    for f in resta:
+        for it in _items_text(f, permet_titol=False):
+            elements.append(it)
+    for f in formes:
+        if f.has_text_frame and f.text_frame.text.strip():
+            continue
+        md = _bloc_especial(f, num, ctx)
+        if md:
+            elements.append((_in(f.top), _in(f.left), "p", md))
+    elements.sort(key=lambda x: (round(x[0] / 0.15), x[1], x[0]))
+    return dict(cover=not cont, titol=titol, kicker=kicker, blocs=_uneix_items(elements))
+
+
 def _pptx_a_markdown(path_pptx, img_dir, titol_fitxer, nom_fitxer):
     from pptx import Presentation
     from pptx.enum.shapes import MSO_SHAPE_TYPE, PP_PLACEHOLDER
@@ -504,18 +777,41 @@ def _pptx_a_markdown(path_pptx, img_dir, titol_fitxer, nom_fitxer):
                     comptes[hsh] = comptes.get(hsh, 0) + 1
     decoratives = {h for h, c in comptes.items() if c >= 3 and len(diapos) >= 4}
 
-    ometre_tipus = (PP_PLACEHOLDER.SLIDE_NUMBER, PP_PLACEHOLDER.FOOTER, PP_PLACEHOLDER.DATE)
+    ctx = dict(ample=prs.slide_width, alt=prs.slide_height, decoratives=decoratives,
+               img_dir=img_dir, n_img=0, nom=nom_fitxer)
     blocs = []
     titol_doc = titol_fitxer
-    n_img = 0
     primera = True
 
     for num, sl in enumerate(diapos, 1):
         if PPTX_SALTAR_OCULTES and sl._element.get("show") == "0":
             continue
-        titol_sl = None
-        forma_titol = None
-        es_portada = False
+        formes = list(_formes(sl.shapes))
+
+        # 1) Diapositiva feta de targetes/caixes
+        try:
+            lay = _slide_layout(sl, formes, ctx, num)
+        except Exception as e:  # noqa: BLE001
+            AVISOS_PPTX.append((nom_fitxer, num, f"disseny no reconegut ({type(e).__name__}); es llegeix en ordre simple"))
+            lay = None
+        if lay is not None:
+            if lay["cover"] and primera and lay["titol"]:
+                titol_doc = lay["titol"]
+                if lay["kicker"]:
+                    blocs.append(f'<p class="md-kicker">{html.escape(lay["kicker"], quote=False)}</p>')
+            else:
+                blocs.append("## " + _md_text(lay["titol"]) if lay["titol"] else f"## Diapositiva {num}")
+                if lay["kicker"]:
+                    blocs.append(f'<p class="md-kicker">{html.escape(lay["kicker"], quote=False)}</p>')
+            if lay["blocs"]:
+                blocs.append(lay["blocs"])
+            primera = False
+            if PPTX_INCLOURE_NOTES:
+                blocs += _notes_md(sl)
+            continue
+
+        # 2) Diapositiva "clàssica" (títol i contingut en marcadors)
+        titol_sl, forma_titol, es_portada = None, None, False
         try:
             if sl.shapes.title is not None and sl.shapes.title.has_text_frame:
                 forma_titol = sl.shapes.title
@@ -523,7 +819,6 @@ def _pptx_a_markdown(path_pptx, img_dir, titol_fitxer, nom_fitxer):
                 es_portada = forma_titol.placeholder_format.type == PP_PLACEHOLDER.CENTER_TITLE
         except Exception:  # noqa: BLE001
             pass
-
         if primera and es_portada and titol_sl:
             titol_doc = titol_sl
         elif titol_sl:
@@ -532,76 +827,48 @@ def _pptx_a_markdown(path_pptx, img_dir, titol_fitxer, nom_fitxer):
             blocs.append(f"## Diapositiva {num}")
         primera = False
 
-        formes = [f for f in _formes(sl.shapes)
-                  if not (forma_titol is not None and f.shape_id == forma_titol.shape_id)]
-        formes.sort(key=lambda f: ((f.top or 0) // 365760, f.left or 0))
-        for f in formes:
+        resta = [f for f in formes if not (forma_titol is not None and f.shape_id == forma_titol.shape_id)]
+        resta.sort(key=lambda f: ((f.top or 0) // 365760, f.left or 0))
+        ometre = (PP_PLACEHOLDER.SLIDE_NUMBER, PP_PLACEHOLDER.FOOTER, PP_PLACEHOLDER.DATE)
+        for f in resta:
             try:
-                if f.is_placeholder and f.placeholder_format.type in ometre_tipus:
+                if f.is_placeholder and f.placeholder_format.type in ometre:
                     continue
             except Exception:  # noqa: BLE001
                 pass
+            md = _bloc_especial(f, num, ctx)
+            if md:
+                blocs.append(md)
+                continue
             try:
-                if f.shape_type == MSO_SHAPE_TYPE.PICTURE or (
-                        f.is_placeholder and hasattr(f, "image")):
-                    blob = f.image.blob
-                    if _h.sha1(blob).hexdigest() in decoratives:
-                        continue
-                    if not PPTX_IMATGES:
-                        continue
-                    nom = _desa_imatge(blob, img_dir, n_img + 1)
-                    if nom:
-                        n_img += 1
-                        try:
-                            alt = f._element.xpath(".//p:cNvPr")[0].get("descr") or ""
-                        except Exception:  # noqa: BLE001
-                            alt = ""
-                        alt = re.sub(r"[\[\]\n]", " ", alt).strip()
-                        if not alt or re.search(r"\.(png|jpe?g|gif|bmp|tiff?|emf|wmf)$", alt, re.I):
-                            alt = f"Imatge {n_img}"
-                        blocs.append(f"![{alt}]({TOKEN_IMG}{nom}){{ loading=lazy }}")
-                    continue
-                if getattr(f, "has_table", False) and f.has_table:
-                    blocs.append(_taula_md(f.table))
-                    continue
-                if getattr(f, "has_chart", False) and f.has_chart:
-                    try:
-                        blocs.append(_grafic_md(f.chart))
-                    except Exception:  # noqa: BLE001
-                        AVISOS_PPTX.append((nom_fitxer, num, "gràfic no convertible"))
-                    continue
-                if f.has_text_frame:
+                if f.has_text_frame and f.text_frame.text.strip():
                     t = _text_forma_md(f)
                     if t:
                         blocs.append(t)
-                    continue
-                if f.shape_type in (MSO_SHAPE_TYPE.MEDIA, MSO_SHAPE_TYPE.EMBEDDED_OLE_OBJECT,
-                                    MSO_SHAPE_TYPE.LINKED_OLE_OBJECT):
-                    AVISOS_PPTX.append((nom_fitxer, num, "vídeo/àudio/objecte incrustat"))
-                elif f.shape_type == MSO_SHAPE_TYPE.GROUP:
-                    pass
-                elif getattr(f, "_element", None) is not None and f._element.tag.endswith("graphicFrame"):
-                    AVISOS_PPTX.append((nom_fitxer, num, "SmartArt o diagrama (no es publica)"))
             except Exception as e:  # noqa: BLE001
                 AVISOS_PPTX.append((nom_fitxer, num, f"element omès ({type(e).__name__})"))
-
         if PPTX_INCLOURE_NOTES:
-            try:
-                if sl.has_notes_slide:
-                    n = sl.notes_slide.notes_text_frame.text.strip()
-                    if n:
-                        cos = "\n".join("    " + _md_text(l) if l.strip() else "" for l in n.splitlines())
-                        blocs.append('!!! note "Notes del professor"\n' + cos)
-            except Exception:  # noqa: BLE001
-                pass
+            blocs += _notes_md(sl)
 
     return f"# {_md_text(titol_doc)}\n\n" + "\n\n".join(b for b in blocs if b.strip()) + "\n"
+
+
+def _notes_md(sl):
+    try:
+        if sl.has_notes_slide:
+            n = sl.notes_slide.notes_text_frame.text.strip()
+            if n:
+                cos = "\n".join("    " + _md_text(l) if l.strip() else "" for l in n.splitlines())
+                return ['!!! note "Notes del professor"\n' + cos]
+    except Exception:  # noqa: BLE001
+        pass
+    return []
 
 
 def converteix_pptx(pptx):
     """Retorna (markdown_amb_token, carpeta_imatges_o_None) o None si falla."""
     st = pptx.stat()
-    opcions = f"{PPTX_IMATGES}|{PPTX_INCLOURE_NOTES}|{PPTX_SALTAR_OCULTES}|v1"
+    opcions = f"{PPTX_IMATGES}|{PPTX_INCLOURE_NOTES}|{PPTX_SALTAR_OCULTES}|v2"
     clau = "p" + hashlib.sha1(
         f"{pptx.resolve()}|{st.st_size}|{st.st_mtime_ns}|{opcions}".encode()
     ).hexdigest()[:15]
@@ -820,6 +1087,19 @@ footer { margin-top: 4rem; padding-top: 1.5rem; border-top: 1px solid var(--bord
   .apunt-content { margin-left: 0; padding: 1.5rem; }
   .search-container { width: 180px; }
 }
+
+/* --- Diapositives convertides des de PPTX --- */
+.md-kicker { font-family: var(--font-mono); font-weight: 600; font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin: .1rem 0 1.1rem !important; }
+.md-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin: 1.2rem 0; }
+.md-card { --card: var(--accent); background: #F8FAFC; border: 1px solid var(--border); border-top: 3px solid var(--card); border-radius: 12px; padding: 1.1rem 1.25rem 1.15rem; min-width: 0; }
+.md-card > :first-child { margin-top: 0 !important; }
+.md-card h3 { margin: 0 0 .55rem !important; font-size: 1.05rem; color: var(--card); color: color-mix(in srgb, var(--card) 70%, #0F172A); }
+.md-card p { margin: .45rem 0; font-size: .95rem; }
+.md-card ul { margin: .45rem 0 .2rem 0; padding-left: 1.15rem; font-size: .93rem; }
+.md-card li + li { margin-top: .3rem; }
+.md-callout { --card: var(--accent); border-left: 4px solid var(--card); background: var(--accent-soft); background: color-mix(in srgb, var(--card) 8%, #fff); padding: .9rem 1.15rem; border-radius: 0 12px 12px 0; margin: 1.1rem 0; font-weight: 500; }
+.md-callout p { margin: 0; }
+.md-card .md-callout { margin: .8rem 0 0; font-size: .9rem; }
 '''
 
 esc = html.escape

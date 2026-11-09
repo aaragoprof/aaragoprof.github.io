@@ -144,3 +144,16 @@ footer { margin-top: 4rem; padding-top: 1.5rem; border-top: 1px solid var(--bord
   .apunt-content { margin-left: 0; padding: 1.5rem; }
   .search-container { width: 180px; }
 }
+
+/* --- Diapositives convertides des de PPTX --- */
+.md-kicker { font-family: var(--font-mono); font-weight: 600; font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin: .1rem 0 1.1rem !important; }
+.md-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin: 1.2rem 0; }
+.md-card { --card: var(--accent); background: #F8FAFC; border: 1px solid var(--border); border-top: 3px solid var(--card); border-radius: 12px; padding: 1.1rem 1.25rem 1.15rem; min-width: 0; }
+.md-card > :first-child { margin-top: 0 !important; }
+.md-card h3 { margin: 0 0 .55rem !important; font-size: 1.05rem; color: var(--card); color: color-mix(in srgb, var(--card) 70%, #0F172A); }
+.md-card p { margin: .45rem 0; font-size: .95rem; }
+.md-card ul { margin: .45rem 0 .2rem 0; padding-left: 1.15rem; font-size: .93rem; }
+.md-card li + li { margin-top: .3rem; }
+.md-callout { --card: var(--accent); border-left: 4px solid var(--card); background: var(--accent-soft); background: color-mix(in srgb, var(--card) 8%, #fff); padding: .9rem 1.15rem; border-radius: 0 12px 12px 0; margin: 1.1rem 0; font-weight: 500; }
+.md-callout p { margin: 0; }
+.md-card .md-callout { margin: .8rem 0 0; font-size: .9rem; }

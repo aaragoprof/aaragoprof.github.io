@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sistemes d&#x27;Emmagatzematge Redundant (RAID) · Material docent</title>
+<title>Sistemes d&#x27;Emmagatzematge Redundant · Material docent</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
@@ -28,7 +28,7 @@
     
 <div class="sidebar-head">Material del RA</div>
 <ul class="sidebar-menu">
-  <li><a href="copies-de-seguretat-i-gestio-d-emmagatzematge.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Còpies de Seguretat i Gestió d&#x27;Emmagatzematge</a></li><li><a href="gestio-de-copies-de-seguretat.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Gestió de Còpies de Seguretat</a></li><li><a href="questionari-inicial.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Questionari Inicial</a></li><li><a href="sistemes-d-emmagatzematge-redundant-raid.html" class="active"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Sistemes d&#x27;Emmagatzematge Redundant (RAID)</a></li>
+  <li><a href="copies-de-seguretat-i-gestio-d-emmagatzematge.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Còpies de Seguretat i Emmagatzematge</a></li><li><a href="gestio-de-copies-de-seguretat.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Gestió del Procés de Còpies de Seguretat</a></li><li><a href="questionari-inicial.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Questionari Inicial</a></li><li><a href="sistemes-d-emmagatzematge-redundant-raid.html" class="active"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Sistemes d&#x27;Emmagatzematge Redundant</a></li>
 </ul>
 
   </aside>
@@ -41,50 +41,89 @@
 </div>
 
 <article class="prose">
-  <h1 id="sistemes-demmagatzematge-redundant-raid">Sistemes d'Emmagatzematge Redundant (RAID)</h1>
-<h2 id="diapositiva-1">Diapositiva 1</h2>
-<p><img alt="Imatge 1" loading="lazy" src="sistemes-d-emmagatzematge-redundant-raid-img/img-001.jpg" /></p>
-<p><img alt="Imatge 2" loading="lazy" src="sistemes-d-emmagatzematge-redundant-raid-img/img-002.png" /></p>
-<p><strong>Sistemes d'Emmagatzematge Redundant</strong></p>
-<p><strong>MÒDUL D'EMMAGATZEMATGE I SEGURETAT DE DADES</strong></p>
+  <h1 id="sistemes-demmagatzematge-redundant">Sistemes d'Emmagatzematge Redundant</h1>
+<p class="md-kicker">MÒDUL D'EMMAGATZEMATGE I SEGURETAT DE DADES</p>
+
 <p>Material d'estudi: Concepte RAID, Tolerància a Fallades, Operació XOR, Paritats (RAID 0, 1, 5, 6, 10) i Alta Disponibilitat</p>
-<h2 id="diapositiva-2">Diapositiva 2</h2>
-<p><strong>ARQUITECTURA DE MAQUINARI</strong></p>
-<p><strong>Introducció als Sistemes RAID</strong></p>
+<h2 id="introduccio-als-sistemes-raid">Introducció als Sistemes RAID</h2>
+<p class="md-kicker">ARQUITECTURA DE MAQUINARI</p>
+
 <p>Un sistema <strong>RAID (Redundant Array of Independent Disks)</strong> agrupa múltiples discos durs físics per formar un únic volum lògic amb major capacitat, rendiment o fiabilitat.</p>
-<p><strong>Divisió i Replicació</strong></p>
-<p><strong>Rendiment i Velocitat</strong></p>
-<p><strong>Intercanvi en Calent</strong></p>
+<div class="md-cards">
+<div class="md-card" style="--card:#0284C7">
+<h3 id="divisio-i-replicacio">Divisió i Replicació</h3>
 <p>Permet distribuir les dades entre diferents unitats físiques per optimitzar la transferència simultània.</p>
+</div>
+<div class="md-card" style="--card:#16A34A">
+<h3 id="rendiment-i-velocitat">Rendiment i Velocitat</h3>
 <p>L'accés paral·lel a diversos discos incrementa notablement les velocitats de lectura i escriptura.</p>
+</div>
+<div class="md-card" style="--card:#8B5CF6">
+<h3 id="intercanvi-en-calent">Intercanvi en Calent</h3>
 <p>Sistemes d'alta disponibilitat que permeten extreure i reemplaçar unitats avariades sense aturar el servidor (Hot-Swap).</p>
-<h2 id="diapositiva-3">Diapositiva 3</h2>
-<p><strong>ACLARIMENT FONAMENTAL</strong></p>
-<p><strong>Protecció del RAID: Abast i Limitacions</strong></p>
-<p><strong>RAID PROTEGEIX Contra:</strong></p>
-<p><strong>RAID NO PROTEGEIX Contra:</strong></p>
-<p>• <strong>Fallada física de discos:</strong> Permet mantenir les dades accessibles i el sistema operatiu actiu si un o més discos s'avarien físicament.</p>
-<p>• <strong>Esborrament accidental</strong> o intencionat d'arxius.</p>
-<p>• <strong>Continuïtat de servei:</strong> Facilita la reconstrucció automàtica o assistida en substituir el disc avariat.</p>
-<p>• <strong>Corrupció lògica</strong> de fitxers o errors de programari.</p>
-<p>• <strong>Atacs de Ransomware</strong> o malware que xifren el volum.</p>
-<p>• <strong>Desastres ambientals</strong> (incendis, inundacions) o robatori.</p>
-<h2 id="diapositiva-4">Diapositiva 4</h2>
-<p><strong>TÈCNIQUES DE PROTECCIÓ</strong></p>
-<p><strong>Redundància: Mirall (Mirror) vs. Paritat</strong></p>
-<p><strong>Mirall (Mirroring)</strong></p>
-<p><strong>Paritat (Parity)</strong></p>
+</div>
+</div>
+<h2 id="proteccio-del-raid-abast-i-limitacions">Protecció del RAID: Abast i Limitacions</h2>
+<p class="md-kicker">ACLARIMENT FONAMENTAL</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#16A34A">
+<h3 id="raid-protegeix-contra">RAID PROTEGEIX Contra:</h3>
+<ul>
+<li><strong>Fallada física de discos:</strong> Permet mantenir les dades accessibles i el sistema operatiu actiu si un o més discos s'avarien físicament.</li>
+<li><strong>Continuïtat de servei:</strong> Facilita la reconstrucció automàtica o assistida en substituir el disc avariat.</li>
+</ul>
+</div>
+<div class="md-card" style="--card:#EF4444">
+<h3 id="raid-no-protegeix-contra">RAID NO PROTEGEIX Contra:</h3>
+<ul>
+<li><strong>Esborrament accidental</strong> o intencionat d'arxius.</li>
+<li><strong>Corrupció lògica</strong> de fitxers o errors de programari.</li>
+<li><strong>Atacs de Ransomware</strong> o malware que xifren el volum.</li>
+<li><strong>Desastres ambientals</strong> (incendis, inundacions) o robatori.</li>
+</ul>
+</div>
+</div>
+<h2 id="redundancia-mirall-mirror-vs-paritat">Redundància: Mirall (Mirror) vs. Paritat</h2>
+<p class="md-kicker">TÈCNIQUES DE PROTECCIÓ</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#0284C7">
+<h3 id="mirall-mirroring">Mirall (Mirroring)</h3>
 <p>Consisteix a duplicar la informació de manera idèntica en dos o més discos.</p>
+<ul>
+<li>Proporciona alta velocitat de lectura.</li>
+<li><strong>Inconvenient:</strong> La capacitat útil es redueix al 50%.</li>
+</ul>
+</div>
+<div class="md-card" style="--card:#16A34A">
+<h3 id="paritat-parity">Paritat (Parity)</h3>
 <p>S'escriuen dades addicionals calculades matemàticament per permetre la reconstrucció de blocs perduts.</p>
-<p>• Proporciona alta velocitat de lectura.</p>
-<p>• <strong>Inconvenient:</strong> La capacitat útil es redueix al 50%.</p>
-<p>• Optimitza l'aprofitament de l'espai útil del conjunt.</p>
-<p>• Idealment requereix discos de la mateixa capacitat.</p>
-<h2 id="diapositiva-5">Diapositiva 5</h2>
-<p><strong>FONAMENT MATEMÀTIC</strong></p>
-<p><strong>Càlcul de Paritat mitjançant la Funció XOR (⊕)</strong></p>
-<p><strong>Taula XOR Binària</strong></p>
-<p><strong>Reconstrucció Matemàtica</strong></p>
+<ul>
+<li>Optimitza l'aprofitament de l'espai útil del conjunt.</li>
+<li>Idealment requereix discos de la mateixa capacitat.</li>
+</ul>
+</div>
+</div>
+<h2 id="calcul-de-paritat-mitjancant-la-funcio-xor">Càlcul de Paritat mitjançant la Funció XOR (⊕)</h2>
+<p class="md-kicker">FONAMENT MATEMÀTIC</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#0284C7">
+<h3 id="taula-xor-binaria">Taula XOR Binària</h3>
+</div>
+<div class="md-card" style="--card:#16A34A">
+<h3 id="reconstruccio-matematica">Reconstrucció Matemàtica</h3>
+<p>La propietat de la funció XOR permet aïllar qualsevol element quan un d'ells falta:</p>
+<div class="md-callout" style="--card:#BAE6FD">
+<ul>
+<li><strong>Si es perd A → A = B ⊕ P</strong> <br />
+<strong>• Si es perd B → B = A ⊕ P</strong> <br />
+<strong>• Càlcul de Paritat → P = A ⊕ B</strong></li>
+</ul>
+</div>
+</div>
+</div>
 <table>
 <thead>
 <tr>
@@ -116,60 +155,96 @@
 </tr>
 </tbody>
 </table>
-<p>La propietat de la funció XOR permet aïllar qualsevol element quan un d'ells falta:</p>
-<p><strong>• Si es perd A → A = B ⊕ P</strong> <br />
-<strong>• Si es perd B → B = A ⊕ P</strong> <br />
-<strong>• Càlcul de Paritat → P = A ⊕ B</strong></p>
-<h2 id="diapositiva-6">Diapositiva 6</h2>
-<p><strong>NIVELLS ESTÀNDARD</strong></p>
-<p><strong>RAID 0: Striping (Sense Redundància)</strong></p>
-<p><strong>Rendiment Elevat</strong></p>
-<p><strong>Risc Total</strong></p>
+<h2 id="raid-0-striping-sense-redundancia">RAID 0: Striping (Sense Redundància)</h2>
+<p class="md-kicker">NIVELLS ESTÀNDARD</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#0284C7">
+<h3 id="rendiment-elevat">Rendiment Elevat</h3>
 <p>Distribueix les dades equitativament en blocs alternats entre dos o més discos.</p>
+<ul>
+<li><strong>Mínim de discos:</strong> 2 unitats.</li>
+<li><strong>Capacitat útil:</strong> 100% de la suma dels discos.</li>
+<li>Escriu i llegeix dades en paral·lel.</li>
+</ul>
+</div>
+<div class="md-card" style="--card:#EF4444">
+<h3 id="risc-total">Risc Total</h3>
 <p><strong>No conté paritat:</strong> Si falla un sol disc, es perden totes les dades del conjunt.</p>
-<p>• <strong>Mínim de discos:</strong> 2 unitats.</p>
-<p>• <strong>Capacitat útil:</strong> 100% de la suma dels discos.</p>
-<p>• Escriu i llegeix dades en paral·lel.</p>
-<h2 id="diapositiva-7">Diapositiva 7</h2>
-<p><strong>NIVELLS ESTÀNDARD</strong></p>
-<p><strong>RAID 1: Mirroring (Còpia en Mirall)</strong></p>
-<p><strong>Replicació Total</strong></p>
-<p><strong>Capacitat Reutilitzable</strong></p>
+</div>
+</div>
+<h2 id="raid-1-mirroring-copia-en-mirall">RAID 1: Mirroring (Còpia en Mirall)</h2>
+<p class="md-kicker">NIVELLS ESTÀNDARD</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#16A34A">
+<h3 id="replicacio-total">Replicació Total</h3>
 <p>Guarda la mateixa informació exacta en dos o més discos simultàniament.</p>
+<ul>
+<li><strong>Mínim de discos:</strong> 2 unitats.</li>
+<li><strong>Lectura:</strong> Accelerada en consultar ambdós discos a la vegada.</li>
+<li><strong>Tolerància:</strong> Suporta la fallada d'1 disc de la parella.</li>
+</ul>
+</div>
+<div class="md-card" style="--card:#F59E0B">
+<h3 id="capacitat-reutilitzable">Capacitat Reutilitzable</h3>
 <p>La capacitat total equival a la mida de la unitat més petita (50% d'eficiència espacial).</p>
-<p>• <strong>Mínim de discos:</strong> 2 unitats.</p>
-<p>• <strong>Lectura:</strong> Accelerada en consultar ambdós discos a la vegada.</p>
-<p>• <strong>Tolerància:</strong> Suporta la fallada d'1 disc de la parella.</p>
-<h2 id="diapositiva-8">Diapositiva 8</h2>
-<p><strong>NIVELLS ESTÀNDARD</strong></p>
-<p><strong>RAID 5: Paritat Distribuïda (N - 1)</strong></p>
-<p><strong>Paritat Rotativa</strong></p>
-<p><strong>Equilibri General</strong></p>
+</div>
+</div>
+<h2 id="raid-5-paritat-distribuida-n-1">RAID 5: Paritat Distribuïda (N - 1)</h2>
+<p class="md-kicker">NIVELLS ESTÀNDARD</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#0284C7">
+<h3 id="paritat-rotativa">Paritat Rotativa</h3>
 <p>Distribueix les dades i el bloc de paritat corresponent entre totes les unitats de la matriu.</p>
+<ul>
+<li><strong>Mínim de discos:</strong> 3 unitats.</li>
+<li><strong>Capacitat útil:</strong> N - 1 discos.</li>
+<li><strong>Tolerància:</strong> Admet la pèrdua d'1 disc.</li>
+</ul>
+</div>
+<div class="md-card" style="--card:#16A34A">
+<h3 id="equilibri-general">Equilibri General</h3>
 <p>És la solució més estesa en servidors de fitxers per la seva relació cost-seguretat.</p>
-<p>• <strong>Mínim de discos:</strong> 3 unitats.</p>
-<p>• <strong>Capacitat útil:</strong> N - 1 discos.</p>
-<p>• <strong>Tolerància:</strong> Admet la pèrdua d'1 disc.</p>
-<h2 id="diapositiva-9">Diapositiva 9</h2>
-<p><strong>NIVELLS ESTÀNDARD</strong></p>
-<p><strong>RAID 6: Doble Paritat Distribuïda (N - 2)</strong></p>
-<p><strong>Doble Paritat (P i Q)</strong></p>
-<p><strong>Maximització de Disponibilitat</strong></p>
+</div>
+</div>
+<h2 id="raid-6-doble-paritat-distribuida-n-2">RAID 6: Doble Paritat Distribuïda (N - 2)</h2>
+<p class="md-kicker">NIVELLS ESTÀNDARD</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#8B5CF6">
+<h3 id="doble-paritat-p-i-q">Doble Paritat (P i Q)</h3>
 <p>Calcula dos blocs de paritat independents distribuïts rotativament.</p>
+<ul>
+<li><strong>Mínim de discos:</strong> 4 unitats.</li>
+<li><strong>Tolerància:</strong> Suporta la fallada simultània de <strong>2 discos</strong>.</li>
+<li><strong>Capacitat útil:</strong> N - 2 discos.</li>
+</ul>
+</div>
+<div class="md-card" style="--card:#0284C7">
+<h3 id="maximitzacio-de-disponibilitat">Maximització de Disponibilitat</h3>
 <p>Dissenyat per a entorns on la pèrdua de dades és completament inacceptable.</p>
-<p>• <strong>Mínim de discos:</strong> 4 unitats.</p>
-<p>• <strong>Tolerància:</strong> Suporta la fallada simultània de <strong>2 discos</strong>.</p>
-<p>• <strong>Capacitat útil:</strong> N - 2 discos.</p>
-<h2 id="diapositiva-10">Diapositiva 10</h2>
-<p><strong>NIVELLS HÍBRIDS</strong></p>
-<p><strong>RAID 10 (1+0): Mirall i Distribució</strong></p>
-<p><strong>Mètode Híbrid</strong></p>
-<p><strong>Entorns Crítics</strong></p>
+</div>
+</div>
+<h2 id="raid-10-10-mirall-i-distribucio">RAID 10 (1+0): Mirall i Distribució</h2>
+<p class="md-kicker">NIVELLS HÍBRIDS</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#16A34A">
+<h3 id="metode-hibrid">Mètode Híbrid</h3>
 <p>Combina blocs en mirall (RAID 1) agrupats en un volum distribuït (RAID 0).</p>
+<ul>
+<li><strong>Mínim de discos:</strong> 4 unitats.</li>
+<li><strong>Capacitat útil:</strong> 50% de la capacitat total.</li>
+<li>Excel·lent velocitat d'E/S sense penalització de càlcul de paritats.</li>
+</ul>
+</div>
+<div class="md-card" style="--card:#0284C7">
+<h3 id="entorns-critics">Entorns Crítics</h3>
 <p>Recomanat per a servidors de bases de dades d'alta freqüència de transaccions.</p>
-<p>• <strong>Mínim de discos:</strong> 4 unitats.</p>
-<p>• <strong>Capacitat útil:</strong> 50% de la capacitat total.</p>
-<p>• Excel·lent velocitat d'E/S sense penalització de càlcul de paritats.</p>
+</div>
+</div>
 <h2 id="diapositiva-11">Diapositiva 11</h2>
 <p><strong>TAULA DE SINTESI</strong></p>
 <p><strong>Comparativa de Característiques RAID</strong></p>
@@ -221,10 +296,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="diapositiva-12">Diapositiva 12</h2>
-<p><img alt="Imatge 3" loading="lazy" src="sistemes-d-emmagatzematge-redundant-raid-img/img-003.jpg" /></p>
-<p><img alt="Imatge 4" loading="lazy" src="sistemes-d-emmagatzematge-redundant-raid-img/img-004.png" /></p>
-<p><strong>Resum d'Estudi - Sistemes RAID</strong></p>
+<h2 id="resum-destudi-sistemes-raid">Resum d'Estudi - Sistemes RAID</h2>
 <p>Els sistemes RAID són indispensables per a la continuïtat de negoci i la tolerància a fallades físiques de maquinari, però <strong>sempre han de ser complementats amb una estratègia de còpies de seguretat (backups)</strong>.</p>
 </article>
 <nav class="pager"><a class="pager-btn" href="questionari-inicial.html">← Questionari Inicial</a></nav>

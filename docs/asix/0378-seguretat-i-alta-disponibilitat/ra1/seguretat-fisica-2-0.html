@@ -28,7 +28,7 @@
     
 <div class="sidebar-head">Material del RA</div>
 <ul class="sidebar-menu">
-  <li><a href="seguretat-fisica-1-0.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Seguretat Física 1.0</a></li><li><a href="seguretat-fisica-2-0.html" class="active"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Seguretat Física 2.0</a></li><li><a href="seguretat-fisica-3-0.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Seguretat Física 3.0</a></li>
+  <li><a href="seguretat-fisica-2-0.html" class="active"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Seguretat Física 2.0</a></li><li><a href="seguretat-fisica-3-0.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Seguretat Física 3.0</a></li><li><a href="seguretat-fisica-1-0.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Seguretat Física i Lògica</a></li>
 </ul>
 
   </aside>
@@ -42,83 +42,140 @@
 
 <article class="prose">
   <h1 id="seguretat-fisica-20">Seguretat Física 2.0</h1>
-<h2 id="diapositiva-1">Diapositiva 1</h2>
-<p><img alt="Imatge 1" loading="lazy" src="seguretat-fisica-2-0-img/img-001.jpg" /></p>
-<p><img alt="Imatge 2" loading="lazy" src="seguretat-fisica-2-0-img/img-002.png" /></p>
-<p><strong>Seguretat Física 2.0</strong></p>
-<p><strong>MÒDUL DE SEGURETAT INFORMÀTICA</strong></p>
+<p class="md-kicker">MÒDUL DE SEGURETAT INFORMÀTICA</p>
+
 <p>Material d'estudi detallat: Funcions Hash, Llistes ACL, Polítiques d'Emmagatzematge, Còpies de Seguretat i la Regla 3-2-1</p>
-<h2 id="diapositiva-2">Diapositiva 2</h2>
-<p><strong>INTEGRITAT DE DADES</strong></p>
-<p><strong>Funcions Hash i Resum del Missatge</strong></p>
+<h2 id="funcions-hash-i-resum-del-missatge">Funcions Hash i Resum del Missatge</h2>
+<p class="md-kicker">INTEGRITAT DE DADES</p>
+
 <p>Una <strong>funció hash</strong> és una funció matemàtica que transforma un missatge de qualsevol mida en una cadena de mida fixa (entre 128 i 512 bits). Aquesta empremta única identifica el fitxer.</p>
-<p><strong>Efecte Avalot</strong></p>
-<p><strong>Algorismes Actuals</strong></p>
-<p><strong>Algorismes Obsolets</strong></p>
+<div class="md-cards">
+<div class="md-card" style="--card:#0284C7">
+<h3 id="efecte-avalot">Efecte Avalot</h3>
 <p>Quasi qualsevol canvi mínim en el fitxer d'origen (encara que sigui modificar un sol caràcter o bit) provoca un <strong>canvi total i impredictible</strong> en el valor resum resultant.</p>
+</div>
+<div class="md-card" style="--card:#16A34A">
+<h3 id="algorismes-actuals">Algorismes Actuals</h3>
 <p><strong>SHA-2</strong> (SHA-256, SHA-512) desenvolupat per la NSA i <strong>SHA-3</strong> (NIST). Ofereixen el millor balanç entre velocitat i seguretat per a verificació d'integritat i signatures digitals.</p>
+</div>
+<div class="md-card" style="--card:#EF4444">
+<h3 id="algorismes-obsolets">Algorismes Obsolets</h3>
 <p><strong>MD5</strong> (128 bits) i <strong>SHA-1</strong> (160 bits) estan completament desaconsellats a causa de vulnerabilitats greus i col·lisions demostrades en trobar fitxers diferents amb el mateix hash.</p>
-<h2 id="diapositiva-3">Diapositiva 3</h2>
-<p><strong>AUTORITZACIÓ I PERMISOS</strong></p>
-<p><strong>Matriu d'Accés i Llistes ACL</strong></p>
+</div>
+</div>
+<h2 id="matriu-dacces-i-llistes-acl">Matriu d'Accés i Llistes ACL</h2>
+<p class="md-kicker">AUTORITZACIÓ I PERMISOS</p>
+
+<div class="md-callout" style="--card:#0284C7">
 <p><strong>Principi de Privilegi Mínim: L'usuari ha de tenir accés</strong> <strong><em>únicament</em></strong> <strong>a aquells recursos indispensables per dur a terme la seva tasca.</strong></p>
-<p><strong>Autenticació</strong></p>
-<p><strong>Autorització (ACL)</strong></p>
-<p><strong>Auditoria (Registre)</strong></p>
+</div>
+<div class="md-cards">
+<div class="md-card" style="--card:#0284C7">
+<h3 id="autenticacio">Autenticació</h3>
 <p>Verificació de la identitat de l'usuari o procés en entrar al sistema.</p>
+</div>
+<div class="md-card" style="--card:#16A34A">
+<h3 id="autoritzacio-acl">Autorització (ACL)</h3>
 <p>Procés que valida si l'usuari té permís (Lectura, Escriptura, Execució) sobre l'objecte o recurs sol·licitat.</p>
+</div>
+<div class="md-card" style="--card:#8B5CF6">
+<h3 id="auditoria-registre">Auditoria (Registre)</h3>
 <p>Gravació en fitxers de log de totes les accions i l'ús que l'usuari fa dels recursos del sistema.</p>
+</div>
+</div>
 <p>* En els SO reals (com Windows o Linux), les <strong>Llistes ACL</strong> s'associen directament a cada fitxer/directori indicant quins usuaris i grups hi tenen accés.</p>
-<h2 id="diapositiva-4">Diapositiva 4</h2>
-<p><strong>GOVERNANÇA CORPORATIVA</strong></p>
-<p><strong>Polítiques d'Emmagatzematge (I)</strong></p>
-<p><strong>Emmagatzematge Local</strong></p>
-<p><strong>Xarxa Corporativa</strong></p>
+<h2 id="politiques-demmagatzematge-i">Polítiques d'Emmagatzematge (I)</h2>
+<p class="md-kicker">GOVERNANÇA CORPORATIVA</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#0284C7">
+<h3 id="emmagatzematge-local">Emmagatzematge Local</h3>
 <p>Regula l'ús dels discos durs de les estacions de treball dels empleats:</p>
+<ul>
+<li>Quin tipus d'informació es permet guardar localment.</li>
+<li>Temps màxim de permanència d'aquests fitxers.</li>
+<li>Ubicació exacta dins de l'arbre de directoris autoritzats.</li>
+<li>Prohibició/Normativa sobre la desa de documents personals.</li>
+</ul>
+</div>
+<div class="md-card" style="--card:#16A34A">
+<h3 id="xarxa-corporativa">Xarxa Corporativa</h3>
 <p>Servidors d'emmagatzematge centralitzat i compartit (NAS/SAN):</p>
-<p>• Quin tipus d'informació es permet guardar localment.</p>
-<p>• Permisos d'accés definits per la direcció i els responsables de sistemes.</p>
-<p>• Temps màxim de permanència d'aquests fitxers.</p>
-<p>• Ubicació exacta dins de l'arbre de directoris autoritzats.</p>
-<p>• Definició clara de les persones encarregades d'actualitzar cada carpeta.</p>
-<p>• Prohibició/Normativa sobre la desa de documents personals.</p>
-<p>• Regulació dels espais de treball personals assignats en xarxa a cada empleat.</p>
-<h2 id="diapositiva-5">Diapositiva 5</h2>
-<p><strong>GOVERNANÇA CORPORATIVA</strong></p>
-<p><strong>Polítiques d'Emmagatzematge (II)</strong></p>
+<ul>
+<li>Permisos d'accés definits per la direcció i els responsables de sistemes.</li>
+<li>Definició clara de les persones encarregades d'actualitzar cada carpeta.</li>
+<li>Regulació dels espais de treball personals assignats en xarxa a cada empleat.</li>
+</ul>
+</div>
+</div>
+<h2 id="politiques-demmagatzematge-ii">Polítiques d'Emmagatzematge (II)</h2>
+<p class="md-kicker">GOVERNANÇA CORPORATIVA</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#F59E0B">
+<h3 id="dispositius-externs-usbs-discs">Dispositius Externs (USBs / Discs)</h3>
 <p>Regula l'ús de suports d'emmagatzematge extraïbles emprats per a transport o còpia personal:</p>
-<p><strong>Dispositius Externs (USBs / Discs)</strong></p>
+<ul>
+<li>Autorització explícita sobre si l'ús d'aquests suports està permès o bloquejat.</li>
+<li>Prohibició absoluta d'emmagatzemar-hi dades sensibles o de clients.</li>
+<li>Obligatorietat de xifratge de hardware/software en dispositius portàtils.</li>
+</ul>
+</div>
+<div class="md-card" style="--card:#EF4444">
+<h3 id="esborrat-segur-i-destruccio">Esborrat Segur i Destrucció</h3>
 <p>Quan la informació ja no es necessita o el suport arriba al final de la seva vida útil:</p>
-<p><strong>Esborrat Segur i Destrucció</strong></p>
-<p>• Utilització de mètodes d'esborrat segur (sobrescriptura/wipe de dades).</p>
-<p>• Autorització explícita sobre si l'ús d'aquests suports està permès o bloquejat.</p>
-<p>• Destrucció física irrecuperable de discs durs obsolets per evitar furgat de dades.</p>
-<p>• Prohibició absoluta d'emmagatzemar-hi dades sensibles o de clients.</p>
-<p>• Obligatorietat de xifratge de hardware/software en dispositius portàtils.</p>
-<h2 id="diapositiva-6">Diapositiva 6</h2>
-<p><strong>PLA DE CONTINGÈNCIA</strong></p>
-<p><strong>Planificació de Còpies de Seguretat</strong></p>
-<p>• Identificar quines dades cal preservar prioritàriament.</p>
-<p><strong>1. Definició i Freqüència</strong></p>
-<p>• Planificar al detall el procés de restauració.</p>
-<p><strong>2. Restauració i Proves</strong></p>
-<p>• Definir el temps de retenció/vigència de cada còpia.</p>
-<p><strong>3. Vigència i Obsolescència</strong></p>
-<p>• <strong>Provar el sistema exhaustivament:</strong> Una còpia no provada no és una còpia vàlida.</p>
-<p>• Establir la freqüència de realització (diària, setmanal).</p>
-<p>• Cercar la mínima probabilitat d'error en la recuperació.</p>
-<p>• Controlar l'obsolescència dels suports de memòria.</p>
-<p>• Disposar del magatzem i suports físics adequats.</p>
-<p>• Esborrar o destruir els suports en acabar la seva vida útil.</p>
-<h2 id="diapositiva-7">Diapositiva 7</h2>
-<p><strong>TIPOLOGIA DE BACKUP</strong></p>
-<p><strong>Completa, Incremental i Diferencial</strong></p>
-<p><strong>Completa (Full)</strong></p>
-<p><strong>Incremental</strong></p>
-<p><strong>Diferencial</strong></p>
+<ul>
+<li>Utilització de mètodes d'esborrat segur (sobrescriptura/wipe de dades).</li>
+<li>Destrucció física irrecuperable de discs durs obsolets per evitar furgat de dades.</li>
+</ul>
+</div>
+</div>
+<h2 id="planificacio-de-copies-de-seguretat">Planificació de Còpies de Seguretat</h2>
+<p class="md-kicker">PLA DE CONTINGÈNCIA</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#0284C7">
+<h3 id="1-definicio-i-frequencia">1. Definició i Freqüència</h3>
+<ul>
+<li>Identificar quines dades cal preservar prioritàriament.</li>
+<li>Establir la freqüència de realització (diària, setmanal).</li>
+<li>Disposar del magatzem i suports físics adequats.</li>
+</ul>
+</div>
+<div class="md-card" style="--card:#16A34A">
+<h3 id="2-restauracio-i-proves">2. Restauració i Proves</h3>
+<ul>
+<li>Planificar al detall el procés de restauració.</li>
+<li><strong>Provar el sistema exhaustivament:</strong> Una còpia no provada no és una còpia vàlida.</li>
+<li>Cercar la mínima probabilitat d'error en la recuperació.</li>
+</ul>
+</div>
+<div class="md-card" style="--card:#8B5CF6">
+<h3 id="3-vigencia-i-obsolescencia">3. Vigència i Obsolescència</h3>
+<ul>
+<li>Definir el temps de retenció/vigència de cada còpia.</li>
+<li>Controlar l'obsolescència dels suports de memòria.</li>
+<li>Esborrar o destruir els suports en acabar la seva vida útil.</li>
+</ul>
+</div>
+</div>
+<h2 id="completa-incremental-i-diferencial">Completa, Incremental i Diferencial</h2>
+<p class="md-kicker">TIPOLOGIA DE BACKUP</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#0284C7">
+<h3 id="completa-full">Completa (Full)</h3>
 <p>Duplica <strong>tota</strong> la informació seleccionada del sistema. És la base de qualsevol pla de backup. Temps de realització alt i gran ús d'espai, però restauració molt senzilla.</p>
+</div>
+<div class="md-card" style="--card:#16A34A">
+<h3 id="incremental">Incremental</h3>
 <p>Desa <strong>només les dades modificades des de la darrera còpia</strong> (ja sigui completa o incremental). Molt ràpida de fer i d'ús d'espai mínim.</p>
+</div>
+<div class="md-card" style="--card:#8B5CF6">
+<h3 id="diferencial">Diferencial</h3>
 <p>Desa totes les dades modificades <strong>des de la darrera còpia completa</strong>. Ocupa més espai que la incremental, però simplifica i accelera la restauració.</p>
+</div>
+</div>
 <h2 id="diapositiva-8">Diapositiva 8</h2>
 <p><strong>COMPARATIVA D'ESTUDI</strong></p>
 <p><strong>Incremental vs Diferencial</strong></p>
@@ -158,25 +215,30 @@
 </tr>
 </tbody>
 </table>
-<h2 id="diapositiva-9">Diapositiva 9</h2>
-<p><strong>ESTÀNDARD D'OR DE LA SEGURETAT</strong></p>
-<p><strong>La Regla de Còpies de Seguretat 3-2-1</strong></p>
-<p><strong>3</strong></p>
-<p><strong>2</strong></p>
-<p><strong>1</strong></p>
+<h2 id="la-regla-de-copies-de-seguretat-3-2-1">La Regla de Còpies de Seguretat 3-2-1</h2>
+<p class="md-kicker">ESTÀNDARD D'OR DE LA SEGURETAT</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#0284C7">
+<h3 id="3">3</h3>
 <p><strong>Còpies de Dades</strong></p>
 <p>Mantenir les dades originals més almenys <strong>2 còpies de seguretat addicionals</strong> de suport.</p>
+</div>
+<div class="md-card" style="--card:#16A34A">
+<h3 id="2">2</h3>
 <p><strong>Suports Diferents</strong></p>
 <p>Desar aquestes còpies en almenys <strong>dues tecnologies diferents</strong> (ex: Disc local SSD/NAS i Núvol).</p>
+</div>
+<div class="md-card" style="--card:#EF4444">
+<h3 id="1">1</h3>
 <p><strong>Còpia Fora de la Seu</strong></p>
 <p>Guardar almenys <strong>una còpia en una ubicació externa (Offsite)</strong> per protegir-se de desastres locals (incendis, robatoris).</p>
-<h2 id="diapositiva-10">Diapositiva 10</h2>
-<p><img alt="Imatge 3" loading="lazy" src="seguretat-fisica-2-0-img/img-003.jpg" /></p>
-<p><img alt="Imatge 4" loading="lazy" src="seguretat-fisica-2-0-img/img-004.png" /></p>
-<p><strong>Resum d'Estudi - Seguretat Física 2.0</strong></p>
+</div>
+</div>
+<h2 id="resum-destudi-seguretat-fisica-20">Resum d'Estudi - Seguretat Física 2.0</h2>
 <p>Garanteix la integritat amb funcions Hash modernes (SHA-2/SHA-3), controla l'accés amb ACLs i el principi de privilegi mínim, i assegura la continuïtat del negoci aplicant la <strong>regla 3-2-1</strong> de còpies de seguretat.</p>
 </article>
-<nav class="pager"><a class="pager-btn" href="seguretat-fisica-1-0.html">← Seguretat Física 1.0</a><a class="pager-btn" href="seguretat-fisica-3-0.html">Seguretat Física 3.0 →</a></nav>
+<nav class="pager"><a class="pager-btn" href="seguretat-fisica-1-0.html">← Seguretat Física i Lògica</a><a class="pager-btn" href="seguretat-fisica-3-0.html">Seguretat Física 3.0 →</a></nav>
 
     <footer>Material docent · Formació Professional · Informàtica</footer>
   </main>

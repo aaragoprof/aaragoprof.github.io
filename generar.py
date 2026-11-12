@@ -11,7 +11,10 @@ Estructura que espera la carpeta d'origen:
             │     └── Teoria        <- només aquesta carpeta es publica
             └── RA2 - ...
 
-PDF: es publiquen perquè els alumnes els descarreguin (PDF_MODE). Enllaços (p. ex. una carpeta de Google Drive):\nfitxer "enllacos.txt" dins de Teoria, una línia per enllaç ("Títol | https://...").\n\nPresentacions .pptx: es converteixen a pàgina (títols, llistes, taules, imatges);
+PDF: no es publiquen a la web per estalviar espai (es comparteixen per Google Drive). Enllaços (p. ex. una carpeta de Google Drive):
+fitxer "enllacos.txt" dins de Teoria, una línia per enllaç ("Títol | https://...").
+
+Presentacions .pptx: es converteixen a pàgina (títols, llistes, taules, imatges);
 les notes del presentador i les diapositives ocultes NO es publiquen.
 
 Ús:
@@ -53,10 +56,11 @@ IMATGES_PDF = True
 PDF_SENSE_TEXT_COM_IMATGES = True
 
 # Què fer amb els PDF de les carpetes Teoria:
-#   "descarrega" = es publica el PDF original perquè els alumnes el descarreguin (recomanat)
+#   "descarrega" = es publica el PDF original perquè els alumnes el descarreguin
 #   "pagina"     = es converteix a pàgina web (el PDF no es publica)
 #   "ambdos"     = les dues coses
-PDF_MODE = "descarrega"
+#   "cap"        = no es publiquen els PDF (es comparteixen per Google Drive)
+PDF_MODE = "cap"
 
 # Presentacions PowerPoint (.pptx): es converteixen a pàgina web (el PPTX no es publica).
 CONVERTIR_PPTX = True

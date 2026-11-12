@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Estructura de les Xarxes de Dades · Material docent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/style.css">
+</head>
+<body>
+
+
+<header class="topbar">
+  <a class="topbar-brand" href="../../../index.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 14l9-5-9-5-9 5 9 5z"/><path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0112 20.055a11.952 11.952 0 01-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
+    <span>Portal Docent</span>
+  </a>
+  <div class="search-container">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" id="site-search" placeholder="Cercar material o temari..." onkeyup="filtrarContingut()">
+  </div>
+</header>
+
+<div class="apunt-layout">
+  <aside class="sidebar">
+    
+<div class="sidebar-head">Material del RA</div>
+<ul class="sidebar-menu">
+  <li><a href="estructura-de-les-xarxes-de-dades-i-conversio-binaria.html" class="active"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Estructura de les Xarxes de Dades</a></li>
+</ul>
+
+  </aside>
+  <main class="apunt-content">
+    
+
+<div class="apunt-header">
+  <a class="back" href="index.html" style="color:var(--accent); text-decoration:none; font-family:var(--font-mono); font-size:0.8rem;">← Tornar a RA1</a>
+  <div class="apunt-eyebrow" style="margin-top:0.5rem;">ASIX · M0370 · RA1</div>
+</div>
+
+<article class="prose">
+  <h1 id="estructura-de-les-xarxes-de-dades">Estructura de les Xarxes de Dades</h1>
+<p class="md-kicker">RESULTAT D'APRENENTATGE 1</p>
+
+<p>Arquitectures, Medis de Transmissió, Dispositius, Topologies i Sistemes de Numeració Binària</p>
+<h2 id="components-principals-duna-xarxa">Components Principals d'una Xarxa</h2>
+<p class="md-kicker">FONAMENTS DE XARXA</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#0284C7">
+<h3 id="terminals-hosts">Terminals (Hosts)</h3>
+<p>Ordinadors, servidors i dispositius mòbils que actuen com a emissors o receptors de dades.</p>
+</div>
+<div class="md-card" style="--card:#16A34A">
+<h3 id="medis-de-transmissio">Medis de Transmissió</h3>
+<p>Suport físic (cablezat o d'aire) que transporta els senyals elèctrics, òptics o d'ones.</p>
+</div>
+<div class="md-card" style="--card:#EAB308">
+<h3 id="dispositius-denllac">Dispositius d'Enllaç</h3>
+<p>Equips com switches o routers que interconnecten, amplifiquen i encaminen les dades.</p>
+</div>
+<div class="md-card" style="--card:#8B5CF6">
+<h3 id="programari-i-protocols">Programari i Protocols</h3>
+<p>Sistemes operatius, adaptadors de xarxa i regles que regulen la comunicació.</p>
+</div>
+</div>
+<h2 id="medis-de-transmissio_1">Medis de Transmissió</h2>
+<p class="md-kicker">CAPA FÍSICA</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#0284C7">
+<h3 id="medis-guiats-confinats">Medis Guiats (Confinats)</h3>
+<p><strong>Cable de Coure:</strong> Utilitzat en distàncies curtes i mitjanes en xarxes locals (UTP/STP).</p>
+<p><strong>Fibra Òptica:</strong> Fil de material transparent que transmet informació mitjançant polsos de llum a grans distàncies.</p>
+</div>
+<div class="md-card" style="--card:#16A34A">
+<h3 id="medis-no-guiats-sense-fil">Medis No Guiats (Sense Fil)</h3>
+<p><strong>Ones de Ràdio:</strong> Omnidireccionals, no requereixen visió directa (Wi-Fi, cel·lular).</p>
+<p><strong>Infrarojos:</strong> Enllaços directes a molt curta distància sense obstacles.</p>
+<p><strong>Microones:</strong> Comunicació direccional d'alta freqüència (Bluetooth, enllaços per satèl·lit).</p>
+</div>
+</div>
+<h2 id="classificacio-de-la-transmissio">Classificació de la Transmissió</h2>
+<p class="md-kicker">FLUX DE COMUNICACIÓ</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#0284C7">
+<h3 id="punt-a-punt">Punt a Punt</h3>
+<p>Enllaç directe compartit exclusivament per dos dispositius destinats.</p>
+</div>
+<div class="md-card" style="--card:#0284C7">
+<h3 id="multipunt">Multipunt</h3>
+<p>Un sol medi de transmissió compartit simultàniament per diversos dispositius.</p>
+</div>
+<div class="md-card" style="--card:#EAB308">
+<h3 id="simplex">Símplex</h3>
+<p>La informació flueix estrictament en un sol sentit (ex. radiodifusió).</p>
+</div>
+<div class="md-card" style="--card:#16A34A">
+<h3 id="duplex">Dúplex</h3>
+<p>La informació pot transmetre's en ambdós sentits entre els terminals.</p>
+</div>
+</div>
+<h2 id="dispositius-dinterconnexio">Dispositius d'Interconnexió</h2>
+<p class="md-kicker">HARDWARE DE XARXA</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#64748B">
+<p><strong>Repetidor</strong></p>
+<p>Amplifica i regenera el senyal primitiu abans que es degradi.</p>
+</div>
+<div class="md-card" style="--card:#64748B">
+<p><strong>Hub (Concentrador)</strong></p>
+<p>Reenvia tot el senyal rebut a totes les seves interfícies sense filtrar.</p>
+</div>
+<div class="md-card" style="--card:#0284C7">
+<p><strong>Switch (Commutador)</strong></p>
+<p>Interconnecta equips en una LAN dirigint la informació només al destí.</p>
+</div>
+<div class="md-card" style="--card:#16A34A">
+<p><strong>Router (Encaminador)</strong></p>
+<p>Connecta xarxes diferents i tria la millor ruta per enviar els paquets.</p>
+</div>
+</div>
+<h2 id="diapositiva-6">Diapositiva 6</h2>
+<p><strong>ESCALA DE XARXA</strong></p>
+<p><strong>Classificació per Àmbit Geogràfic</strong></p>
+<table>
+<thead>
+<tr>
+<th>Tipus</th>
+<th>Nom Complet</th>
+<th>Abast i Característiques</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PAN</td>
+<td>Personal Area Network</td>
+<td>Pocs metres. Connecta dispositius personals (ex. auriculars Bluetooth).</td>
+</tr>
+<tr>
+<td>LAN / WLAN</td>
+<td>Local Area Network (Wireless)</td>
+<td>Oficines o llars. Alta velocitat, permet compartir fitxers i impressores.</td>
+</tr>
+<tr>
+<td>MAN / WMAN</td>
+<td>Metropolitan Area Network</td>
+<td>Abasta una ciutat o campus universitari interconnectant diverses LANs.</td>
+</tr>
+<tr>
+<td>WAN</td>
+<td>Wide Area Network</td>
+<td>Grans distàncies geogràfiques (països, continents o global com Internet).</td>
+</tr>
+</tbody>
+</table>
+<h2 id="topologies-de-xarxa">Topologies de Xarxa</h2>
+<p class="md-kicker">ESTRUCTURA FÍSICA I LÒGICA</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#0284C7">
+<h3 id="bus-anell">Bus &amp; Anell</h3>
+<p><strong>Bus:</strong> Medi compartit únic. 
+ <strong>Anell:</strong> Connexions punt a punt tancades en un cercle.</p>
+</div>
+<div class="md-card" style="--card:#16A34A">
+<h3 id="estrella-malla">Estrella &amp; Malla</h3>
+<p><strong>Estrella:</strong> Tots els nodes van al Switch central. 
+ <strong>Malla:</strong> Múltiples camins redundants.</p>
+</div>
+<div class="md-card" style="--card:#EAB308">
+<h3 id="jerarquica-arbre">Jeràrquica (Arbre)</h3>
+<p>Organitzada en 3 capes: 
+ • <strong>Core:</strong> Encaminament d'alta velocitat. 
+ • <strong>Distribució:</strong> Polítiques i routing. 
+ • <strong>Accés:</strong> Connexió directa de terminals.</p>
+</div>
+</div>
+<h2 id="tecnologies-i-relacions-de-xarxa">Tecnologies i Relacions de Xarxa</h2>
+<p class="md-kicker">MODEL DE COMUNICACIÓ</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#0284C7">
+<h3 id="difusio-vs-punt-a-punt">Difusió vs Punt a Punt</h3>
+<p><strong>Broadcast:</strong> El paquet s'envia a tots els nodes de la xarxa.</p>
+<p><strong>Multicast:</strong> Envia la informació només a un grup definit.</p>
+<p><strong>Punt a Punt:</strong> El paquet passa per equips intermedis fins al destí.</p>
+</div>
+<div class="md-card" style="--card:#16A34A">
+<h3 id="client-servidor-vs-p2p">Client-Servidor vs P2P</h3>
+<p><strong>Client-Servidor:</strong> Un servidor centralitzat ofereix recursos que els clients sol·liciten.</p>
+<p><strong>Peer-to-Peer (P2P):</strong> Tots els equips actuen simultàniament com a clients i servidors.</p>
+</div>
+</div>
+<h2 id="arquitectura-i-elements-dun-protocol">Arquitectura i Elements d'un Protocol</h2>
+<p class="md-kicker">ESTANDARDITZACIÓ</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#0284C7">
+<h3 id="arquitectura-per-capes">Arquitectura per Capes</h3>
+<p>La comunicació es divideix en nivells on cada capa ofereix serveis a la superior. Ambdós equips han de compartir el mateix protocol en el mateix nivell.</p>
+</div>
+<div class="md-card" style="--card:#8B5CF6">
+<h3 id="trets-fundamentals-del-protocol">Trets Fundamentals del Protocol</h3>
+<p><strong>Sintaxi:</strong> Estrutura i format dels blocs de dades.</p>
+<p><strong>Semàntica:</strong> Informació de control i coordinació d'errors.</p>
+<p><strong>Temporització:</strong> Seqüència dels missatges i adaptació de velocitats.</p>
+</div>
+</div>
+<h2 id="sistemes-de-numeracio-posicional">Sistemes de Numeració Posicional</h2>
+<p class="md-kicker">REPRESENTACIÓ DIGITAL</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#EAB308">
+<h3 id="principi-posicional">Principi Posicional</h3>
+<p>En exhaurir els símbols d'una columna, s'afegeix una unitat a la d'esquerra (unitat d'ordre superior) i la columna actual torna a 0.</p>
+</div>
+<div class="md-card" style="--card:#0284C7">
+<h3 id="base-2-sistema-binari">Base 2 (Sistema Binari)</h3>
+<p>En binari només existeixen dos símbols (0 i 1). Els canvis de columna es produeixen ràpidament:</p>
+<div class="md-callout">
+<p>0 (0d) → 1 (1d) → 10 (2d) → 11 (3d) → 100 (4d)</p>
+</div>
+</div>
+</div>
+<h2 id="conversio-de-decimal-a-binari-metode-de-loctet">Conversió de Decimal a Binari (Mètode de l'Octet)</h2>
+<p class="md-kicker">MÈTODE PRÀCTIC DE XARXES</p>
+
+<p>Taula de valors de les 8 potències de 2 d'un octet (8 bits):</p>
+<table>
+<thead>
+<tr>
+<th>128</th>
+<th>64</th>
+<th>32</th>
+<th>16</th>
+<th>8</th>
+<th>4</th>
+<th>2</th>
+<th>1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<div class="md-callout" style="--card:#0284C7">
+<p><strong>Exemple amb el número 168:</strong> 
+ 168 ≥ 128 → <strong>1</strong> (resten 40) | 40 &lt; 64 → <strong>0</strong> | 40 ≥ 32 → <strong>1</strong> (resten 8) | 8 &lt; 16 → <strong>0</strong> | 8 ≥ 8 → <strong>1</strong> (resten 0) → Resta de caselles en <strong>0</strong>. 
+ <strong>Resultat Binari: 10101000</strong></p>
+</div>
+<h2 id="diapositiva-12">Diapositiva 12</h2>
+<p><strong>Conversió de Binari a Decimal</strong></p>
+<p>S'assignen els bits a la taula de l'octet i es sumen exclusivament els valors de les caselles que tinguin un <strong>1</strong>:</p>
+<div class="md-card">
+<p>Binari: <strong>10010100</strong> → 128 + 16 + 4 = <strong>148 Decimal</strong></p>
+</div>
+</article>
+<nav class="pager"><span></span></nav>
+
+    <footer>Material docent · Formació Professional · Informàtica</footer>
+  </main>
+</div>
+
+<script>
+function filtrarContingut() {
+  let input = document.getElementById('site-search').value.toLowerCase();
+  let items = document.querySelectorAll('.card, .resource');
+  items.forEach(item => {
+    let text = item.innerText.toLowerCase();
+    item.style.display = text.includes(input) ? '' : 'none';
+  });
+}
+</script>
+</body>
+</html>

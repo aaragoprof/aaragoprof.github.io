@@ -11,7 +11,7 @@ Estructura que espera la carpeta d'origen:
             │     └── Teoria        <- només aquesta carpeta es publica
             └── RA2 - ...
 
-Presentacions .pptx: es converteixen a pàgina (títols, llistes, taules, imatges);
+PDF: es publiquen perquè els alumnes els descarreguin (PDF_MODE). Enllaços (p. ex. una carpeta de Google Drive):\nfitxer "enllacos.txt" dins de Teoria, una línia per enllaç ("Títol | https://...").\n\nPresentacions .pptx: es converteixen a pàgina (títols, llistes, taules, imatges);
 les notes del presentador i les diapositives ocultes NO es publiquen.
 
 Ús:
@@ -29,7 +29,7 @@ import sys
 import time
 import unicodedata
 from pathlib import Path
-from urllib.parse import quote
+from urllib.parse import quote, urlparse
 
 # ----------------------------------------------------------------------------
 # CONFIGURACIÓ (edita aquí el que necessitis)
@@ -51,6 +51,12 @@ CICLES = {
 CONVERTIR_PDF = True
 IMATGES_PDF = True
 PDF_SENSE_TEXT_COM_IMATGES = True
+
+# Què fer amb els PDF de les carpetes Teoria:
+#   "descarrega" = es publica el PDF original perquè els alumnes el descarreguin (recomanat)
+#   "pagina"     = es converteix a pàgina web (el PDF no es publica)
+#   "ambdos"     = les dues coses
+PDF_MODE = "descarrega"
 
 # Presentacions PowerPoint (.pptx): es converteixen a pàgina web (el PPTX no es publica).
 CONVERTIR_PPTX = True
@@ -1112,6 +1118,35 @@ ICONES = {
     "fitxer": '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>',
 }
 ETIQUETES = {"diapositives": "Diapositives", "pagina": "Pàgina", "html": "Interactiu", "fitxer": "Fitxer"}
+ICONES["pdf"] = ICONES["fitxer"]
+ETIQUETES["pdf"] = "PDF"
+ICONES["drive"] = '<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>'
+ETIQUETES["drive"] = "Google Drive"
+ICONES["enllac"] = '<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>'
+ETIQUETES["enllac"] = "Enllaç"
+TIPUS_DESCARREGA = ("pdf", "fitxer", "drive", "enllac")
+PRIORITAT_TIPUS = {"diapositives": 0, "pagina": 0, "html": 1, "pdf": 2, "fitxer": 3, "drive": 4, "enllac": 4}
+
+
+def llegeix_enllacos(f):
+    """Fitxer enllacos.txt: una línia per enllaç ('Títol | https://...' o només l'URL)."""
+    out = []
+    for linia in f.read_text(encoding="utf-8-sig", errors="replace").splitlines():
+        l = linia.strip()
+        if not l or l.startswith("#"):
+            continue
+        if "|" in l:
+            titol, url = [x.strip() for x in l.rsplit("|", 1)]
+        else:
+            titol, url = "", l
+        if not re.match(r"^https?://", url, re.I):
+            continue
+        es_drive = "drive.google.com" in url or "docs.google.com" in url
+        if not titol:
+            titol = "Carpeta de Google Drive" if "drive.google.com/drive" in url else (
+                "Google Drive" if es_drive else urlparse(url).netloc)
+        out.append((titol, url, "drive" if es_drive else "enllac"))
+    return out
 EXT_IMATGE = {".png", ".jpg", ".jpeg", ".gif", ".svg", ".webp", ".ico"}
 
 
@@ -1328,13 +1363,28 @@ def processa_material(fitxers, base, desti, index_path, nom_pagina_tornar, eyebr
         ext = f.suffix.lower()
         stem = norm(f.stem)
 
+        if sense_accents(f.name).lower() in ("enllacos.txt", "links.txt"):
+            for titol_e, url_e, tipus_e in llegeix_enllacos(f):
+                res.append(dict(grup=grup, titol=titol_e, url=url_e, path=None, tipus=tipus_e, nova=True))
+            continue
+
         if ext in EXT_IMATGE:
             out_dir.mkdir(parents=True, exist_ok=True)
             nom = lliure(rel_dir, norm(f.name))
             shutil.copy2(f, out_dir / nom)
             continue
 
-        if ext == ".pdf" and CONVERTIR_PDF:
+        if ext == ".pdf" and PDF_MODE in ("descarrega", "ambdos"):
+            out_dir.mkdir(parents=True, exist_ok=True)
+            nom_pdf = lliure(rel_dir, norm(f.name))
+            shutil.copy2(f, out_dir / nom_pdf)
+            if f.stat().st_size > AVIS_MB_FITXER * 1024 * 1024:
+                GRANS.append((norm(f.name), f.stat().st_size // (1024 * 1024)))
+            res.append(dict(grup=grup, titol=stem, path=out_dir / nom_pdf, tipus="pdf", nova=True))
+            if PDF_MODE == "descarrega":
+                continue
+
+        if ext == ".pdf" and CONVERTIR_PDF and PDF_MODE in ("pagina", "ambdos"):
             if te_germa_publicable(f):
                 continue
             r = converteix_pdf(f)
@@ -1393,7 +1443,7 @@ def processa_material(fitxers, base, desti, index_path, nom_pagina_tornar, eyebr
                 GRANS.append((norm(f.name), f.stat().st_size // (1024 * 1024)))
             res.append(dict(grup=grup, titol=norm(f.name), path=out_dir / nom, tipus="fitxer", nova=True))
 
-    res.sort(key=lambda r: (natural(r["grup"]), natural(r["titol"])))
+    res.sort(key=lambda r: (natural(r["grup"]), PRIORITAT_TIPUS.get(r["tipus"], 5), natural(r["titol"])))
 
     num_elems = len(elements_generats)
     for idx, el in enumerate(elements_generats):
@@ -1461,11 +1511,19 @@ def llista_recursos(res, pagina_dir):
     for g in sorted(grups, key=natural):
         if g:
             out.append(f'  <h3 class="section-title">{esc(g)}</h3>')
-        out.append('  <div class="resource-list">')
-        for r in res:
-            if r["grup"] == g:
-                out.append(recurs(r["titol"], rel_href(r["path"], pagina_dir), r["tipus"], r["nova"]))
-        out.append("  </div>")
+        del_grup = [r for r in res if r["grup"] == g]
+        contingut = [r for r in del_grup if r["tipus"] not in TIPUS_DESCARREGA]
+        baixades = [r for r in del_grup if r["tipus"] in TIPUS_DESCARREGA]
+        for llista, titol in ((contingut, None), (baixades, "Descàrregues i enllaços" if contingut else None)):
+            if not llista:
+                continue
+            if titol:
+                out.append(f'  <h3 class="section-title">{titol}</h3>')
+            out.append('  <div class="resource-list">')
+            for r in llista:
+                href = esc(r["url"], quote=True) if r.get("url") else rel_href(r["path"], pagina_dir)
+                out.append(recurs(r["titol"], href, r["tipus"], r["nova"]))
+            out.append("  </div>")
     return "\n".join(out) + "\n"
 
 

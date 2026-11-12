@@ -1378,6 +1378,9 @@ def processa_material(fitxers, base, desti, index_path, nom_pagina_tornar, eyebr
             shutil.copy2(f, out_dir / nom)
             continue
 
+        if ext == ".pdf" and PDF_MODE == "cap":
+            continue
+
         if ext == ".pdf" and PDF_MODE in ("descarrega", "ambdos"):
             out_dir.mkdir(parents=True, exist_ok=True)
             nom_pdf = lliure(rel_dir, norm(f.name))
@@ -1435,17 +1438,16 @@ def processa_material(fitxers, base, desti, index_path, nom_pagina_tornar, eyebr
             res.append(dict(grup=grup, titol=titol, path=path, tipus="pagina", nova=False))
             continue
 
-        out_dir.mkdir(parents=True, exist_ok=True)
-        nom = lliure(rel_dir, norm(f.name))
-        shutil.copy2(f, out_dir / nom)
         if ext in (".html", ".htm"):
+            out_dir.mkdir(parents=True, exist_ok=True)
+            nom = lliure(rel_dir, norm(f.name))
+            shutil.copy2(f, out_dir / nom)
             t = re.search(r"<title>(.*?)</title>", f.read_text(encoding="utf-8", errors="replace"), re.I | re.S)
             titol = html.unescape(t.group(1)).strip() if t and t.group(1).strip() else stem
             res.append(dict(grup=grup, titol=titol, path=out_dir / nom, tipus="html", nova=True))
-        else:
-            if f.stat().st_size > AVIS_MB_FITXER * 1024 * 1024:
-                GRANS.append((norm(f.name), f.stat().st_size // (1024 * 1024)))
-            res.append(dict(grup=grup, titol=norm(f.name), path=out_dir / nom, tipus="fitxer", nova=True))
+            continue
+
+        continue
 
     res.sort(key=lambda r: (natural(r["grup"]), PRIORITAT_TIPUS.get(r["tipus"], 5), natural(r["titol"])))
 

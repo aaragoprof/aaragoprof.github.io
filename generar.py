@@ -926,6 +926,18 @@ def escriu(path, text):
     path.write_text(text, encoding="utf-8")
 
 
+def neteja_git_ini():
+    git_dir = ROOT / ".git"
+    if not git_dir.is_dir():
+        return
+    for ini in git_dir.rglob("desktop.ini"):
+        try:
+            os.chmod(ini, stat.S_IWRITE)
+            ini.unlink()
+        except OSError:
+            pass
+
+
 def esborra_docs():
     def _treu_readonly(func, path, exc):
         try:
@@ -1630,6 +1642,7 @@ def main():
         print(f"No trobo la carpeta: {origen}")
         sys.exit(1)
 
+    neteja_git_ini()
     esborra_docs()
     DOCS.mkdir()
     escriu(DOCS / "assets" / "style.css", CSS)

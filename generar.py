@@ -150,6 +150,8 @@ AVISAT = []
 FALLITS = []
 GRANS = []
 STATS = {"convertits": 0, "cache": 0}
+SEARCH = []                    # índex del cercador (text de cada pàgina)
+BUILD = str(int(time.time()))  # evita que el navegador usi un índex antic
 
 
 def _pdf_a_markdown(pdf_tmp, img_dir):
@@ -1122,6 +1124,245 @@ footer { margin-top: 4rem; padding-top: 1.5rem; border-top: 1px solid var(--bord
 .md-callout { --card: var(--accent); border-left: 4px solid var(--card); background: var(--accent-soft); background: color-mix(in srgb, var(--card) 8%, #fff); padding: .9rem 1.15rem; border-radius: 0 12px 12px 0; margin: 1.1rem 0; font-weight: 500; }
 .md-callout p { margin: 0; }
 .md-card .md-callout { margin: .8rem 0 0; font-size: .9rem; }
+
+/* --- Cercador --- */
+#search-results { position: fixed; top: calc(var(--topbar-h) - 6px); right: 1.5rem; width: min(640px, calc(100vw - 2rem)); max-height: calc(100vh - var(--topbar-h) - 2rem); overflow-y: auto; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; box-shadow: 0 20px 50px -15px rgba(15,23,42,.3); z-index: 1100; padding: .4rem; }
+#search-results[hidden] { display: none; }
+.sr-count { font-family: var(--font-mono); font-size: .72rem; color: var(--muted); padding: .5rem .8rem; }
+.sr-empty { padding: 1.2rem; color: var(--muted); text-align: center; font-size: .92rem; }
+.sr-item { display: block; padding: .7rem .8rem; border-radius: 10px; text-decoration: none; color: inherit; }
+.sr-item:hover, .sr-item.active { background: var(--accent-soft); }
+.sr-crumb { display: block; font-family: var(--font-mono); font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+.sr-title { display: block; font-weight: 600; font-size: .95rem; color: var(--ink); }
+.sr-sec { display: block; font-size: .82rem; color: var(--primary); }
+.sr-snip { display: block; font-size: .84rem; line-height: 1.5; color: #475569; margin-top: .2rem; }
+.sr-snip mark, .prose mark { background: #FEF08A; color: inherit; border-radius: 3px; padding: 0 .1em; }
+.prose h1, .prose h2, .prose h3, .prose h4 { scroll-margin-top: calc(var(--topbar-h) + 1rem); }
+'''
+
+JS_CERCADOR = r'''(function () {
+  var tag = document.querySelector("script[data-base]");
+  var BASE = tag ? tag.getAttribute("data-base") : "";
+  var VER = tag ? tag.getAttribute("data-ver") : "";
+  var input = document.getElementById("site-search");
+  var data = null, loading = false, pending = [], active = -1, timer = null;
+
+  function fold(s) {
+    return s.replace(/[^\u0000-\u007f]/g, function (c) {
+      return c.normalize("NFD").replace(/[̀-ͯ]/g, "");
+    }).toLowerCase();
+  }
+  function esc(s) {
+    return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+  function tokens(q) {
+    return fold(q).split(/\s+/).filter(function (t) { return t.length >= 2; });
+  }
+  function ranges(ftxt, tk) {
+    var r = [];
+    tk.forEach(function (t) {
+      var p = -1;
+      while ((p = ftxt.indexOf(t, p + 1)) >= 0) r.push([p, p + t.length]);
+    });
+    r.sort(function (a, b) { return a[0] - b[0]; });
+    var m = [];
+    r.forEach(function (x) {
+      var l = m[m.length - 1];
+      if (l && x[0] <= l[1]) l[1] = Math.max(l[1], x[1]);
+      else m.push([x[0], x[1]]);
+    });
+    return m;
+  }
+
+  /* ---------- Resaltat a la pàgina de destí (?q=...) ---------- */
+  function highlightPage() {
+    var q = new URLSearchParams(location.search).get("q");
+    var root = document.querySelector(".prose");
+    if (!q || !root) return;
+    var tk = tokens(q);
+    if (!tk.length) return;
+    var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode: function (n) {
+        return n.parentNode.closest("script, style, mark") ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    var nodes = [], n;
+    while ((n = walker.nextNode())) nodes.push(n);
+    var marks = [];
+    nodes.forEach(function (node) {
+      var txt = node.nodeValue, m = ranges(fold(txt), tk);
+      if (!m.length) return;
+      var frag = document.createDocumentFragment(), last = 0;
+      m.forEach(function (x) {
+        if (x[0] > last) frag.appendChild(document.createTextNode(txt.slice(last, x[0])));
+        var mk = document.createElement("mark");
+        mk.textContent = txt.slice(x[0], x[1]);
+        frag.appendChild(mk);
+        marks.push(mk);
+        last = x[1];
+      });
+      if (last < txt.length) frag.appendChild(document.createTextNode(txt.slice(last)));
+      node.parentNode.replaceChild(frag, node);
+    });
+    if (!marks.length) return;
+    var target = null;
+    if (location.hash.length > 1) {
+      try { target = document.getElementById(decodeURIComponent(location.hash.slice(1))); } catch (e) { target = null; }
+    }
+    var first = marks[0];
+    if (target) {
+      for (var i = 0; i < marks.length; i++) {
+        if (target.compareDocumentPosition(marks[i]) & Node.DOCUMENT_POSITION_FOLLOWING) { first = marks[i]; break; }
+      }
+    }
+    setTimeout(function () { first.scrollIntoView({ block: "center" }); }, 60);
+  }
+  highlightPage();
+
+  if (!input) return;
+
+  var panel = document.createElement("div");
+  panel.id = "search-results";
+  panel.setAttribute("role", "listbox");
+  panel.hidden = true;
+  document.body.appendChild(panel);
+
+  /* ---------- Càrrega de l'índex (només la primera vegada) ---------- */
+  function load(cb) {
+    if (data) return cb();
+    pending.push(cb);
+    if (loading) return;
+    loading = true;
+    var s = document.createElement("script");
+    s.src = BASE + "assets/search-index.js?v=" + VER;
+    s.onload = function () {
+      data = (window.SEARCH_INDEX || []).map(function (p) {
+        return {
+          t: p.t, c: p.c, u: p.u, ft: fold(p.t),
+          s: p.s.map(function (x) {
+            return { id: x[0], h: x[1], x: x[2], fh: fold(x[1]), fx: fold(x[2]) };
+          })
+        };
+      });
+      var cbs = pending; pending = [];
+      cbs.forEach(function (f) { f(); });
+    };
+    s.onerror = function () {
+      loading = false; pending = [];
+      show('<div class="sr-empty">No s\'ha pogut carregar el cercador.</div>');
+    };
+    document.head.appendChild(s);
+  }
+
+  /* ---------- Cerca ---------- */
+  function search(tk) {
+    var res = [];
+    data.forEach(function (p) {
+      var best = null;
+      p.s.forEach(function (sec) {
+        var score = 0, ok = true;
+        for (var i = 0; i < tk.length; i++) {
+          var t = tk[i];
+          var inT = p.ft.indexOf(t) >= 0, inH = sec.fh.indexOf(t) >= 0, inX = sec.fx.indexOf(t) >= 0;
+          if (!inT && !inH && !inX) { ok = false; break; }
+          if (inT) score += 20;
+          if (inH) score += 10;
+          if (inX) {
+            var n = 0, pos = -1;
+            while (n < 20 && (pos = sec.fx.indexOf(t, pos + 1)) >= 0) n++;
+            score += n;
+          }
+        }
+        if (ok && (!best || score > best.score)) best = { sec: sec, score: score };
+      });
+      if (best) res.push({ p: p, sec: best.sec, score: best.score });
+    });
+    res.sort(function (a, b) { return b.score - a.score || (a.p.t < b.p.t ? -1 : 1); });
+    return res;
+  }
+
+  function snippet(sec, tk) {
+    var text = sec.x, f = sec.fx, pos = -1;
+    tk.forEach(function (t) {
+      var k = f.indexOf(t);
+      if (k >= 0 && (pos < 0 || k < pos)) pos = k;
+    });
+    if (pos < 0) return esc(text.slice(0, 150)) + (text.length > 150 ? "…" : "");
+    var a = Math.max(0, pos - 60), b = Math.min(text.length, pos + 120);
+    if (a > 0) {
+      var sp = text.indexOf(" ", a);
+      if (sp >= 0 && sp < pos) a = sp + 1;
+    }
+    var frag = text.slice(a, b), m = ranges(f.slice(a, b), tk), out = "", last = 0;
+    m.forEach(function (x) {
+      out += esc(frag.slice(last, x[0])) + "<mark>" + esc(frag.slice(x[0], x[1])) + "</mark>";
+      last = x[1];
+    });
+    out += esc(frag.slice(last));
+    return (a > 0 ? "…" : "") + out + (b < text.length ? "…" : "");
+  }
+
+  function show(html) { panel.innerHTML = html; panel.hidden = false; active = -1; }
+  function close() { panel.hidden = true; active = -1; }
+
+  function render() {
+    var q = input.value.trim(), tk = tokens(q);
+    if (!tk.length) { close(); return; }
+    load(function () {
+      if (input.value.trim() !== q) return;
+      var res = search(tk);
+      if (!res.length) {
+        show('<div class="sr-empty">Cap resultat per a «' + esc(q) + '».</div>');
+        return;
+      }
+      var html = '<div class="sr-count">' + res.length + " resultat" + (res.length === 1 ? "" : "s") + "</div>";
+      res.slice(0, 12).forEach(function (r) {
+        var href = BASE + r.p.u + "?q=" + encodeURIComponent(q) + (r.sec.id ? "#" + encodeURIComponent(r.sec.id) : "");
+        html += '<a class="sr-item" role="option" href="' + esc(href) + '">' +
+          '<span class="sr-crumb">' + esc(r.p.c) + "</span>" +
+          '<span class="sr-title">' + esc(r.p.t) + "</span>" +
+          (r.sec.h ? '<span class="sr-sec"># ' + esc(r.sec.h) + "</span>" : "") +
+          '<span class="sr-snip">' + snippet(r.sec, tk) + "</span></a>";
+      });
+      if (res.length > 12) html += '<div class="sr-count">Es mostren els 12 primers. Afegeix més paraules per afinar.</div>';
+      show(html);
+    });
+  }
+
+  function move(d) {
+    var items = panel.querySelectorAll(".sr-item");
+    if (!items.length) return;
+    if (active >= 0) items[active].classList.remove("active");
+    active = (active + d + items.length) % items.length;
+    items[active].classList.add("active");
+    items[active].scrollIntoView({ block: "nearest" });
+  }
+
+  input.addEventListener("input", function () {
+    clearTimeout(timer);
+    timer = setTimeout(render, 120);
+  });
+  input.addEventListener("focus", function () { if (tokens(input.value).length) render(); });
+  input.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowDown") { e.preventDefault(); move(1); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); move(-1); }
+    else if (e.key === "Escape") { close(); input.blur(); }
+    else if (e.key === "Enter") {
+      var items = panel.querySelectorAll(".sr-item");
+      if (items.length) { e.preventDefault(); location.href = items[active >= 0 ? active : 0].href; }
+    }
+  });
+  document.addEventListener("click", function (e) {
+    if (!panel.contains(e.target) && !e.target.closest(".search-container")) close();
+  });
+  document.addEventListener("keydown", function (e) {
+    var el = document.activeElement, tag = el ? el.tagName : "";
+    if (e.key === "/" && tag !== "INPUT" && tag !== "TEXTAREA" && !e.ctrlKey && !e.metaKey) {
+      e.preventDefault();
+      input.focus();
+    }
+  });
+})();
 '''
 
 esc = html.escape
@@ -1190,7 +1431,7 @@ def barra_superior(pre=""):
   </a>
   <div class="search-container">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-    <input type="text" id="site-search" placeholder="Cercar material o temari..." onkeyup="filtrarContingut()">
+    <input type="text" id="site-search" placeholder="Cercar al material… (prem /)" autocomplete="off" aria-label="Cercar al material">
   </div>
 </header>
 """
@@ -1235,16 +1476,7 @@ def pagina(path, titol, cos, es_apunt=False, sidebar_html=""):
 </head>
 <body>
 {body_content}
-<script>
-function filtrarContingut() {{
-  let input = document.getElementById('site-search').value.toLowerCase();
-  let items = document.querySelectorAll('.card, .resource');
-  items.forEach(item => {{
-    let text = item.innerText.toLowerCase();
-    item.style.display = text.includes(input) ? '' : 'none';
-  }});
-}}
-</script>
+<script src="{pre}assets/search.js?v={BUILD}" data-base="{pre}" data-ver="{BUILD}" defer></script>
 </body>
 </html>
 """
@@ -1356,6 +1588,32 @@ def te_germa_publicable(f):
     return False
 
 
+def text_de_html(h):
+    h = re.sub(r"(?is)<(script|style)\b.*?</\1>", " ", h)
+    h = re.sub(r"(?s)<[^>]+>", " ", h)
+    return " ".join(html.unescape(h).split())
+
+
+def seccions_de_html(cos_html):
+    """[(id, títol de la secció, text)] dividint la pàgina pels encapçalaments h2."""
+    parts = re.split(r"(?is)(<h2\b[^>]*>.*?</h2>)", cos_html)
+    out = []
+    intro = text_de_html(parts[0])
+    if intro:
+        out.append(("", "", intro))
+    for i in range(1, len(parts), 2):
+        m = re.search(r'id="([^"]*)"', parts[i])
+        cos = parts[i + 1] if i + 1 < len(parts) else ""
+        out.append((m.group(1) if m else "", text_de_html(parts[i]), text_de_html(cos)))
+    return out
+
+
+def indexa(titol, crumb, path, seccions):
+    url = quote(os.path.relpath(str(path), str(DOCS)).replace(os.sep, "/"), safe="/")
+    SEARCH.append({"t": titol, "c": crumb, "u": url,
+                   "s": [list(s) for s in seccions] or [["", "", ""]]})
+
+
 def processa_material(fitxers, base, desti, index_path, nom_pagina_tornar, eyebrow):
     res = []
     usats = {"index.html"}
@@ -1454,9 +1712,12 @@ def processa_material(fitxers, base, desti, index_path, nom_pagina_tornar, eyebr
             out_dir.mkdir(parents=True, exist_ok=True)
             nom = lliure(rel_dir, norm(f.name))
             shutil.copy2(f, out_dir / nom)
-            t = re.search(r"<title>(.*?)</title>", f.read_text(encoding="utf-8", errors="replace"), re.I | re.S)
+            brut = f.read_text(encoding="utf-8", errors="replace")
+            t = re.search(r"<title>(.*?)</title>", brut, re.I | re.S)
             titol = html.unescape(t.group(1)).strip() if t and t.group(1).strip() else stem
             res.append(dict(grup=grup, titol=titol, path=out_dir / nom, tipus="html", nova=True))
+            cos_brut = re.search(r"(?is)<body\b[^>]*>(.*)</body>", brut)
+            indexa(titol, eyebrow, out_dir / nom, seccions_de_html(cos_brut.group(1) if cos_brut else brut))
             continue
 
         continue
@@ -1475,6 +1736,7 @@ def processa_material(fitxers, base, desti, index_path, nom_pagina_tornar, eyebr
             md = md.replace(TOKEN_IMG, quote(img_nom) + "/")
 
         cos_html, h2 = md_a_html(md)
+        indexa(el["titol"], eyebrow, path, seccions_de_html(cos_html))
 
         menu_items = []
         for r_item in res:
@@ -1607,6 +1869,9 @@ def construeix_modul(m_dir, c_slug, c_nom, codi, nom):
         else:
             cos = cap + properament_caixa()
         escriu(ra_index, pagina(ra_index, f"RA{n} · {titol_ra or nom}", cos))
+        if mat:
+            indexa(f"RA{n} · {titol_ra or nom}", f"{c_nom} · M{codi}", ra_index,
+                   [("", "", " ".join([desc] + [x["titol"] for x in mat]).strip())])
         ras.append(dict(n=n, titol=titol_ra or f"RA{n}", index=ra_index, mat=mat, desc=desc))
 
     desc_mod = llegeix_descripcio(m_dir)
@@ -1629,6 +1894,10 @@ def construeix_modul(m_dir, c_slug, c_nom, codi, nom):
     elif not mat_mod:
         cos += properament_caixa()
     escriu(mod_index, pagina(mod_index, f"M{codi} {nom}", cos))
+    if mat_mod or any(r["mat"] for r in ras):
+        indexa(f"M{codi} {nom}", eyebrow_mod, mod_index,
+               [("", "", " ".join([desc_mod] + [r["titol"] for r in ras]
+                                  + [x["titol"] for x in mat_mod]).strip())])
     return dict(codi=codi, nom=nom, index=mod_index, ras=ras, mat=mat_mod,
                 desc=desc_mod, ok=bool(mat_mod) or any(r["mat"] for r in ras))
 
@@ -1646,6 +1915,7 @@ def main():
     esborra_docs()
     DOCS.mkdir()
     escriu(DOCS / "assets" / "style.css", CSS)
+    escriu(DOCS / "assets" / "search.js", JS_CERCADOR)
     escriu(DOCS / ".nojekyll", "")
 
     ignorades = []
@@ -1697,8 +1967,12 @@ def main():
         cos += targeta(cicle, c_nom, "", rel_href(c_index, DOCS), tag=tag, disabled=not n_ok)
     cos += "  </main>\n"
     escriu(h_index, pagina(h_index, SITE_NAME, cos))
+    index_js = "window.SEARCH_INDEX=" + json.dumps(SEARCH, ensure_ascii=False, separators=(",", ":")) + ";"
+    escriu(DOCS / "assets" / "search-index.js", index_js)
+    kb_index = len(index_js.encode("utf-8")) // 1024
 
     print("\nWeb generada amb èxit! Els fitxers .ini (com desktop.ini) s'han ignorat.")
+    print(f"Cercador: {len(SEARCH)} pàgines indexades ({kb_index} KB).")
     if STATS["convertits"] or STATS["cache"]:
         print(f"Presentacions/PDF convertits ara: {STATS['convertits']} · reutilitzats de la memòria cau: {STATS['cache']}")
     if FALLITS:

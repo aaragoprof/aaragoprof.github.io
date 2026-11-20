@@ -19,7 +19,7 @@
   </a>
   <div class="search-container">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-    <input type="text" id="site-search" placeholder="Cercar material o temari..." onkeyup="filtrarContingut()">
+    <input type="text" id="site-search" placeholder="Cercar al material… (prem /)" autocomplete="off" aria-label="Cercar al material">
   </div>
 </header>
 
@@ -252,15 +252,6 @@
   </main>
 </div>
 
-<script>
-function filtrarContingut() {
-  let input = document.getElementById('site-search').value.toLowerCase();
-  let items = document.querySelectorAll('.card, .resource');
-  items.forEach(item => {
-    let text = item.innerText.toLowerCase();
-    item.style.display = text.includes(input) ? '' : 'none';
-  });
-}
-</script>
+<script src="../../../assets/search.js?v=1795174141" data-base="../../../" data-ver="1795174141" defer></script>
 </body>
 </html>

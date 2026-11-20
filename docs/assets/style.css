@@ -157,3 +157,17 @@ footer { margin-top: 4rem; padding-top: 1.5rem; border-top: 1px solid var(--bord
 .md-callout { --card: var(--accent); border-left: 4px solid var(--card); background: var(--accent-soft); background: color-mix(in srgb, var(--card) 8%, #fff); padding: .9rem 1.15rem; border-radius: 0 12px 12px 0; margin: 1.1rem 0; font-weight: 500; }
 .md-callout p { margin: 0; }
 .md-card .md-callout { margin: .8rem 0 0; font-size: .9rem; }
+
+/* --- Cercador --- */
+#search-results { position: fixed; top: calc(var(--topbar-h) - 6px); right: 1.5rem; width: min(640px, calc(100vw - 2rem)); max-height: calc(100vh - var(--topbar-h) - 2rem); overflow-y: auto; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; box-shadow: 0 20px 50px -15px rgba(15,23,42,.3); z-index: 1100; padding: .4rem; }
+#search-results[hidden] { display: none; }
+.sr-count { font-family: var(--font-mono); font-size: .72rem; color: var(--muted); padding: .5rem .8rem; }
+.sr-empty { padding: 1.2rem; color: var(--muted); text-align: center; font-size: .92rem; }
+.sr-item { display: block; padding: .7rem .8rem; border-radius: 10px; text-decoration: none; color: inherit; }
+.sr-item:hover, .sr-item.active { background: var(--accent-soft); }
+.sr-crumb { display: block; font-family: var(--font-mono); font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+.sr-title { display: block; font-weight: 600; font-size: .95rem; color: var(--ink); }
+.sr-sec { display: block; font-size: .82rem; color: var(--primary); }
+.sr-snip { display: block; font-size: .84rem; line-height: 1.5; color: #475569; margin-top: .2rem; }
+.sr-snip mark, .prose mark { background: #FEF08A; color: inherit; border-radius: 3px; padding: 0 .1em; }
+.prose h1, .prose h2, .prose h3, .prose h4 { scroll-margin-top: calc(var(--topbar-h) + 1rem); }

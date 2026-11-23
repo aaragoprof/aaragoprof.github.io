@@ -42,151 +42,191 @@
 
 <article class="prose">
   <h1 id="monitoratge-de-xarxes-snmp-i-enginyeria-social">Monitoratge de Xarxes, SNMP i Enginyeria Social</h1>
-<h2 id="diapositiva-1">Diapositiva 1</h2>
-<p><strong>SEGURETAT I ADMINISTRACIÓ DE SISTEMES</strong></p>
-<p><strong>Monitoratge de Xarxes, SNMP i Enginyeria Social</strong></p>
-<p>Inventari de recursos, gestió centralitzada i defensa davant fraus informàtics</p>
-<h2 id="el-monitoratge-de-xarxes">El Monitoratge de Xarxes</h2>
-<div class="md-card">
-<p><strong>Qualitat de servei:</strong> Rendiment òptim.</p>
-<p><strong>Control d'accés:</strong> Només usuaris autoritzats.</p>
-<p><strong>Anàlisi proactiva:</strong> Detecció ràpida d'errors.</p>
-</div>
-<p><strong>Anàlisi contínua del trànsit i estat de la xarxa.</strong></p>
-<p>Garanteix la qualitat de servei i assegura l'ús exclusiu per part d'usuaris legítims.</p>
-<h2 id="factors-clau-dinventari-i-control">Factors Clau d'Inventari i Control</h2>
+<p class="md-kicker">MÒDUL DE SEGURETAT I MONITORATGE</p>
+
+<p>Inventari d'actius, gestió centralitzada amb SNMPv3 i defensa davant fraus informàtics</p>
+<h2 id="objectius-del-monitoratge-de-xarxes">Objectius del Monitoratge de Xarxes</h2>
+<p class="md-kicker">QUALITAT I CONTROL</p>
+
 <div class="md-cards">
-<div class="md-card">
-<h3 id="adreces-ip-i-mac">Adreces IP i MAC</h3>
-<p>Identificació lògica i física d'equips.</p>
+<div class="md-card" style="--card:#0284C7">
+<h3 id="qualitat-de-servei">Qualitat de Servei</h3>
+<p>Anàlisi contínua del trànsit per garantir un rendiment òptim.</p>
 </div>
-<div class="md-card">
-<h3 id="ports-i-serveis">Ports i Serveis</h3>
-<p>Control de serveis crítics actius.</p>
+<div class="md-card" style="--card:#16A34A">
+<h3 id="usuaris-legitims">Usuaris Legítims</h3>
+<p>Control d'accés estrictament sota les polítiques dels administradors.</p>
 </div>
-<div class="md-card">
+<div class="md-card" style="--card:#EAB308">
+<h3 id="deteccio-dintrusos">Detecció d'Intrusos</h3>
+<p>Visibilitat total dels recursos per identificar equips no autoritzats.</p>
+</div>
+</div>
+<h2 id="factors-clau-dinventari-de-xarxa">Factors Clau d'Inventari de Xarxa</h2>
+<p class="md-kicker">GESTIÓ D'ACTIUS</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#0284C7">
+<h3 id="adrecament-ip-i-mac">Adreçament IP i MAC</h3>
+<p>Control de rangs lògics IP i inventari físic d'adreces MAC.</p>
+</div>
+<div class="md-card" style="--card:#0284C7">
+<h3 id="ports-i-serveis-actius">Ports i Serveis Actius</h3>
+<p>Supervisió de ports oberts i serveis crítics exposats.</p>
+</div>
+<div class="md-card" style="--card:#0284C7">
 <h3 id="protocol-snmp">Protocol SNMP</h3>
-<p>Supervisió centralitzada de dispositius.</p>
+<p>Consulta automatitzada d'estat i mètriques en temps real.</p>
 </div>
 </div>
-<h2 id="protocol-snmp_1">Protocol SNMP</h2>
-<p><strong>Simple Network Management Protocol</strong></p>
-<p>Estàndard que permet als dispositius de xarxa comunicar-se amb una consola central.</p>
+<h2 id="protocol-snmp-simple-network-management-protocol">Protocol SNMP (Simple Network Management Protocol)</h2>
+<p class="md-kicker">ESTÀNDARD DE GESTIÓ</p>
+
 <div class="md-cards">
-<div class="md-card">
-<h3 id="inventari-dinamic">Inventari Dinàmic</h3>
-<p>Detecta equips i serveis actius.</p>
+<div class="md-card" style="--card:#0284C7">
+<h3 id="llenguatge-comu-de-xarxa">Llenguatge Comú de Xarxa</h3>
+<p>Permet que encaminadors, commutadors, servidors i impressores es comuniquin amb una consola central.</p>
 </div>
-<div class="md-card">
-<h3 id="control-de-rendiment">Control de Rendiment</h3>
-<p>Vigila CPU, memòria i trànsit.</p>
-</div>
-<div class="md-card">
-<h3 id="deteccio-danomalies">Detecció d'Anomalies</h3>
-<p>Alerta davant canvis no autoritzats.</p>
-</div>
-</div>
-<h2 id="arquitectura-del-sistema-snmp">Arquitectura del Sistema SNMP</h2>
-<div class="md-cards">
-<div class="md-card">
-<h3 id="1">1</h3>
-<p><strong>Agent SNMP</strong></p>
-<p>Programari integrat al dispositiu vigilat.</p>
-</div>
-<div class="md-card">
-<h3 id="2">2</h3>
-<p><strong>Base MIB</strong></p>
-<p>Base jeràrquica de paràmetres consultables.</p>
-</div>
-<div class="md-card">
-<h3 id="3">3</h3>
-<p><strong>Estació NMS</strong></p>
-<p>Servidor central (Zabbix, Nagios, PRTG).</p>
-</div>
-</div>
-<h2 id="seguretat-en-les-versions-snmp">Seguretat en les Versions SNMP</h2>
-<div class="md-cards">
-<div class="md-card">
-<h3 id="snmpv1-v2c">SNMPv1 / v2c</h3>
+<div class="md-card" style="--card:#0284C7">
+<h3 id="funcions-principals">Funcions Principals</h3>
 <ul>
-<li><strong>Sense xifratge:</strong> Dades en text pla.</li>
-<li><strong>Comunitat exposada:</strong> Contrasenya vulnerable.</li>
-</ul>
-</div>
-<div class="md-card">
-<h3 id="snmpv3-recomanat">SNMPv3 (Recomanat)</h3>
-<ul>
-<li><strong>Autenticació:</strong> Verifica identitat de l'origen.</li>
-<li><strong>Privadesa:</strong> Xifratge imprescindible del trànsit.</li>
+<li><strong>Inventari dinàmic:</strong> Equips connectats.</li>
+<li><strong>Rendiment:</strong> Ús de CPU, RAM i trànsit.</li>
+<li><strong>Anomalies:</strong> Alerta de canvis sospitosos.</li>
 </ul>
 </div>
 </div>
-<h2 id="diapositiva-7">Diapositiva 7</h2>
-<p><strong>SEGONA PART</strong></p>
-<p><strong>Fraus Informàtics i Enginyeria Social</strong></p>
-<h2 id="diapositiva-8">Diapositiva 8</h2>
-<p><strong>Concepte d'Enginyeria Social</strong></p>
-<p><strong>«Obtenció d'informació confidencial mitjançant la manipulació o l'engany d'usuaris legítims.»</strong></p>
-<p>Exemples principals: Phishing i estafes bancàries</p>
-<h2 id="defensa-contra-el-phishing">Defensa contra el Phishing</h2>
+<h2 id="com-funciona-larquitectura-snmp">Com Funciona l'Arquitectura SNMP?</h2>
+<p class="md-kicker">COMPONENTS TÈCNICS</p>
+
 <div class="md-cards">
-<div class="md-card">
+<div class="md-card" style="--card:#0284C7">
+<h3 id="1-agent-snmp">1. Agent SNMP</h3>
+<p>Programari integrat dins el dispositiu vigilat (router, switch o servidor).</p>
+</div>
+<div class="md-card" style="--card:#8B5CF6">
+<h3 id="2-base-mib">2. Base MIB</h3>
+<p>Base de dades jeràrquica que defineix els paràmetres consultables.</p>
+</div>
+<div class="md-card" style="--card:#16A34A">
+<h3 id="3-estacio-nms">3. Estació NMS</h3>
+<p>Servidor central que recull i visualitza dades (Zabbix, Nagios, PRTG).</p>
+</div>
+</div>
+<h2 id="versions-i-seguretat-del-protocol-snmp">Versions i Seguretat del Protocol SNMP</h2>
+<p class="md-kicker">EVOLUCIÓ I XIFRATGE</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#EF4444">
+<h3 id="snmpv1-snmpv2c-insegur">SNMPv1 / SNMPv2c (Insegur)</h3>
+<ul>
+<li>Envia la contrasenya (comunitat) en text pla.</li>
+<li>Sense xifratge de dades durant el trànsit.</li>
+</ul>
+</div>
+<div class="md-card" style="--card:#16A34A">
+<h3 id="snmpv3-estandard-segur">SNMPv3 (Estàndard Segur)</h3>
+<ul>
+<li><strong>Autenticació:</strong> Verifica la identitat de l'origen.</li>
+<li><strong>Privadesa:</strong> Xifratge imprescindible dels paquets.</li>
+</ul>
+</div>
+</div>
+<h2 id="fraus-informatics-i-enginyeria-social">Fraus Informàtics i Enginyeria Social</h2>
+<p class="md-kicker">AMENACES HUMANES</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#E11D48">
+<h3 id="manipulacio-psicologica">Manipulació Psicològica</h3>
+<p>Pràctica d'obtenir informació confidencial mitjançant l'engany o la manipulació d'usuaris legítims.</p>
+</div>
+<div class="md-card" style="--card:#EAB308">
+<h3 id="vectors-habituals">Vectors Habituals</h3>
+<ul>
+<li><strong>Phishing:</strong> Suplantació via correu o SMS.</li>
+<li><strong>Estafes bancàries:</strong> Robatori de credencials.</li>
+</ul>
+</div>
+</div>
+<h2 id="mecanismes-de-defensa-contra-el-phishing">Mecanismes de Defensa contra el Phishing</h2>
+<p class="md-kicker">PREVENCIÓ ACTIVA</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#0284C7">
 <h3 id="conscienciacio">Conscienciació</h3>
-<p>Desconfiar de correus que demanin dades.</p>
+<p>Formar els usuaris per ignorar correus que demanin dades personals.</p>
 </div>
-<div class="md-card">
-<h3 id="autenticacio-2fa">Autenticació (2FA)</h3>
-<p>Doble verificació i contrasenyes úniques.</p>
+<div class="md-card" style="--card:#16A34A">
+<h3 id="doble-verificacio">Doble Verificació</h3>
+<p>Activar 2FA i usar contrasenyes complexes i úniques per servei.</p>
 </div>
-</div>
-<div class="md-cards">
-<div class="md-card">
-<h3 id="sistemes-al-dia">Sistemes al Dia</h3>
-<p>Actualitzacions i antivirus actius.</p>
-</div>
-<div class="md-card">
-<h3 id="xarxes-segures">Xarxes Segures</h3>
-<p>Evitar xarxes Wi-Fi públiques obertes.</p>
+<div class="md-card" style="--card:#8B5CF6">
+<h3 id="higiene-digital">Higiene Digital</h3>
+<p>Actualitzar sistemes, usar antivirus i evitar xarxes Wi-Fi obertes.</p>
 </div>
 </div>
 <h2 id="hoax-i-noticies-falses-fake-news">Hoax i Notícies Falses (Fake News)</h2>
-<div class="md-card">
-<h3 id="exemple-cas-adamuz">Exemple: Cas Adamuz</h3>
-<p>Vídeo fals sobre esquerdes ferroviàries generat amb IA.</p>
+<p class="md-kicker">DESINFORMACIÓ VIRAL</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#EAB308">
+<h3 id="definicio-de-hoax">Definició de Hoax</h3>
+<p>Missatge fals difós massivament per correu o xarxes socials per enganyar i provocar la seva viralització.</p>
 </div>
-<p><strong>Missatges falsos difosos massivament per enganyar o viralitzar contingut.</strong></p>
-<p>Sovint utilitzen vídeos o imatges manipulades amb Intel·ligència Artificial per generar alarma social.</p>
+<div class="md-card" style="--card:#EF4444">
+<h3 id="cas-practic-video-adamuz">Cas Pràctic: Vídeo Adamuz</h3>
+<p>Difusió viral de suposades esquerdes ferroviàries creades amb contingut multimèdia generat per IA.</p>
+</div>
+</div>
+<h2 id="pharming-manipulacio-de-la-resolucio-web">Pharming: Manipulació de la Resolució Web</h2>
+<p class="md-kicker">REDIRECCIÓ MALICIOSA</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#EF4444">
+<h3 id="desviament-invisible">Desviament Invisible</h3>
+<p>Redirigeix la víctima a una web falsa encara que escrigui l'URL correcta.</p>
+</div>
+<div class="md-card" style="--card:#0284C7">
+<h3 id="alteracio-del-dns">Alteració del DNS</h3>
+<p>Manipula servidors DNS o el fitxer local d'adreces del dispositiu.</p>
+</div>
+<div class="md-card" style="--card:#EAB308">
+<h3 id="objectiu-de-latac">Objectiu de l'Atac</h3>
+<p>Captura silenciosa de contrasenyes i credencials bancàries.</p>
+</div>
+</div>
 <h2 id="diferencia-clau-phishing-vs-pharming">Diferència Clau: Phishing vs. Pharming</h2>
+<p class="md-kicker">COMPARATIVA TECNOLÒGICA</p>
+
 <div class="md-card"></div>
 <table>
 <thead>
 <tr>
-<th>Característica</th>
+<th>Aspecte</th>
 <th>Phishing</th>
 <th>Pharming</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Mecanisme</td>
-<td>Engany directe via correu o missatge</td>
-<td>Manipulació del sistema DNS</td>
+<td>Vector d'atac</td>
+<td>Missatge enganyós (correu, SMS)</td>
+<td>Enverinament de DNS o configuració local</td>
 </tr>
 <tr>
-<td>Acció de l'usuari</td>
+<td>Acció de la víctima</td>
 <td>Fa clic en un enllaç fraudulent</td>
-<td>Escriu l'adreça web correcta</td>
+<td>Escriu l'adreça web legítima</td>
 </tr>
 <tr>
-<td>Resultat</td>
-<td>Accedeix a una web falsa</td>
-<td>Redirecció automàtica a web falsa</td>
+<td>Resultat tècnic</td>
+<td>Obre un domini fals semblant</td>
+<td>Redirecció automàtica a servidor fals</td>
 </tr>
 </tbody>
 </table>
-<h2 id="diapositiva-12">Diapositiva 12</h2>
-<p><strong>Seguretat Integral a la Xarxa</strong></p>
-<p>Combina la supervisió tècnica amb <strong>SNMPv3</strong> i la formació constant dels usuaris contra l'enginyeria social.</p>
+<h2 id="resum-destudi-monitoratge-i-seguretat">Resum d'Estudi - Monitoratge i Seguretat</h2>
+<p>Garantir la seguretat de la xarxa exigeix inventari constant, supervisió xifrada amb <strong>SNMPv3</strong> i formació dels usuaris contra el <strong>Phishing</strong>, <strong>Hoax</strong> i <strong>Pharming</strong>.</p>
 </article>
 <nav class="pager"><a class="pager-btn" href="firewall-i-vpn-proteccio-perimetral-i-tunels-segurs.html">← Firewall i VPN</a><a class="pager-btn" href="seguretat-en-xarxes-de-cable-i-control-de-monitoratge.html">Seguretat en Xarxes de Cable i Monitoratge →</a></nav>
 
@@ -194,6 +234,6 @@
   </main>
 </div>
 
-<script src="../../../assets/search.js?v=1795459757" data-base="../../../" data-ver="1795459757" defer></script>
+<script src="../../../assets/search.js?v=1795460546" data-base="../../../" data-ver="1795460546" defer></script>
 </body>
 </html>

@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guàrdia de Nocturnitat - Simulador de Ciberseguretat</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --text-main: #c9d1d9;
+            --accent-green: #2ea043;
+            --accent-red: #f85149;
+            --accent-blue: #58a6ff;
+            --border-color: #30363d;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 750px;
+            width: 100%;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+        }
+
+        header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.4rem;
+            color: var(--accent-blue);
+        }
+
+        .stats {
+            display: flex;
+            gap: 20px;
+            font-weight: bold;
+            font-family: monospace;
+            font-size: 1.1rem;
+        }
+
+        .health-bar-container {
+            width: 100%;
+            background-color: #21262d;
+            border-radius: 5px;
+            height: 12px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .health-bar {
+            height: 100%;
+            background-color: var(--accent-green);
+            width: 100%;
+            transition: width 0.4s ease, background-color 0.4s ease;
+        }
+
+        .terminal-box {
+            background-color: #010409;
+            border-left: 4px solid var(--accent-blue);
+            padding: 15px 20px;
+            font-family: 'Courier New', Courier, monospace;
+            margin-bottom: 20px;
+            border-radius: 0 6px 6px 0;
+            line-height: 1.5;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        button.option-btn {
+            background-color: #21262d;
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            text-align: left;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        button.option-btn:hover:not(:disabled) {
+            border-color: var(--accent-blue);
+            background-color: #30363d;
+        }
+
+        button.option-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 6px;
+            display: none;
+            line-height: 1.5;
+        }
+
+        .feedback.correct {
+            background-color: rgba(46, 160, 67, 0.15);
+            border: 1px solid var(--accent-green);
+            color: #7ee787;
+        }
+
+        .feedback.incorrect {
+            background-color: rgba(248, 81, 73, 0.15);
+            border: 1px solid var(--accent-red);
+            color: #ff7b72;
+        }
+
+        .next-btn {
+            margin-top: 20px;
+            background-color: var(--accent-blue);
+            color: #0d1117;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            display: none;
+            float: right;
+        }
+
+        .next-btn:hover {
+            opacity: 0.9;
+        }
+
+        .end-screen {
+            text-align: center;
+            display: none;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            background-color: #30363d;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>🛡️ Guàrdia de Nocturnitat: CISO</h1>
+        <div class="stats">
+            <span id="health-text">Sistema: 100%</span>
+            <span id="score-text">Punts: 0</span>
+        </div>
+    </header>
+
+    <div class="health-bar-container">
+        <div class="health-bar" id="health-bar"></div>
+    </div>
+
+    <div id="game-area">
+        <span class="badge" id="level-badge">Incident 1 de 8</span>
+        <div class="terminal-box" id="scenario-text"></div>
+        <div class="options" id="options-container"></div>
+        <div class="feedback" id="feedback-box"></div>
+        <button class="next-btn" id="next-btn" onclick="nextQuestion()">Següent Incident ➔</button>
+        <div style="clear: both;"></div>
+    </div>
+
+    <div class="end-screen" id="end-screen">
+        <h2 id="end-title"></h2>
+        <p id="end-summary" style="font-size: 1.1rem; line-height: 1.6;"></p>
+        <button class="next-btn" style="display: inline-block; float: none;" onclick="restartGame()">Tornar a jugar 🔄</button>
+    </div>
+</div>
+
+<script>
+    const questions = [
+        {
+            tag: "Incident 1/8 · Capa d'Enllaç (Switch)",
+            scenario: "ALERTA DE XARXA: Els usuaris es queixen que la xarxa va molt lenta. Mires el commutador (switch) i veus que els LEDs parpellegen frenèticament enviant trames a tots els ports alhora, comportant-se com un concentrador (hub) antic.",
+            options: [
+                {
+                    text: "És un atac Smurf (ICMP). Instal·les un antivirus local a tots els equips.",
+                    correct: false,
+                    healthChange: -25,
+                    pointsChange: 0,
+                    explanation: "Incorrecte. L'atac Smurf utilitza adreces de broadcast IP, però aquí el problema és a la capa d'enllaç (MAC) del switch. Un antivirus no atura la saturació del commutador."
+                },
+                {
+                    text: "És un MAC Flooding (CAM Table Overflow). Actives Port-Security al switch per limitar les adreces MAC per port.",
+                    correct: true,
+                    healthChange: 0,
+                    pointsChange: 20,
+                    explanation: "Correcte! L'atacant ha omplert la taula CAM amb MACs falses perquè el switch actuï com un hub i poder fer sniffing. Limitar les MACs per port ho atura."
+                },
+                {
+                    text: "És un atac de Pharming. Apagues el servidor DNS de l'empresa.",
+                    correct: false,
+                    healthChange: -30,
+                    pointsChange: 0,
+                    explanation: "Incorrecte. Apagar el DNS ha deixat tota l'empresa sense navegació web per un problema físic/d'enllaç al switch."
+                }
+            ]
+        },
+        {
+            tag: "Incident 2/8 · Capa d'Aplicació i DNS",
+            scenario: "TRUCADA URGENT: El director financer ha escrit manualment 'www.elmeubanc.com' al navegador (sense clicar cap enllaç de correu) i ha arribat a una web idèntica que li demanava les claus, però sense certificat vàlid.",
+            options: [
+                {
+                    text: "És Phishing. Li dius que no obri correus sospitosos i li fas passar un antiespia.",
+                    correct: false,
+                    healthChange: -20,
+                    pointsChange: 0,
+                    explanation: "Incorrecte. El phishing requereix enginyeria social (que l'usuari cliqui un enllaç fals). Aquí ha estat redirigit automàticament en escriure la URL."
+                },
+                {
+                    text: "És Pharming (DNS Cache Poisoning / modificació de 'hosts'). Revises la memòria cau DNS, el fitxer hosts i els certificats de la CA.",
+                    correct: true,
+                    healthChange: 0,
+                    pointsChange: 25,
+                    explanation: "Exacte! En el pharming s'enverina la resolució DNS o el fitxer hosts local per redirigir un domini legítim cap a una IP maliciosa."
+                },
+                {
+                    text: "És un atac de fragmentació IP (Teardrop). Reinicies el router.",
+                    correct: false,
+                    healthChange: -25,
+                    pointsChange: 0,
+                    explanation: "Incorrecte. El Teardrop és un atac de denegació de servei (DoS), no de suplantació de pàgines web."
+                }
+            ]
+        },
+        {
+            tag: "Incident 3/8 · Amenaces Internes i Integritat",
+            scenario: "ALARMA IDS (Tripwire): S'ha modificat un fitxer executable crític i s'ha creat un compte d'administrador nou des de la xarxa interna. Ahir es va acomiadar un tècnic de sistemes.",
+            options: [
+                {
+                    text: "Amenaça de Fabricació per un insider (extreballador). Calia donar de baixa els seus comptes immediatament i usar autenticació forta (2FA).",
+                    correct: true,
+                    healthChange: 0,
+                    pointsChange: 25,
+                    explanation: "Molt bé! Crear objectes falsos al sistema és una amenaça de Fabricació. A més, Tripwire ho ha detectat perquè el valor hash del fitxer ha canviat."
+                },
+                {
+                    text: "Amenaça d'Interrupció externa. Calia ocultar l'SSID de la xarxa sense fil.",
+                    correct: false,
+                    healthChange: -25,
+                    pointsChange: 0,
+                    explanation: "Incorrecte. L'atac prové de l'interior (insider) i no busca aturar el servei (interrupció), sinó inserir elements nous."
+                },
+                {
+                    text: "És un Keylogger. Actives un teclat virtual per iniciar sessió.",
+                    correct: false,
+                    healthChange: -20,
+                    pointsChange: 0,
+                    explanation: "Incorrecte. Un keylogger és un atac d'intercepció (espionatge), no de creació d'usuaris administradors."
+                }
+            ]
+        },
+        {
+            tag: "Incident 4/8 · Capa de Transport (TCP)",
+            scenario: "SERVIDOR WEB CAIGUT: Els clients no poden accedir al web. Executes 'netstat' i veus milers de connexions en estat SYN_RECEIVED que mai completen el 3-way handshake.",
+            options: [
+                {
+                    text: "És ARP Spoofing. Actives el mode promiscu a la targeta de xarxa del servidor.",
+                    correct: false,
+                    healthChange: -30,
+                    pointsChange: 0,
+                    explanation: "Incorrecte. El mode promiscu serveix per capturar trànsit (sniffing), no per defensar-se d'un col·lapse de connexions TCP."
+                },
+                {
+                    text: "És un SYN Flooding (atac DoS). Configuras el tallafoc per filtrar IPs falses i redueixes el temps d'espera de connexions mig obertes.",
+                    correct: true,
+                    healthChange: 0,
+                    pointsChange: 25,
+                    explanation: "Correcte! L'atacant envia paquets SYN amb IPs falses perquè el servidor ompli la cua esperant un ACK que mai arribarà."
+                },
+                {
+                    text: "És un atac de diccionari. Obligues a posar contrasenyes de 8 caràcters.",
+                    correct: false,
+                    healthChange: -20,
+                    pointsChange: 0,
+                    explanation: "Incorrecte. Les polítiques de contrasenyes no eviten la saturació de ports TCP."
+                }
+            ]
+        },
+        {
+            tag: "Incident 5/8 · Xarxes Públiques i Criptografia",
+            scenario: "CONNEXIÓ REMOTA: Un comercial connectat a la Wi-Fi pública d'un aeroport vol enviar un contracte confidencial a l'oficina. Hi ha risc que algú faci sniffing en text clar.",
+            options: [
+                {
+                    text: "Li dius que l'enviï per FTP i que es connecti per Telnet perquè són protocols estàndard.",
+                    correct: false,
+                    healthChange: -35,
+                    pointsChange: 0,
+                    explanation: "Error greu! Tant FTP com Telnet transmeten les dades i les contrasenyes en text clar. Qualsevol amb Wireshark ho llegirà tot."
+                },
+                {
+                    text: "Li fas connectar per VPN i xifrar/signar el fitxer amb PGP (clau pública i privada).",
+                    correct: true,
+                    healthChange: 0,
+                    pointsChange: 25,
+                    explanation: "Excel·lent! La VPN crea un túnel xifrat i PGP garanteix confidencialitat, integritat, autenticitat i no repudi."
+                },
+                {
+                    text: "Li demanes que canviï la seva adreça MAC amb 'ifconfig' abans d'enviar el correu.",
+                    correct: false,
+                    healthChange: -20,
+                    pointsChange: 0,
+                    explanation: "Incorrecte. Canviar la MAC no xifra les dades que viatgen per les ones de ràdio de la Wi-Fi."
+                }
+            ]
+        },
+        {
+            tag: "Incident 6/8 · Seguretat Sense Fil (WLAN)",
+            scenario: "AUDITORIA WI-FI: Revises el punt d'accés de la sala de reunions i veus que utilitza xifratge WEP amb algorisme RC4 i difon l'SSID.",
+            options: [
+                {
+                    text: "Ho deixes igual perquè WEP és l'estàndard més segur i RC4 és indesxifrable.",
+                    correct: false,
+                    healthChange: -25,
+                    pointsChange: 0,
+                    explanation: "Incorrecte! WEP utilitza RC4, que és molt feble i es pot trencar en minuts capturant paquets amb eines com Aircrack."
+                },
+                {
+                    text: "Canvies el xifratge a WPA2 (algorisme AES), canvies la contrasenya per defecte i actives el filtratge MAC.",
+                    correct: true,
+                    healthChange: 0,
+                    pointsChange: 20,
+                    explanation: "Correcte! WPA2 utilitza AES, molt més robust que RC4, i combinat amb una contrasenya forta i filtratge MAC millora molt la seguretat WLAN."
+                },
+                {
+                    text: "Configures la xarxa en mode 'Ad hoc' perquè sigui invisible.",
+                    correct: false,
+                    healthChange: -20,
+                    pointsChange: 0,
+                    explanation: "Incorrecte. El mode Ad hoc és per connectar equips directe client-a-client sense punt d'accés."
+                }
+            ]
+        },
+        {
+            tag: "Incident 7/8 · Permisos en Sistemes Linux",
+            scenario: "CONTROL D'ACCÉS: Has creat un directori anomenat 'examen' a Ubuntu. Fas 'ls -l' i veus: 'drwxr-xr-x 2 root root examen'. Vols que el grup 'professors' en sigui el propietari i que la resta d'usuaris NO hi puguin entrar ni llegir res.",
+            options: [
+                {
+                    text: "Executes 'chgrp professors examen' i canvies els permisos a '750' (drwxr-x---).",
+                    correct: true,
+                    healthChange: 0,
+                    pointsChange: 25,
+                    explanation: "Perfecte! 'chgrp' canvia el grup propietari, i amb '750' (rwxr-x---) deixes lectura i execució al grup però treus tots els permisos a la resta d'usuaris."
+                },
+                {
+                    text: "Executes 'chown professors examen' i dones permisos '777' perquè ningú tingui problemes.",
+                    correct: false,
+                    healthChange: -30,
+                    pointsChange: 0,
+                    explanation: "Perill! 'chown' canvia l'usuari (no el grup) i '777' dona permís de lectura, escriptura i execució a tothom!"
+                },
+                {
+                    text: "Edites el fitxer '/etc/shadow' i esborres els usuaris dels alumnes.",
+                    correct: false,
+                    healthChange: -25,
+                    pointsChange: 0,
+                    explanation: "Incorrecte. '/etc/shadow' guarda les contrasenyes xifrades, no els permisos dels directoris."
+                }
+            ]
+        },
+        {
+            tag: "Incident 8/8 · Anatomia de l'Atac (Fase Final)",
+            scenario: "INTRUSIÓ DETECTADA: Un atacant ha entrat fa una hora i ha instal·lat un rootkit. Ara mateix està esborrant els fitxers '/var/log' i les alertes de l'IDS per no deixar rastre.",
+            options: [
+                {
+                    text: "Està a la Fase 1 (Reconeixement). Llances un escaneig Nmap contra la seva IP.",
+                    correct: false,
+                    healthChange: -25,
+                    pointsChange: 0,
+                    explanation: "Incorrecte. El reconeixement és la fase prèvia a l'atac (whois, enginyeria social). Aquí ja ha entrat."
+                },
+                {
+                    text: "Està a la Fase 5 (Esborrat d'empremtes). Aïlles l'equip de la xarxa, guardes els logs en un suport de només lectura i analitzes el malware en una màquina virtual aïllada.",
+                    correct: true,
+                    healthChange: 0,
+                    pointsChange: 30,
+                    explanation: "Brillant! Has identificat la 5a fase de l'anatomia d'un atac i has aplicat el protocol forense i d'anàlisi controlat (VirtualBox/VMware)."
+                },
+                {
+                    text: "Està a la Fase 2 (Escaneig). Li fas un Ping of Death per bloquejar-li l'ordinador.",
+                    correct: false,
+                    healthChange: -25,
+                    pointsChange: 0,
+                    explanation: "Incorrecte. A més, el Ping of Death és un atac històric dels anys 90 que ja no afecta els sistemes moderns."
+                }
+            ]
+        }
+    ];
+
+    let currentQuestion = 0;
+    let health = 100;
+    let score = 0;
+
+    function loadQuestion() {
+        const q = questions[currentQuestion];
+        document.getElementById('level-badge').innerText = q.tag;
+        document.getElementById('scenario-text').innerText = q.scenario;
+        
+        const optionsContainer = document.getElementById('options-container');
+        optionsContainer.innerHTML = '';
+        
+        const feedbackBox = document.getElementById('feedback-box');
+        feedbackBox.style.display = 'none';
+        feedbackBox.className = 'feedback';
+        
+        document.getElementById('next-btn').style.display = 'none';
+
+        q.options.forEach((opt, index) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = opt.text;
+            btn.onclick = () => selectOption(index);
+            optionsContainer.appendChild(btn);
+        });
+    }
+
+    function selectOption(index) {
+        const q = questions[currentQuestion];
+        const selected = q.options[index];
+        const buttons = document.querySelectorAll('.option-btn');
+        
+        buttons.forEach(btn => btn.disabled = true);
+
+        health = Math.max(0, health + selected.healthChange);
+        score += selected.pointsChange;
+
+        updateStats();
+
+        const feedbackBox = document.getElementById('feedback-box');
+        feedbackBox.innerText = selected.explanation;
+        feedbackBox.classList.add(selected.correct ? 'correct' : 'incorrect');
+        feedbackBox.style.display = 'block';
+
+        const nextBtn = document.getElementById('next-btn');
+        if (health <= 0) {
+            nextBtn.innerText = "Veure resultat final ➔";
+        } else if (currentQuestion === questions.length - 1) {
+            nextBtn.innerText = "Finalitzar torn ➔";
+        } else {
+            nextBtn.innerText = "Següent Incident ➔";
+        }
+        nextBtn.style.display = 'block';
+    }
+
+    function updateStats() {
+        document.getElementById('health-text').innerText = `Sistema: ${health}%`;
+        document.getElementById('score-text').innerText = `Punts: ${score}`;
+        
+        const bar = document.getElementById('health-bar');
+        bar.style.width = `${health}%`;
+        if (health > 60) {
+            bar.style.backgroundColor = '#2ea043';
+        } else if (health > 30) {
+            bar.style.backgroundColor = '#d29922';
+        } else {
+            bar.style.backgroundColor = '#f85149';
+        }
+    }
+
+    function nextQuestion() {
+        if (health <= 0 || currentQuestion >= questions.length - 1) {
+            showEndScreen();
+        } else {
+            currentQuestion++;
+            loadQuestion();
+        }
+    }
+
+    function showEndScreen() {
+        document.getElementById('game-area').style.display = 'none';
+        const endScreen = document.getElementById('end-screen');
+        endScreen.style.display = 'block';
+
+        const title = document.getElementById('end-title');
+        const summary = document.getElementById('end-summary');
+
+        if (health <= 0) {
+            title.innerText = "💥 SISTEMA COMPROMÈS (Game Over)";
+            title.style.color = "#f85149";
+            summary.innerHTML = `La integritat i disponibilitat dels servidors ha caigut al <strong>0%</strong>.<br>Puntuació aconseguida: <strong>${score} / 195 punts</strong>.<br><br>Repassa la teoria d'atacs i contramesures a GitHub i torna-ho a intentar!`;
+        } else if (score >= 150) {
+            title.innerText = "🏆 NIVELL CISO EXPERT!";
+            title.style.color = "#2ea043";
+            summary.innerHTML = `Has superat la guàrdia amb un <strong>${health}%</strong> d'integritat del sistema i <strong>${score} / 195 punts</strong>.<br><br>Domines perfectament les amenaces, els protocols de xarxa i les contramesures actives i pal·liatives.`;
+        } else {
+            title.innerText = "⚠️ TORN SUPERAT AMB INCIDÈNCIES";
+            title.style.color = "#d29922";
+            summary.innerHTML = `Has mantingut el sistema operatiu (<strong>${health}%</strong>), però alguns atacs han deixat seqüeles.<br>Puntuació: <strong>${score} / 195 punts</strong>.<br><br>Revisa els errors que has comès per polir els conceptes abans de l'examen.`;
+        }
+    }
+
+    function restartGame() {
+        currentQuestion = 0;
+        health = 100;
+        score = 0;
+        updateStats();
+        document.getElementById('end-screen').style.display = 'none';
+        document.getElementById('game-area').style.display = 'block';
+        loadQuestion();
+    }
+
+    // Iniciar el joc
+    loadQuestion();
+</script>
+
+</body>
+</html>

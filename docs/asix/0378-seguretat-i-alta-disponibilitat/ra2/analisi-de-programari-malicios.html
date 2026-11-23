@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anàlisi de Programari Maliciós · Material docent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/style.css">
+</head>
+<body>
+
+
+<header class="topbar">
+  <a class="topbar-brand" href="../../../index.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 14l9-5-9-5-9 5 9 5z"/><path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0112 20.055a11.952 11.952 0 01-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
+    <span>Portal Docent</span>
+  </a>
+  <div class="search-container">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" id="site-search" placeholder="Cercar al material… (prem /)" autocomplete="off" aria-label="Cercar al material">
+  </div>
+</header>
+
+<div class="apunt-layout">
+  <aside class="sidebar">
+    
+<div class="sidebar-head">Material del RA</div>
+<ul class="sidebar-menu">
+  <li><a href="analisi-de-programari-malicios.html" class="active"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Anàlisi de Programari Maliciós</a></li><li><a href="seguretat-activa-introduccio.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Seguretat Activa: Introducció</a></li><li><a href="jocseguretat.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Guàrdia de Nocturnitat - Simulador de Ciberseguretat</a></li>
+</ul>
+
+  </aside>
+  <main class="apunt-content">
+    
+
+<div class="apunt-header">
+  <a class="back" href="index.html" style="color:var(--accent); text-decoration:none; font-family:var(--font-mono); font-size:0.8rem;">← Tornar a RA2</a>
+  <div class="apunt-eyebrow" style="margin-top:0.5rem;">ASIX · M0378 · RA2</div>
+</div>
+
+<article class="prose">
+  <h1 id="analisi-de-programari-malicios">Anàlisi de Programari Maliciós</h1>
+<p class="md-kicker">MÒDUL DE SEGURETAT ACTIVA</p>
+
+<p>Detecció d'amenaces, anàlisi en entorns aïllats, gestió d'accessos i criptografia aplicada</p>
+<h2 id="evolucio-i-propagacio-del-malware">Evolució i Propagació del Malware</h2>
+<p class="md-kicker">CONTEXT DE L'AMENAÇA</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#0284C7">
+<h3 id="1972-2005">1972 – 2005</h3>
+<p>De Creeper al dany tècnic per guanyar notorietat.</p>
+</div>
+<div class="md-card" style="--card:#EAB308">
+<h3 id="des-del-2005">Des del 2005</h3>
+<p>Enfocament econòmic amb spyware, phishing i troians bancaris.</p>
+</div>
+<div class="md-card" style="--card:#EF4444">
+<h3 id="tendencia-actual">Tendència Actual</h3>
+<p>Entrada per correu o USB i desplaçament cap a mòbils.</p>
+</div>
+</div>
+<h2 id="deteccio-del-codi-malicios">Detecció del Codi Maliciós</h2>
+<p class="md-kicker">SUPERVISIÓ D'INTEGRITAT</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#EF4444">
+<h3 id="metadades-limitada">Metadades (Limitada)</h3>
+<p>Dates i mides manipulables mitjançant tècniques de timestomping.</p>
+</div>
+<div class="md-card" style="--card:#0284C7">
+<h3 id="control-hash-fim">Control Hash (FIM)</h3>
+<p>Empremtes SHA-256 immutables en eines com Wazuh o OSSEC.</p>
+</div>
+<div class="md-card" style="--card:#16A34A">
+<h3 id="temps-real-edr">Temps Real (EDR)</h3>
+<p>Antivirus NGAV i EDR bloquegen el comportament maliciós abans d'executar-se.</p>
+</div>
+</div>
+<h2 id="preparacio-dun-entorn-aillat-sandbox">Preparació d'un Entorn Aïllat (Sandbox)</h2>
+<p class="md-kicker">LABORATORI SEGUR</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#0284C7">
+<h3 id="aillament-total">Aïllament Total</h3>
+<p>Màquines virtuals separades o sandboxes com Cuckoo i ANY.RUN.</p>
+</div>
+<div class="md-card" style="--card:#8B5CF6">
+<h3 id="linia-base-i-snapshots">Línia Base i Snapshots</h3>
+<p>Instantànies prèvies i registre de ports, processos i usuaris actius.</p>
+</div>
+<div class="md-card" style="--card:#16A34A">
+<h3 id="eines-dinspeccio">Eines d'Inspecció</h3>
+<p>Monitoratge amb Wireshark per xarxa i Process Monitor o Sysmon.</p>
+</div>
+</div>
+<h2 id="analisi-estatica-dinamica-i-extraccio-diocs">Anàlisi Estàtica, Dinàmica i Extracció d'IoCs</h2>
+<p class="md-kicker">METODOLOGIA TÈCNICA</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#0284C7">
+<h3 id="analisi-estatica-en-repos">Anàlisi Estàtica (En Repòs)</h3>
+<ul>
+<li>Estudi sense executar el fitxer maliciós.</li>
+<li>Revisió de hashes, cadenes de text (strings) i capçaleres.</li>
+</ul>
+</div>
+<div class="md-card" style="--card:#EAB308">
+<h3 id="analisi-dinamica-i-dfir">Anàlisi Dinàmica i DFIR</h3>
+<ul>
+<li>Observació en viu de connexions C2 i canvis al registre.</li>
+<li>Extracció d'IoCs (IPs, dominis) per bloquejar atacs reals.</li>
+</ul>
+</div>
+</div>
+<h2 id="gestio-segura-de-contrasenyes">Gestió Segura de Contrasenyes</h2>
+<p class="md-kicker">PREVENCIÓ A L'USUARI</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#0284C7">
+<h3 id="creacio-robusta">Creació Robusta</h3>
+<p>Mínim 12–16 caràcters o frases de pas úniques sense reutilització.</p>
+</div>
+<div class="md-card" style="--card:#16A34A">
+<h3 id="gestors-i-mfa">Gestors i MFA</h3>
+<p>Emmagatzematge xifrat (Bitwarden, KeePass) i autenticació multifactor obligatòria.</p>
+</div>
+<div class="md-card" style="--card:#8B5CF6">
+<h3 id="control-proactiu">Control Proactiu</h3>
+<p>Filtres contra contrasenyes filtrades i bloqueig davant força bruta.</p>
+</div>
+</div>
+<h2 id="nivells-de-contrasenyes-a-larrencada">Nivells de Contrasenyes a l'Arrencada</h2>
+<p class="md-kicker">NIVELLS DE PROTECCIÓ FÍSICA</p>
+
+<div class="md-card"></div>
+<table>
+<thead>
+<tr>
+<th>Nivell d'Arrencada</th>
+<th>Funció de Seguretat</th>
+<th>Tecnologies Clau</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. Firmware (UEFI / BIOS)</td>
+<td>Impedeix iniciar des d'un Live USB extern</td>
+<td>Secure Boot, xip TPM i xifratge de disc</td>
+</tr>
+<tr>
+<td>2. Gestor (GRUB 2)</td>
+<td>Bloqueja l'edició del nucli i el mode root</td>
+<td>Contrasenyes protegides amb hash PBKDF2</td>
+</tr>
+<tr>
+<td>3. Sistema Operatiu</td>
+<td>Inici de sessió (feble en comptes locals sense xifrar)</td>
+<td>Vulnerable a chntpw sobre SAM sense BitLocker</td>
+</tr>
+</tbody>
+</table>
+<h2 id="control-dacces-permisos-i-quotes-de-disc">Control d'Accés, Permisos i Quotes de Disc</h2>
+<p class="md-kicker">GOVERNANÇA DEL SISTEMA</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#0284C7">
+<h3 id="permisos-linux-unix">Permisos Linux / Unix</h3>
+<p>Control rwx per propietari (u), grup (g) i altres (o); hashes a /etc/shadow.</p>
+</div>
+<div class="md-card" style="--card:#8B5CF6">
+<h3 id="llistes-acl">Llistes ACL</h3>
+<p>Permisos granulars per usuaris específics amb setfacl o NTFS.</p>
+</div>
+<div class="md-card" style="--card:#EAB308">
+<h3 id="quotes-de-disc">Quotes de Disc</h3>
+<p>Límits amb FSRM o xfs_quota per evitar denegacions de servei (DoS).</p>
+</div>
+</div>
+<h2 id="proteccio-de-dades-mitjancant-criptografia">Protecció de Dades mitjançant Criptografia</h2>
+<p class="md-kicker">CONFIDENCIALITAT I INTEGRITAT</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#0284C7">
+<h3 id="dades-en-repos-at-rest">Dades en Repòs (At Rest)</h3>
+<ul>
+<li>Protecció de discs, particions i còpies de seguretat.</li>
+<li>Eines: <strong>BitLocker</strong>, <strong>LUKS</strong>, <strong>FileVault</strong> i <strong>VeraCrypt</strong> (AES-256).</li>
+</ul>
+</div>
+<div class="md-card" style="--card:#16A34A">
+<h3 id="dades-en-transit-in-transit">Dades en Trànsit (In Transit)</h3>
+<ul>
+<li>Evita sniffing i atacs Man-in-the-Middle a la xarxa.</li>
+<li>Protocols: <strong>SSH</strong>, <strong>TLS (HTTPS)</strong> i túnels <strong>VPN</strong> (WireGuard / IPsec).</li>
+</ul>
+</div>
+</div>
+<h2 id="resum-destudi-analisi-de-malware-i-hardening">Resum d'Estudi - Anàlisi de Malware i Hardening</h2>
+<p>La defensa en profunditat combina detecció <strong>EDR/FIM</strong>, anàlisi en <strong>Sandbox</strong>, protecció de l'arrencada, gestió d'accessos i <strong>criptografia</strong> en repòs i en trànsit.</p>
+</article>
+<nav class="pager"><span></span><a class="pager-btn" href="seguretat-activa-introduccio.html">Seguretat Activa: Introducció →</a></nav>
+
+    <footer>Material docent · Formació Professional · Informàtica</footer>
+  </main>
+</div>
+
+<script src="../../../assets/search.js?v=1795464869" data-base="../../../" data-ver="1795464869" defer></script>
+</body>
+</html>

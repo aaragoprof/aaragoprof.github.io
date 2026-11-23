@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seguretat Activa: Introducció · Material docent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/style.css">
+</head>
+<body>
+
+
+<header class="topbar">
+  <a class="topbar-brand" href="../../../index.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 14l9-5-9-5-9 5 9 5z"/><path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0112 20.055a11.952 11.952 0 01-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
+    <span>Portal Docent</span>
+  </a>
+  <div class="search-container">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" id="site-search" placeholder="Cercar al material… (prem /)" autocomplete="off" aria-label="Cercar al material">
+  </div>
+</header>
+
+<div class="apunt-layout">
+  <aside class="sidebar">
+    
+<div class="sidebar-head">Material del RA</div>
+<ul class="sidebar-menu">
+  <li><a href="analisi-de-programari-malicios.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Anàlisi de Programari Maliciós</a></li><li><a href="seguretat-activa-introduccio.html" class="active"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Seguretat Activa: Introducció</a></li><li><a href="jocseguretat.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Guàrdia de Nocturnitat - Simulador de Ciberseguretat</a></li>
+</ul>
+
+  </aside>
+  <main class="apunt-content">
+    
+
+<div class="apunt-header">
+  <a class="back" href="index.html" style="color:var(--accent); text-decoration:none; font-family:var(--font-mono); font-size:0.8rem;">← Tornar a RA2</a>
+  <div class="apunt-eyebrow" style="margin-top:0.5rem;">ASIX · M0378 · RA2</div>
+</div>
+
+<article class="prose">
+  <h1 id="seguretat-activa-introduccio">Seguretat Activa: Introducció</h1>
+<p class="md-kicker">MÒDUL DE SEGURETAT INFORMÀTICA</p>
+
+<p>Principis estratègics, classificació d'atacs i cicle de vida d'una intrusió</p>
+<h2 id="principis-de-la-proteccio-de-la-informacio">Principis de la Protecció de la Informació</h2>
+<p class="md-kicker">FONAMENTS ESTRATÈGICS</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#0284C7">
+<h3 id="objectiu-global">Objectiu Global</h3>
+<p>La seguretat abasta tota la infraestructura tecnològica.</p>
+</div>
+<div class="md-card" style="--card:#16A34A">
+<h3 id="disseny-integrat">Disseny Integrat</h3>
+<p>Forma part estructural de tota l'organització.</p>
+</div>
+<div class="md-card" style="--card:#EAB308">
+<h3 id="marc-legal">Marc Legal</h3>
+<p>Integrat des de l'inici a les polítiques internes.</p>
+</div>
+</div>
+<h2 id="seguretat-activa-vs-seguretat-passiva">Seguretat Activa vs. Seguretat Passiva</h2>
+<p class="md-kicker">ENFOCAMENT DEFENSIU</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#0284C7">
+<h3 id="seguretat-activa">Seguretat Activa</h3>
+<p>Mecanismes físics i lògics per prevenir i detectar intents de comprometre el sistema.</p>
+</div>
+<div class="md-card" style="--card:#8B5CF6">
+<h3 id="seguretat-passiva">Seguretat Passiva</h3>
+<p>Mesures per minimitzar els efectes d'un incident i informar els administradors.</p>
+</div>
+</div>
+<h2 id="diapositiva-4">Diapositiva 4</h2>
+<p><strong>ACTIU CRÍTIC</strong></p>
+<p><strong>L'Actiu Més Valuós: Les Dades</strong></p>
+<p><strong>Les Dades Són Irreemplaçables</strong></p>
+<p>El maquinari i el programari es poden substituir gairebé sempre; la informació perduda, no.</p>
+<h2 id="classificacio-segons-lobjectiu-de-latac">Classificació Segons l'Objectiu de l'Atac</h2>
+<p class="md-kicker">TIPOLOGIA D'AMENACES</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#EF4444">
+<h3 id="interrupcio">Interrupció</h3>
+<p>Atac contra la disponibilitat d'un recurs.</p>
+</div>
+<div class="md-card" style="--card:#EAB308">
+<h3 id="intercepcio">Intercepció</h3>
+<p>Atac contra la confidencialitat per accés il·legítim.</p>
+</div>
+<div class="md-card" style="--card:#0284C7">
+<h3 id="modificacio">Modificació</h3>
+<p>Accés no autoritzat amb alteració de dades.</p>
+</div>
+<div class="md-card" style="--card:#8B5CF6">
+<h3 id="fabricacio">Fabricació</h3>
+<p>Inserció d'objectes falsificats al sistema.</p>
+</div>
+</div>
+<h2 id="atacs-passius-vs-atacs-actius">Atacs Passius vs. Atacs Actius</h2>
+<p class="md-kicker">FORMA D'EXECUCIÓ</p>
+
+<div class="md-card"></div>
+<table>
+<thead>
+<tr>
+<th>Criteri</th>
+<th>Atacs Passius</th>
+<th>Atacs Actius</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Acció sobre el sistema</td>
+<td>Observa i escolta sense alterar dades</td>
+<td>Altera, destrueix o falsifica recursos</td>
+</tr>
+<tr>
+<td>Objectiu principal</td>
+<td>Obtenir informació confidencial</td>
+<td>Suplantació, degradació o modificació</td>
+</tr>
+<tr>
+<td>Facilitat de detecció</td>
+<td>Molt difícil (no deixa rastre d'alteració)</td>
+<td>Més detectable per l'impacte visible</td>
+</tr>
+</tbody>
+</table>
+<h2 id="atacants-externs-vs-atacants-interns">Atacants Externs vs. Atacants Interns</h2>
+<p class="md-kicker">ORIGEN DE L'AMENAÇA</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#0284C7">
+<h3 id="atacs-externs">Atacs Externs</h3>
+<ul>
+<li>Són molt més nombrosos en volum.</li>
+<li>Troben barreres perimetrals inicials.</li>
+</ul>
+</div>
+<div class="md-card" style="--card:#EF4444">
+<h3 id="atacs-interns">Atacs Interns</h3>
+<ul>
+<li>Percentatge d'èxit molt més elevat.</li>
+<li>Provoquen un dany molt superior.</li>
+</ul>
+</div>
+</div>
+<h2 id="anatomia-dels-atacs-preparacio-i-acces">Anatomia dels Atacs: Preparació i Accés</h2>
+<p class="md-kicker">CICLE D'INTRUSIÓ (I)</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#0284C7">
+<h3 id="1-reconeixement">1. Reconeixement</h3>
+<p>Recopilació prèvia d'informació sobre l'objectiu.</p>
+</div>
+<div class="md-card" style="--card:#EAB308">
+<h3 id="2-escaneig">2. Escaneig</h3>
+<p>Sondeig del sistema per detectar vulnerabilitats.</p>
+</div>
+<div class="md-card" style="--card:#EF4444">
+<h3 id="3-acces-al-sistema">3. Accés al Sistema</h3>
+<p>Explotació efectiva de les fallades localitzades.</p>
+</div>
+</div>
+<h2 id="anatomia-dels-atacs-persistencia-i-ocultacio">Anatomia dels Atacs: Persistència i Ocultació</h2>
+<p class="md-kicker">CICLE D'INTRUSIÓ (II)</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#8B5CF6">
+<h3 id="4-manteniment-de-lacces">4. Manteniment de l'Accés</h3>
+<p>Assegurar vies d'entrada persistents per a futurs accessos no autoritzats.</p>
+</div>
+<div class="md-card" style="--card:#EF4444">
+<h3 id="5-esborrat-dempremtes">5. Esborrat d'Empremtes</h3>
+<p>Eliminació de registres en fitxers de log i alarmes IDS per evitar ser descobert.</p>
+</div>
+</div>
+<h2 id="resum-destudi-seguretat-activa">Resum d'Estudi - Seguretat Activa</h2>
+<p>Protegir les dades requereix combinar prevenció activa i mitigació passiva, comprenent tant les amenaces internes com les <strong>5 fases d'un atac informàtic</strong>.</p>
+</article>
+<nav class="pager"><a class="pager-btn" href="analisi-de-programari-malicios.html">← Anàlisi de Programari Maliciós</a></nav>
+
+    <footer>Material docent · Formació Professional · Informàtica</footer>
+  </main>
+</div>
+
+<script src="../../../assets/search.js?v=1795464869" data-base="../../../" data-ver="1795464869" defer></script>
+</body>
+</html>

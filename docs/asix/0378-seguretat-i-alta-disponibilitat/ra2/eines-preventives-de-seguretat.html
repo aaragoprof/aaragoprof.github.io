@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eines Preventives · Material docent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/style.css">
+</head>
+<body>
+
+
+<header class="topbar">
+  <a class="topbar-brand" href="../../../index.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 14l9-5-9-5-9 5 9 5z"/><path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0112 20.055a11.952 11.952 0 01-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
+    <span>Portal Docent</span>
+  </a>
+  <div class="search-container">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" id="site-search" placeholder="Cercar al material… (prem /)" autocomplete="off" aria-label="Cercar al material">
+  </div>
+</header>
+
+<div class="apunt-layout">
+  <aside class="sidebar">
+    
+<div class="sidebar-head">Material del RA</div>
+<ul class="sidebar-menu">
+  <li><a href="seguretat-activa-introduccio.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Seguretat Activa: Introducció</a></li><li><a href="analisi-de-programari-malicios.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Anàlisi de Programari Maliciós</a></li><li><a href="eines-preventives-de-seguretat.html" class="active"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Eines Preventives</a></li><li><a href="jocseguretat.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Guàrdia de Nocturnitat - Simulador de Ciberseguretat</a></li>
+</ul>
+
+  </aside>
+  <main class="apunt-content">
+    
+
+<div class="apunt-header">
+  <a class="back" href="index.html" style="color:var(--accent); text-decoration:none; font-family:var(--font-mono); font-size:0.8rem;">← Tornar a RA2</a>
+  <div class="apunt-eyebrow" style="margin-top:0.5rem;">ASIX · M0378 · RA2</div>
+</div>
+
+<article class="prose">
+  <h1 id="eines-preventives">Eines Preventives</h1>
+<p class="md-kicker">MÒDUL DE SEGURETAT ACTIVA</p>
+
+<p>Gestió de contrasenyes, seguretat a l'arrencada, permisos a Linux, ACL, quotes i criptografia</p>
+<h2 id="gestio-segura-de-contrasenyes">Gestió Segura de Contrasenyes</h2>
+<p class="md-kicker">PROTECCIÓ DE CREDENCIALS</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#0284C7">
+<h3 id="creacio-robusta">Creació Robusta</h3>
+<p>Mínim 12–16 caràcters o frases de pas úniques sense reutilització.</p>
+</div>
+<div class="md-card" style="--card:#16A34A">
+<h3 id="gestors-i-mfa">Gestors i MFA</h3>
+<p>Emmagatzematge xifrat (Bitwarden, KeePass) i autenticació multifactor obligatòria.</p>
+</div>
+<div class="md-card" style="--card:#8B5CF6">
+<h3 id="control-proactiu">Control Proactiu</h3>
+<p>Filtres contra contrasenyes filtrades i bloqueig davant força bruta.</p>
+</div>
+</div>
+<h2 id="nivells-de-contrasenyes-a-larrencada">Nivells de Contrasenyes a l'Arrencada</h2>
+<p class="md-kicker">PROTECCIÓ FÍSICA DE L'EQUIP</p>
+
+<div class="md-card"></div>
+<table>
+<thead>
+<tr>
+<th>Nivell d'Arrencada</th>
+<th>Funció Preventiva</th>
+<th>Tecnologies i Riscos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. Firmware (UEFI / BIOS)</td>
+<td>Bloqueja l'arrencada des d'un Live USB extern</td>
+<td>Secure Boot, xip TPM i xifratge complet de disc</td>
+</tr>
+<tr>
+<td>2. Gestor (GRUB 2)</td>
+<td>Impedeix editar el nucli o iniciar en mode root</td>
+<td>Contrasenyes emmagatzemades amb hash PBKDF2</td>
+</tr>
+<tr>
+<td>3. Sistema Operatiu</td>
+<td>Autenticació d'inici de sessió d'usuari</td>
+<td>Feble en comptes locals sense xifrar (fitxer SAM)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="control-dacces-acl-i-quotes-de-disc">Control d'Accés, ACL i Quotes de Disc</h2>
+<p class="md-kicker">GOVERNANÇA DE RECURSOS</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#0284C7">
+<h3 id="proteccio-critica">Protecció Crítica</h3>
+<p>Contrasenyes xifrades a accessibles només per root.</p>
+<p>/etc/shadow</p>
+</div>
+<div class="md-card" style="--card:#8B5CF6">
+<h3 id="granularitat-acl">Granularitat ACL</h3>
+<p>Permisos específics per a múltiples usuaris amb o NTFS.</p>
+<p>setfacl</p>
+</div>
+<div class="md-card" style="--card:#EAB308">
+<h3 id="quotes-de-disc">Quotes de Disc</h3>
+<p>Límits amb FSRM o per evitar denegació de servei.</p>
+<p>xfs_quota</p>
+</div>
+</div>
+<h2 id="tipus-de-permisos-basics-r-w-x">Tipus de Permisos Bàsics (r, w, x)</h2>
+<p class="md-kicker">SEGURETAT LÒGICA LINUX</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#0284C7">
+<h3 id="lectura-r-read">Lectura (r / read)</h3>
+<p>Permet visualitzar el contingut d'un fitxer o llistar un directori.</p>
+</div>
+<div class="md-card" style="--card:#EAB308">
+<h3 id="escriptura-w-write">Escriptura (w / write)</h3>
+<p>Permet modificar el fitxer o crear i esborrar dins del directori.</p>
+</div>
+<div class="md-card" style="--card:#16A34A">
+<h3 id="execucio-x-execute">Execució (x / execute)</h3>
+<p>Executa el fitxer com a programa o permet entrar al directori ().</p>
+<p>cd</p>
+</div>
+</div>
+<h2 id="notacio-simbolica-de-10-caracters">Notació Simbòlica de 10 Caràcters</h2>
+<p class="md-kicker">VISUALITZACIÓ AMB LS -L</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#0F172A">
+<h3 id="-d-l">- / d / l</h3>
+<p><strong>Caràcter 1: Tipus</strong></p>
+<p>Fitxer (), directori () o enllaç ().</p>
+<p>-</p>
+<p>d</p>
+<p>l</p>
+</div>
+<div class="md-card" style="--card:#EF4444">
+<h3 id="r-w-x">r w x</h3>
+<p><strong>Caràcters 2–4: Propietari</strong></p>
+<p>Permisos de l'usuari propietari ().</p>
+<p>u</p>
+</div>
+<div class="md-card" style="--card:#16A34A">
+<h3 id="r-x">r - x</h3>
+<p><strong>Caràcters 5–7: Grup</strong></p>
+<p>Permisos del grup propietari ().</p>
+<p>g</p>
+</div>
+<div class="md-card" style="--card:#0284C7">
+<h3 id="r-x_1">r - x</h3>
+<p><strong>Caràcters 8–10: Altres</strong></p>
+<p>Permisos de la resta d'usuaris ().</p>
+<p>o</p>
+</div>
+</div>
+<h2 id="conversio-de-notacio-simbolica-a-octal">Conversió de Notació Simbòlica a Octal</h2>
+<p class="md-kicker">CÀLCUL AMB CHMOD</p>
+
+<div class="md-card"></div>
+<table>
+<thead>
+<tr>
+<th>Entitat</th>
+<th>Propietari (Owner)</th>
+<th>Grup (Group)</th>
+<th>Altres (Other)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Notació Simbòlica</td>
+<td>rwx</td>
+<td>r-x</td>
+<td>r-x</td>
+</tr>
+<tr>
+<td>Suma Binària / Pesos</td>
+<td>4 + 2 + 1</td>
+<td>4 + 0 + 1</td>
+<td>4 + 0 + 1</td>
+</tr>
+<tr>
+<td>Valor Octal (chmod 755)</td>
+<td>7 (Control total)</td>
+<td>5 (Lectura i execució)</td>
+<td>5 (Lectura i execució)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="acl-a-linux-i-funcio-de-la-mascara-mask">ACL a Linux i Funció de la Màscara (Mask)</h2>
+<p class="md-kicker">PERMISOS AVANÇATS</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#0284C7">
+<h3 id="sintaxi-acl-setfacl">Sintaxi ACL (setfacl)</h3>
+<ul>
+<li>/ : Usuari específic</li>
+</ul>
+<p>u</p>
+<p>user</p>
+<ul>
+<li>/ : Grup específic</li>
+</ul>
+<p>g</p>
+<p>group</p>
+<ul>
+<li>/ : Resta d'usuaris</li>
+</ul>
+<p>o</p>
+<p>other</p>
+<ul>
+<li>/ : Sostre màxim efectiu</li>
+</ul>
+<p>m</p>
+<p>mask</p>
+</div>
+<div class="md-card" style="--card:#EAB308">
+<h3 id="cas-practic-de-la-mascara">Cas Pràctic de la Màscara</h3>
+<p>La màscara limita el sostre màxim de permisos sense esborrar les regles individuals dels usuaris.</p>
+<p>Bloqueig ràpid: 
+ Restauració:</p>
+<p>setfacl -m m::--- carpeta</p>
+<p>setfacl -m m::rwx carpeta</p>
+</div>
+</div>
+<h2 id="proteccio-de-dades-mitjancant-criptografia">Protecció de Dades mitjançant Criptografia</h2>
+<p class="md-kicker">CONFIDENCIALITAT I INTEGRITAT</p>
+
+<div class="md-cards">
+<div class="md-card" style="--card:#0284C7">
+<h3 id="dades-en-repos-data-at-rest">Dades en Repòs (Data at Rest)</h3>
+<ul>
+<li>Protegeix discs, particions i còpies emmagatzemades.</li>
+<li>Eines: <strong>BitLocker</strong>, <strong>LUKS</strong>, <strong>FileVault</strong> i <strong>VeraCrypt</strong> (AES-256).</li>
+</ul>
+</div>
+<div class="md-card" style="--card:#16A34A">
+<h3 id="dades-en-transit-data-in-transit">Dades en Trànsit (Data in Transit)</h3>
+<ul>
+<li>Evita intercepcions sniffing i Man-in-the-Middle.</li>
+<li>Protocols: <strong>SSH</strong>, <strong>TLS (HTTPS)</strong> i <strong>VPN</strong> (WireGuard / IPsec).</li>
+</ul>
+</div>
+</div>
+<h2 id="resum-destudi-eines-preventives">Resum d'Estudi - Eines Preventives</h2>
+<p>La prevenció integral combina contrasenyes robustes, bloqueig a l'arrencada, permisos i <strong>ACL</strong> a Linux, quotes de disc i <strong>criptografia</strong> en repòs i en trànsit.</p>
+</article>
+<nav class="pager"><a class="pager-btn" href="analisi-de-programari-malicios.html">← Anàlisi de Programari Maliciós</a></nav>
+
+    <footer>Material docent · Formació Professional · Informàtica</footer>
+  </main>
+</div>
+
+<script src="../../../assets/search.js" data-base="../../../" defer></script>
+</body>
+</html>

@@ -17,6 +17,10 @@ fitxer "enllacos.txt" dins de Teoria, una línia per enllaç ("Títol | https://
 Presentacions .pptx: es converteixen a pàgina (títols, llistes, taules, imatges);
 les notes del presentador i les diapositives ocultes NO es publiquen.
 
+Ordre: el material es mostra en l'ordre dels noms de fitxer (i de carpeta). Per decidir-lo,
+posa un número al davant: "01 Introducció.pptx", "02 Conceptes.pptx"... El número només
+serveix per ordenar: no es veu a la web ni forma part de l'adreça de la pàgina.
+
 Ús:
     python generar.py "C:\ruta\a\la\carpeta\de\material"
 """
@@ -95,6 +99,12 @@ def slug(s, maxlen=60):
     return (s[:maxlen].strip("-")) or "x"
 
 
+def treu_prefix(s):
+    """'01 Introducció' -> 'Introducció' (el número només serveix per ordenar)."""
+    t = re.sub(r"^\d{1,3}(?:\s*[-_.)]\s*|\s+)(?=\S)", "", s.strip())
+    return t or s
+
+
 def excluit(nom):
     n = sense_accents(nom).lower()
     return (n in EXCLOURE
@@ -151,7 +161,6 @@ FALLITS = []
 GRANS = []
 STATS = {"convertits": 0, "cache": 0}
 SEARCH = []                    # índex del cercador (text de cada pàgina)
-BUILD = str(int(time.time()))  # evita que el navegador usi un índex antic
 
 
 def _pdf_a_markdown(pdf_tmp, img_dir):
@@ -904,7 +913,7 @@ def converteix_pptx(pptx):
     shutil.rmtree(cdir, ignore_errors=True)
     (cdir / "img").mkdir(parents=True, exist_ok=True)
     try:
-        md = _pptx_a_markdown(pptx, cdir / "img", norm(pptx.stem), norm(pptx.name))
+        md = _pptx_a_markdown(pptx, cdir / "img", treu_prefix(norm(pptx.stem)), norm(pptx.name))
         text_pla = re.sub(r"!\[[^\]]*\]\([^)]*\)(\{[^}]*\})?|[#\s]+", "", md)
         if len(text_pla) < 5 and not any((cdir / "img").iterdir()):
             raise RuntimeError("la presentació no té contingut convertible")
@@ -1143,7 +1152,6 @@ footer { margin-top: 4rem; padding-top: 1.5rem; border-top: 1px solid var(--bord
 JS_CERCADOR = r'''(function () {
   var tag = document.querySelector("script[data-base]");
   var BASE = tag ? tag.getAttribute("data-base") : "";
-  var VER = tag ? tag.getAttribute("data-ver") : "";
   var input = document.getElementById("site-search");
   var data = null, loading = false, pending = [], active = -1, timer = null;
 
@@ -1234,7 +1242,7 @@ JS_CERCADOR = r'''(function () {
     if (loading) return;
     loading = true;
     var s = document.createElement("script");
-    s.src = BASE + "assets/search-index.js?v=" + VER;
+    s.src = BASE + "assets/search-index.js";
     s.onload = function () {
       data = (window.SEARCH_INDEX || []).map(function (p) {
         return {
@@ -1476,7 +1484,7 @@ def pagina(path, titol, cos, es_apunt=False, sidebar_html=""):
 </head>
 <body>
 {body_content}
-<script src="{pre}assets/search.js?v={BUILD}" data-base="{pre}" data-ver="{BUILD}" defer></script>
+<script src="{pre}assets/search.js" data-base="{pre}" defer></script>
 </body>
 </html>
 """
@@ -1635,7 +1643,7 @@ def processa_material(fitxers, base, desti, index_path, nom_pagina_tornar, eyebr
         rel_dir = "/".join(dirs)
         out_dir = desti.joinpath(*dirs) if dirs else desti
         ext = f.suffix.lower()
-        stem = norm(f.stem)
+        stem = treu_prefix(norm(f.stem))
 
         if sense_accents(f.name).lower() in ("enllacos.txt", "links.txt"):
             for titol_e, url_e, tipus_e in llegeix_enllacos(f):
@@ -1710,7 +1718,7 @@ def processa_material(fitxers, base, desti, index_path, nom_pagina_tornar, eyebr
 
         if ext in (".html", ".htm"):
             out_dir.mkdir(parents=True, exist_ok=True)
-            nom = lliure(rel_dir, norm(f.name))
+            nom = lliure(rel_dir, treu_prefix(norm(f.name)))
             shutil.copy2(f, out_dir / nom)
             brut = f.read_text(encoding="utf-8", errors="replace")
             t = re.search(r"<title>(.*?)</title>", brut, re.I | re.S)
@@ -1722,7 +1730,9 @@ def processa_material(fitxers, base, desti, index_path, nom_pagina_tornar, eyebr
 
         continue
 
-    res.sort(key=lambda r: (natural(r["grup"]), PRIORITAT_TIPUS.get(r["tipus"], 5), natural(r["titol"])))
+    # Els recursos ja estan en l'ordre dels noms de fitxer (bucle de dalt); el sort és estable
+    # i només agrupa per subcarpeta. Així llista, menú lateral i botons Anterior/Següent coincideixen.
+    res.sort(key=lambda r: natural(r["grup"]))
 
     num_elems = len(elements_generats)
     for idx, el in enumerate(elements_generats):

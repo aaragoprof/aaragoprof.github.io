@@ -1,7 +1,6 @@
 (function () {
   var tag = document.querySelector("script[data-base]");
   var BASE = tag ? tag.getAttribute("data-base") : "";
-  var VER = tag ? tag.getAttribute("data-ver") : "";
   var input = document.getElementById("site-search");
   var data = null, loading = false, pending = [], active = -1, timer = null;
 
@@ -92,7 +91,7 @@
     if (loading) return;
     loading = true;
     var s = document.createElement("script");
-    s.src = BASE + "assets/search-index.js?v=" + VER;
+    s.src = BASE + "assets/search-index.js";
     s.onload = function () {
       data = (window.SEARCH_INDEX || []).map(function (p) {
         return {
